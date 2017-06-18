@@ -40,4 +40,11 @@ class DropItemPacket extends DataPacket{
 
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "DropItemPacket";
+	}
+
 }

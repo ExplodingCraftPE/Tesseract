@@ -19,27 +19,13 @@
  *
 */
 
-namespace pocketmine\network\protocol;
+namespace pocketmine\level\sound;
 
-#include <rules/DataPacket.h>
+use pocketmine\math\Vector3;
+use pocketmine\network\protocol\LevelEventPacket;
 
-
-class EntityFallPacket extends DataPacket{
-
-	const NETWORK_ID = Info::ENTITY_FALL_PACKET;
-
-	public $eid;
-	public $fallDistance;
-	public $unknownbool;
-
-	public function decode(){
-		$this->eid = $this->getEntityId();
-		$this->fallDistance = $this->getLFloat();
-		$this->unknownbool = $this->getBool();
+class ZombieInfectSound extends GenericSound{
+	public function __construct(Vector3 $pos, $pitch = 0){
+		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_ZOMBIE_INFECT, $pitch);
 	}
-
-	public function encode(){
-
-	}
-
 }

@@ -46,4 +46,11 @@ class AddHangingEntityPacket extends DataPacket{
 		$this->putVarInt($this->unknown);
 	}
 
+	/**
+	 * @return AddHangingEntityPacket|string
+     */
+	public function getName(){
+		return "AddHangingEntityPacket";
+	}
+
 }

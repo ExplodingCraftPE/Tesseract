@@ -38,7 +38,7 @@ class LoginPacket extends DataPacket{
 	public $gameEdition;
 	public $clientUUID;
 	public $clientId;
-     public $adRole;
+    public $adRole;
 	public $currentInputMode;
 	public $defaultInputMode;
 	public $deviceModel;
@@ -62,7 +62,9 @@ class LoginPacket extends DataPacket{
 
 		$this->gameEdition = $this->getByte();
 
-		$this->setBuffer($this->getString(), 0);
+		$str = zlib_decode($this->getString(), 1024 * 1024 * 64);
+
+		$this->setBuffer($str, 0);
 
 		$time = time();
 
@@ -176,6 +178,13 @@ class LoginPacket extends DataPacket{
 		}
 
 		return array($verified, json_decode(base64_decode($payloadB64), true));
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "LoginPacket";
 	}
 
 }

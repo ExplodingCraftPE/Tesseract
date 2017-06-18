@@ -64,17 +64,12 @@ use pocketmine\command\defaults\TellCommand;
 use pocketmine\command\defaults\TimeCommand;
 use pocketmine\command\defaults\TimingsCommand;
 use pocketmine\command\defaults\TransferCommand;
-use pocketmine\command\defaults\TitleCommand;
 use pocketmine\command\defaults\VanillaCommand;
 use pocketmine\command\defaults\VersionCommand;
 use pocketmine\command\defaults\WeatherCommand;
 use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\command\defaults\XpCommand;
-
-//TODO: Fix the horrible mess of DevTools commands.
-use pocketmine\command\defaults\MakePluginCommand;
-use pocketmine\command\defaults\MakeServerCommand;
-use pocketmine\command\defaults\ExtractPluginCommand;
+use pocketmine\command\defaults\MakePharCommand;
 
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
@@ -143,7 +138,6 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new SpawnpointCommand("spawnpoint"));
 		$this->register("pocketmine", new SetWorldSpawnCommand("setworldspawn"));
 		$this->register("pocketmine", new SummonCommand("summon"));
-		$this->register("pocketmine", new TitleCommand("title"));
 		$this->register("pocketmine", new TeleportCommand("tp"));
 		$this->register("pocketmine", new TimeCommand("time"));
 		$this->register("pocketmine", new TimingsCommand("timings"));
@@ -151,9 +145,6 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ReloadCommand("reload"), null, true);
 		$this->register("pocketmine", new XpCommand("xp"));
 		$this->register("pocketmine", new SetBlockCommand("setblock"));
-		$this->register("pocketmine", new MakePluginCommand("makeplugin"));
-		$this->register("pocketmine", new MakeServerCommand("makeserver"));
-		$this->register("pocketmine", new ExtractPluginCommand("extractplugin"));
 
 		if($this->server->getProperty("debug.commands", false)){
 			$this->register("pocketmine", new StatusCommand("status"), null, true);

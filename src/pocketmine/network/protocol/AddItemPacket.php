@@ -39,4 +39,11 @@ class AddItemPacket extends DataPacket{
 		$this->putSlot($this->item);
 	}
 
+	/**
+	 * @return AddItemPacket|string
+     */
+	public function getName(){
+		return "AddItemPacket";
+	}
+
 }

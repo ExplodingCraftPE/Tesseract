@@ -47,8 +47,6 @@ class PlayerActionPacket extends DataPacket{
 	const ACTION_START_GLIDE = 15;
 	const ACTION_STOP_GLIDE = 16;
 
-	const ACTION_CONTINUE_BREAK = 18;
-
 	public $eid;
 	public $action;
 	public $x;
@@ -69,6 +67,13 @@ class PlayerActionPacket extends DataPacket{
 		$this->putVarInt($this->action);
 		$this->putBlockCoords($this->x, $this->y, $this->z);
 		$this->putVarInt($this->face);
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "PlayerActionPacket";
 	}
 
 }

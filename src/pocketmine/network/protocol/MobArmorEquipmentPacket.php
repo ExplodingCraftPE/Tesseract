@@ -48,4 +48,11 @@ class MobArmorEquipmentPacket extends DataPacket{
 		$this->putSlot($this->slots[3]);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "MobArmorEquipmentPacket";
+	}
+
 }

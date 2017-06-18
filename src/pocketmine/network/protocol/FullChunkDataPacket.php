@@ -43,4 +43,11 @@ class FullChunkDataPacket extends DataPacket{
 		$this->putString($this->data);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "FullChunkDataPacket";
+	}
+
 }

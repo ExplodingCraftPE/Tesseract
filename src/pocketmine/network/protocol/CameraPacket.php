@@ -39,4 +39,11 @@ class CameraPacket extends DataPacket{
 		$this->putVarInt($this->eid);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "BossEventPacket";
+	}
+
 }

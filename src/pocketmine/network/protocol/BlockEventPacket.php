@@ -45,4 +45,11 @@ class BlockEventPacket extends DataPacket{
 		$this->putVarInt($this->case2);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "BlockEventPacket";
+	}
+
 }

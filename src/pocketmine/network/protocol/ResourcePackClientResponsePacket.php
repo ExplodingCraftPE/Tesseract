@@ -23,38 +23,28 @@ namespace pocketmine\network\protocol;
 
 #include <rules/DataPacket.h>
 
-class SetTitlePacket extends DataPacket{
 
-	const NETWORK_ID = Info::SET_TITLE_PACKET;
+class ResourcePackClientResponsePacket extends DataPacket{
 
-	const TYPE_CLEAR = 0;
-	const TYPE_RESET = 1;
-	const TYPE_TITLE = 2;
-	const TYPE_SUB_TITLE = 3;
-	const TYPE_ACTION_BAR = 4;
-	const TYPE_TIMES = 5;
+	const NETWORK_ID = Info::RESOURCE_PACK_CLIENT_RESPONSE_PACKET;
 
-	public $type;
-	public $title;
-	public $fadeInDuration;
-	public $duration;
-	public $fadeOutDuration;
+	public $unknownByte;
+	public $unknownShort;
 
 	public function decode(){
-		$this->type = $this->getVarInt();
-		$this->title = $this->getString();
-		$this->fadeInDuration = $this->getVarInt();
-		$this->duration = $this->getVarInt();
-		$this->fadeOutDuration = $this->getVarInt();
+		$this->unknownByte = $this->getByte();
+		$this->unknownShort = $this->getShort();
 	}
 
 	public function encode(){
-		$this->reset();
-		$this->putVarInt($this->type);
-		$this->putString($this->title);
-		$this->putVarInt($this->fadeInDuration);
-		$this->putVarInt($this->duration);
-		$this->putVarInt($this->fadeOutDuration);
+
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "ResourcePackClientResponsePacket";
 	}
 
 }

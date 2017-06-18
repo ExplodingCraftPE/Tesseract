@@ -39,4 +39,11 @@ class HurtArmorPacket extends DataPacket{
 		$this->putVarInt($this->health);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "HurtArmorPacket";
+	}
+
 }

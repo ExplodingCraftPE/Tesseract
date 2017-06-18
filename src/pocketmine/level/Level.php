@@ -93,7 +93,6 @@ use pocketmine\network\protocol\BatchPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\LevelEventPacket;
-use pocketmine\network\protocol\LevelSoundEventPacket;
 use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\SetEntityMotionPacket;
@@ -573,42 +572,6 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * Broadcasts a LevelEvent to players in the area. This could be sound, particles, weather changes, etc.
-	 *
-	 * @param Vector3 $pos
-	 * @param int $evid
-	 * @param int $data
-	 */
-	public function broadcastLevelEvent(Vector3 $pos, int $evid, int $data = 0){
-		$pk = new LevelEventPacket();
-		$pk->evid = $evid;
-		$pk->data = $data;
-		list($pk->x, $pk->y, $pk->z) = [$pos->x, $pos->y, $pos->z];
-		$this->addChunkPacket($pos->x >> 4, $pos->z >> 4, $pk);
-	}
-
-	/**
-	 * Broadcasts a LevelSoundEvent to players in the area.
-	 *
-	 * @param Vector3 $pos
-	 * @param int $soundId
-	 * @param int $pitch
-	 * @param int $extraData
-	 * @param bool $unknown
-	 * @param bool $disableRelativeVolume If true, all players receiving this sound-event will hear the sound at full volume regardless of distance
-	 */
-	public function broadcastLevelSoundEvent(Vector3 $pos, int $soundId, int $pitch = 1, int $extraData = -1, bool $unknown = false, bool $disableRelativeVolume = false){
-		$pk = new LevelSoundEventPacket();
-		$pk->sound = $soundId;
-		$pk->pitch = $pitch;
-		$pk->extraData = $extraData;
-		$pk->unknownBool = $unknown;
-		$pk->disableRelativeVolume = $disableRelativeVolume;
-		list($pk->x, $pk->y, $pk->z) = [$pos->x, $pos->y, $pos->z];
-		$this->addChunkPacket($pos->x >> 4, $pos->z >> 4, $pk);
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function getAutoSave() : bool{
@@ -759,6 +722,7 @@ class Level implements ChunkManager, Metadatable{
 	public function sendTime(){
 		$pk = new SetTimePacket();
 		$pk->time = (int) $this->time;
+		$pk->started = $this->stopTime == false;
 
 		$this->server->broadcastPacket($this->players, $pk);
 	}
@@ -1401,33 +1365,17 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function updateBlockSkyLight(int $x, int $y, int $z){
-	    $this->timings->doBlockSkyLightUpdates->startTiming();
 		//TODO
-        $this->timings->doBlockSkyLightUpdates->stopTiming();
 	}
 
-    public function getHighestAdjacentBlockLight(int $x, int $y, int $z) : int{
-        return max([
-            $this->getBlockLightAt($x + 1, $y, $z),
-            $this->getBlockLightAt($x - 1, $y, $z),
-            $this->getBlockLightAt($x, $y + 1, $z),
-            $this->getBlockLightAt($x, $y - 1, $z),
-            $this->getBlockLightAt($x, $y, $z + 1),
-            $this->getBlockLightAt($x, $y, $z - 1)
-        ]);
-    }
-
 	public function updateBlockLight(int $x, int $y, int $z){
-	    $this->timings->doBlockLightUpdates->startTiming();
-
-	    $lightPropagationQueue = new \SplQueue();
+		$lightPropagationQueue = new \SplQueue();
 		$lightRemovalQueue = new \SplQueue();
 		$visited = [];
 		$removalVisited = [];
 
-		$id = $this->getBlockIdAt($x, $y, $z);
 		$oldLevel = $this->getBlockLightAt($x, $y, $z);
-		$newLevel = max(Block::$light[$id], $this->getHighestAdjacentBlockLight($x, $y, $z) - Block::$lightFilter[$id]);
+		$newLevel = (int) Block::$light[$this->getBlockIdAt($x, $y, $z)];
 
 		if($oldLevel !== $newLevel){
 			$this->setBlockLightAt($x, $y, $z, $newLevel);
@@ -1459,7 +1407,7 @@ class Level implements ChunkManager, Metadatable{
 			/** @var Vector3 $node */
 			$node = $lightPropagationQueue->dequeue();
 
-			$lightLevel = $this->getBlockLightAt($node->x, $node->y, $node->z);
+			$lightLevel = $this->getBlockLightAt($node->x, $node->y, $node->z) - (int) Block::$lightFilter[$this->getBlockIdAt($node->x, $node->y, $node->z)];
 
 			if($lightLevel >= 1){
 				$this->computeSpreadBlockLight($node->x - 1, $node->y, $node->z, $lightLevel, $lightPropagationQueue, $visited);
@@ -1470,8 +1418,6 @@ class Level implements ChunkManager, Metadatable{
 				$this->computeSpreadBlockLight($node->x, $node->y, $node->z + 1, $lightLevel, $lightPropagationQueue, $visited);
 			}
 		}
-
-		$this->timings->doBlockLightUpdates->stopTiming();
 	}
 
 	private function computeRemoveBlockLight(int $x, int $y, int $z, int $currentLight, \SplQueue $queue, \SplQueue $spreadQueue, array &$visited, array &$spreadVisited){
@@ -1498,7 +1444,6 @@ class Level implements ChunkManager, Metadatable{
 	private function computeSpreadBlockLight(int $x, int $y, int $z, int $currentLight, \SplQueue $queue, array &$visited){
 		if($y < 0) return;
 		$current = $this->getBlockLightAt($x, $y, $z);
-		$currentLight -= Block::$lightFilter[$this->getBlockIdAt($x, $y, $z)];
 
 		if($current < $currentLight){
 			$this->setBlockLightAt($x, $y, $z, $currentLight);
@@ -1536,7 +1481,6 @@ class Level implements ChunkManager, Metadatable{
 			return false;
 		}
 
-		$this->timings->setBlock->startTiming();
 		if($this->getChunk($pos->x >> 4, $pos->z >> 4, true)->setBlock($pos->x & 0x0f, $pos->y & Level::Y_MASK, $pos->z & 0x0f, $block->getId(), $block->getDamage())){
 			if(!($pos instanceof Position)){
 				$pos = $this->temporalPosition->setComponents($pos->x, $pos->y, $pos->z);
@@ -1576,12 +1520,8 @@ class Level implements ChunkManager, Metadatable{
 				$this->updateAround($pos);
 			}
 
-            $this->timings->setBlock->stopTiming();
-
 			return true;
 		}
-
-		$this->timings->setBlock->stopTiming();
 
 		return false;
 	}
@@ -1646,7 +1586,7 @@ class Level implements ChunkManager, Metadatable{
 		}
 
 		if($player !== null){
-			$ev = new BlockBreakEvent($player, $target, $item, true);
+			$ev = new BlockBreakEvent($player, $target, $item, ($player->isCreative() or $this->server->allowInstabreak));
 
 			if($player->isAdventure() or $player->isSpectator() or ($player->isSurvival() and $item instanceof Item and !$target->isBreakable($item))){
 				$ev->setCancelled();
@@ -1662,10 +1602,10 @@ class Level implements ChunkManager, Metadatable{
 				return false;
 			}
 
-			$breakTime = ceil($target->getBreakTime($item) * 20);
+			$breakTime = $target->getBreakTime($item);
 
-			if($player->isCreative() and $breakTime > 3){
-				$breakTime = 3;
+			if($player->isCreative() and $breakTime > 0.15){
+				$breakTime = 0.15;
 			}
 
 			if($player->hasEffect(Effect::SWIFTNESS)){
@@ -1676,13 +1616,13 @@ class Level implements ChunkManager, Metadatable{
 				$breakTime *= 1 + (0.3 * ($player->getEffect(Effect::MINING_FATIGUE)->getAmplifier() + 1));
 			}
 
-			$breakTime -= 1; //1 tick compensation
+			$breakTime -= 0.05; //1 tick compensation
 
-			if(!$ev->getInstaBreak() and ((ceil($player->lastBreak * 20)) + $breakTime) > ceil(microtime(true) * 20)){
+			if(!$ev->getInstaBreak() and ($player->lastBreak + $breakTime) > microtime(true)){
 				return false;
 			}
 
-			$player->lastBreak = PHP_INT_MAX;
+			$player->lastBreak = microtime(true);
 
 			$drops = $ev->getDrops();
 

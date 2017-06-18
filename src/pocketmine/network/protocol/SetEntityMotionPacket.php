@@ -48,4 +48,11 @@ class SetEntityMotionPacket extends DataPacket{
 		$this->putVector3f($this->motionX, $this->motionY, $this->motionZ);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "SetEntityMotionPacket";
+	}
+
 }

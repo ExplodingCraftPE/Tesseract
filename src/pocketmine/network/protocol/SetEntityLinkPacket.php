@@ -32,6 +32,7 @@ class SetEntityLinkPacket extends DataPacket{
 	const TYPE_RIDE = 1;
 	const TYPE_PASSENGER = 2;
 
+
 	public $from;
 	public $to;
 	public $type;
@@ -45,6 +46,13 @@ class SetEntityLinkPacket extends DataPacket{
 		$this->putEntityId($this->from);
 		$this->putEntityId($this->to);
 		$this->putByte($this->type);
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "SetEntityLinkPacket";
 	}
 
 }

@@ -68,13 +68,14 @@ use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
-use pocketmine\network\protocol\EntityFallPacket;
+use pocketmine\network\protocol\PlayerFallPacket;
 use pocketmine\network\protocol\PlayerInputPacket;
 use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\network\protocol\RemoveBlockPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
 use pocketmine\network\protocol\ReplaceItemInSlotPacket;
 use pocketmine\network\protocol\RequestChunkRadiusPacket;
+use pocketmine\network\protocol\ResourcePackClientResponsePacket;
 use pocketmine\network\protocol\ResourcePacksInfoPacket;
 use pocketmine\network\protocol\RespawnPacket;
 use pocketmine\network\protocol\SetCommandsEnabledPacket;
@@ -86,7 +87,6 @@ use pocketmine\network\protocol\SetHealthPacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
 use pocketmine\network\protocol\SetSpawnPositionPacket;
 use pocketmine\network\protocol\SetTimePacket;
-use pocketmine\network\protocol\SetTitlePacket;
 use pocketmine\network\protocol\ShowCreditsPacket;
 use pocketmine\network\protocol\SpawnExperienceOrbPacket;
 use pocketmine\network\protocol\StartGamePacket;
@@ -245,9 +245,9 @@ class Network {
 			while($stream->offset < $len){
 				$buf = $stream->getString();
 				if(($pk = $this->getPacket(ord($buf{0}))) !== null){
-					/*if($pk::NETWORK_ID === 0xfe){
+					if($pk::NETWORK_ID === Info::BATCH_PACKET){
 						throw new \InvalidStateException("Invalid BatchPacket inside BatchPacket");
-					}*/
+					}
 
 					$pk->setBuffer($buf, 1);
 
@@ -328,7 +328,7 @@ class Network {
 		$this->registerPacket(ProtocolInfo::ADVENTURE_SETTINGS_PACKET, AdventureSettingsPacket::class);
 		$this->registerPacket(ProtocolInfo::ANIMATE_PACKET, AnimatePacket::class);
 		$this->registerPacket(ProtocolInfo::AVAILABLE_COMMANDS_PACKET, AvailableCommandsPacket::class);
-		$this->registerPacket(0xfe, BatchPacket::class);
+		$this->registerPacket(ProtocolInfo::BATCH_PACKET, BatchPacket::class);
 		$this->registerPacket(ProtocolInfo::BLOCK_ENTITY_DATA_PACKET, BlockEntityDataPacket::class);
 		$this->registerPacket(ProtocolInfo::BLOCK_EVENT_PACKET, BlockEventPacket::class);
 		$this->registerPacket(ProtocolInfo::BOSS_EVENT_PACKET, BossEventPacket::class); 
@@ -359,7 +359,7 @@ class Network {
 		$this->registerPacket(ProtocolInfo::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
 		$this->registerPacket(ProtocolInfo::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_ACTION_PACKET, PlayerActionPacket::class);
-		$this->registerPacket(ProtocolInfo::ENTITY_FALL_PACKET, EntityFallPacket::class);
+		$this->registerPacket(ProtocolInfo::PLAYER_FALL_PACKET, PlayerFallPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_INPUT_PACKET, PlayerInputPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_LIST_PACKET, PlayerListPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAY_STATUS_PACKET, PlayStatusPacket::class);
@@ -367,6 +367,7 @@ class Network {
 		$this->registerPacket(ProtocolInfo::REMOVE_ENTITY_PACKET, RemoveEntityPacket::class);
 		$this->registerPacket(ProtocolInfo::REPLACE_ITEM_IN_SLOT_PACKET, ReplaceItemInSlotPacket::class);
 		$this->registerPacket(ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
+		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
 		$this->registerPacket(ProtocolInfo::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
 		$this->registerPacket(ProtocolInfo::RESPAWN_PACKET, RespawnPacket::class);
 		$this->registerPacket(ProtocolInfo::SET_COMMANDS_ENABLED_PACKET, SetCommandsEnabledPacket::class);
@@ -378,7 +379,6 @@ class Network {
 		$this->registerPacket(ProtocolInfo::SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket::class);
 		$this->registerPacket(ProtocolInfo::SET_SPAWN_POSITION_PACKET, SetSpawnPositionPacket::class);
 		$this->registerPacket(ProtocolInfo::SET_TIME_PACKET, SetTimePacket::class);
-		$this->registerPacket(ProtocolInfo::SET_TITLE_PACKET, SetTitlePacket::class);
 		$this->registerPacket(ProtocolInfo::SHOW_CREDITS_PACKET, ShowCreditsPacket::class);
 		$this->registerPacket(ProtocolInfo::SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket::class);
 		$this->registerPacket(ProtocolInfo::START_GAME_PACKET, StartGamePacket::class);

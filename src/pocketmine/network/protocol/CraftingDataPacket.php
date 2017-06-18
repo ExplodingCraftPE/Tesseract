@@ -39,7 +39,6 @@ class CraftingDataPacket extends DataPacket{
 	const ENTRY_FURNACE = 2;
 	const ENTRY_FURNACE_DATA = 3;
 	const ENTRY_MULTI = 4;
-	const ENTRY_SHULKER_BOX = 5; //TODO
 
 	/** @var object[] */
 	public $entries = [];
@@ -197,6 +196,13 @@ class CraftingDataPacket extends DataPacket{
 		}
 
 		$this->putBool($this->cleanRecipes);
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "CraftingDataPacket";
 	}
 
 }

@@ -35,7 +35,7 @@ use pocketmine\tile\Tile;
 use pocketmine\tile\Beacon as TileBeacon;
 
 
-class Beacon extends Transparent{
+class Beacon extends Transparent implements SolidLight{
  
  	protected $id = self::BEACON;
  

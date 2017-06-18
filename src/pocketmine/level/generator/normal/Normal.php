@@ -37,7 +37,6 @@ use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Simplex;
 use pocketmine\level\generator\normal\object\OreType;
-use pocketmine\level\generator\normal\populator\Cave;
 use pocketmine\level\generator\normal\populator\GroundCover;
 use pocketmine\level\generator\normal\populator\Ore;
 use pocketmine\level\generator\populator\Populator;
@@ -48,21 +47,21 @@ use pocketmine\utils\Random;
 class Normal extends Generator{
 
 	/** @var Populator[] */
-	protected $populators = [];
+	private $populators = [];
 	/** @var ChunkManager */
-	protected $level;
+	private $level;
 	/** @var Random */
-	protected $random;
-	protected $waterHeight = 62;
-	protected $bedrockDepth = 5;
+	private $random;
+	private $waterHeight = 62;
+	private $bedrockDepth = 5;
 
 	/** @var Populator[] */
-	protected $generationPopulators = [];
+	private $generationPopulators = [];
 	/** @var Simplex */
-	protected $noiseBase;
+	private $noiseBase;
 
 	/** @var BiomeSelector */
-	protected $selector;
+	private $selector;
 
 	private static $GAUSSIAN_KERNEL = null;
 	private static $SMOOTH_SIZE = 2;
@@ -94,11 +93,7 @@ class Normal extends Generator{
 		return "Normal";
 	}
 
-	public function getWaterHeight(): int{
-        return $this->waterHeight;
-    }
-
-    public function getSettings(){
+	public function getSettings(){
 		return [];
 	}
 
@@ -144,9 +139,6 @@ class Normal extends Generator{
 		$cover = new GroundCover();
 		$this->generationPopulators[] = $cover;
 
-		$cave = new Cave();
-		$this->populators[] = $cave;
-
 		$ores = new Ore();
 		$ores->setOreTypes([
 			new OreType(new CoalOre(), 20, 17, 0, 128),
@@ -156,10 +148,10 @@ class Normal extends Generator{
 			new OreType(new GoldOre(), 2, 9, 0, 32),
 			new OreType(new DiamondOre(), 1, 8, 0, 16),
 			new OreType(new Dirt(), 10, 33, 0, 128),
-            new OreType(new Stone(Stone::GRANITE), 10, 33, 0, 80),
-            new OreType(new Stone(Stone::DIORITE), 10, 33, 0, 80),
-            new OreType(new Stone(Stone::ANDESITE), 10, 33, 0, 80),
-			new OreType(new Gravel(), 8, 33, 0, 128)
+			new OreType(new Gravel(), 8, 33, 0, 128),
+			new OreType(new Stone(Stone::GRANITE), 10, 33, 0, 80),
+			new OreType(new Stone(Stone::DIORITE), 10, 33, 0, 80),
+			new OreType(new Stone(Stone::ANDESITE), 10, 33, 0, 80)
 		]);
 		$this->populators[] = $ores;
 	}
@@ -208,25 +200,19 @@ class Normal extends Generator{
 				$minSum /= $weightSum;
 				$maxSum /= $weightSum;
 
-				$solidLand = false;
+				$smoothHeight = ($maxSum - $minSum) / 2;
 
-                for($y = 127; $y >= 0; --$y){
+                for($y = 0; $y < 128; ++$y){
 					if($y === 0){
 						$chunk->setBlockId($x, $y, $z, Block::BEDROCK);
 						continue;
 					}
 
-                    $noiseAdjustment = 2 * (($maxSum - $y) / ($maxSum - $minSum)) - 1;
-
-                    $caveLevel = $minSum - 10;
-                    $distAboveCaveLevel = max(0, $y - $caveLevel);
-
-                    $noiseAdjustment = min($noiseAdjustment, 0.4 + ($distAboveCaveLevel / 10));
-                    $noiseValue = $noise[$x][$z][$y] + $noiseAdjustment;
+                    $noiseValue = $noise[$x][$z][$y] - 1 / $smoothHeight * ($y - $smoothHeight - $minSum);
 
 					if($noiseValue > 0){
 						$chunk->setBlockId($x, $y, $z, Block::STONE);
-					}elseif($y <= $this->waterHeight && $solidLand == false){
+					}elseif($y <= $this->waterHeight){
 						$chunk->setBlockId($x, $y, $z, Block::STILL_WATER);
 					}
 				}

@@ -192,7 +192,6 @@ class Block extends Position implements BlockIds, Metadatable{
 
 			self::$list[self::BREWING_STAND_BLOCK] = BrewingStand::class;
 			self::$list[self::END_PORTAL_FRAME] = EndPortalFrame::class;
-			self::$list[self::END_PORTAL] = EndPortal::class;
 			self::$list[self::END_STONE] = EndStone::class;
 
 			self::$list[self::END_STONE_BRICKS] = EndStoneBricks::class;
@@ -313,6 +312,8 @@ class Block extends Position implements BlockIds, Metadatable{
 							}else{
 								self::$lightFilter[$id] = 1;
 							}
+						}elseif($block instanceof SolidLight){
+							self::$lightFilter[$id] = 1;
 						}else{
 							self::$lightFilter[$id] = 15;
 						}

@@ -48,4 +48,11 @@ class ChangeDimensionPacket extends DataPacket{
 		$this->putBool($this->unknown);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "ChangeDimensionPacket";
+	}
+
 }

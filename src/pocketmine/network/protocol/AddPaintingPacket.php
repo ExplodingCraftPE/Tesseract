@@ -48,4 +48,11 @@ class AddPaintingPacket extends DataPacket{
 		$this->putString($this->title);
 	}
 
+	/**
+	 * @return string
+     */
+	public function getName(){
+		return "AddPaintingPacket";
+	}
+
 }

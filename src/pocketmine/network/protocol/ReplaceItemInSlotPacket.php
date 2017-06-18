@@ -39,4 +39,11 @@ class ReplaceItemInSlotPacket extends DataPacket{
 		$this->putSlot($this->item);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "ReplaceItemInSlotPacket";
+	}
+
 }

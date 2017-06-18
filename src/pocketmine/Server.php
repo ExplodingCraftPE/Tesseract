@@ -54,7 +54,6 @@ use pocketmine\level\generator\Flat;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\nether\Nether;
 use pocketmine\level\generator\normal\Normal;
-use pocketmine\level\generator\normal\Normal2;
 use pocketmine\level\Level;
 use pocketmine\level\LevelException;
 use pocketmine\metadata\EntityMetadataStore;
@@ -263,7 +262,6 @@ class Server{
 
 	private $aboutContent = "";
 
-	//TODO: Remove advanced config
 	/** Advanced Config */
 	public $advancedConfig = null;
 
@@ -298,6 +296,8 @@ class Server{
 	public $allowInventoryCheats = false;
 	public $raklibDisable = false;
 	public $checkMovement = true;
+	public $antiFly = true;
+	public $allowInstabreak = false;
 	public $folderpluginloader = false;
 	
 	/**
@@ -1470,6 +1470,8 @@ class Server{
 		$this->raklibDisable = $this->getAdvancedProperty("network.raklib-disable", false);
 		$this->allowInventoryCheats = $this->getAdvancedProperty("inventory.allow-cheats", false);
 		$this->checkMovement = $this->getAdvancedProperty("anticheat.check-movement", true);
+		$this->allowInstabreak = $this->getAdvancedProperty("anticheat.allow-instabreak", true);
+		$this->antiFly = $this->getAdvancedProperty("anticheat.anti-fly", true);
 		$this->folderpluginloader = $this->getAdvancedProperty("developer.folder-plugin-loader", false);
 	}
 	
@@ -1536,10 +1538,6 @@ class Server{
 
 			if(!file_exists($dataPath . "crashdumps/")){
 				mkdir($dataPath . "crashdumps/", 0777);
-			}
-			
-			if(!file_exists($dataPath . "plugins/Tesseract/")){
-				mkdir($dataPath . "plugins/Tesseract/", 0777);
 			}
 			
 			if(\Phar::running(true) === ""){
@@ -1611,7 +1609,7 @@ class Server{
 §6│                                                 │  §6------------------------------------------
 §6│                                                 │    §cAPI Version: §d$api
 §6│   §aSupport: §bgithub.com/TesseractTeam/Tesseract   §6│    §cLanguage: §d$lang
-§6│					           │    §cPackage: §d$package
+§6│					          │    §cPackage: §d$package
 §6└─────────────────────────────────────────────────┘  §6------------------------------------------");
 
 			$nowLang = $this->getProperty("settings.language", "eng");
@@ -1686,8 +1684,8 @@ class Server{
 			$this->playerMetadata = new PlayerMetadataStore();
 			$this->levelMetadata = new LevelMetadataStore();
 
-			$this->operators = new Config($this->dataPath . "ops.txt", Config::ENUM);
-			$this->whitelist = new Config($this->dataPath . "white-list.txt", Config::ENUM);
+			$this->operators = new Config($this->dataPath . "ops.json", Config::JSON);
+			$this->whitelist = new Config($this->dataPath . "whitelist.json", Config::JSON);
 			if(file_exists($this->dataPath . "banned.txt") and !file_exists($this->dataPath . "banned-players.txt")){
 				@rename($this->dataPath . "banned.txt", $this->dataPath . "banned-players.txt");
 			}
@@ -1777,7 +1775,6 @@ class Server{
 
 			Generator::addGenerator(Flat::class, "flat");
 			Generator::addGenerator(Normal::class, "normal");
-			Generator::addGenerator(Normal2::class, "normal2");
 			Generator::addGenerator(Normal::class, "default");
 			Generator::addGenerator(Nether::class, "hell");
 			Generator::addGenerator(Nether::class, "nether");
@@ -1847,12 +1844,6 @@ class Server{
 			}
 
 			$this->enablePlugins(PluginLoadOrder::POSTWORLD);
-			
-			if($this->dserverConfig["enable"] and ($this->getAdvancedProperty("dserver.server-list", "") != "")) $this->scheduler->scheduleRepeatingTask(new scheduler\CallbackTask(
-			[
-				$this, "updateDServerInfo"
-			]),
-			$this->dserverConfig["timer"]);
 
 			if($cfgVer > $advVer){
 				$this->logger->notice("Your tesseract.yml needs update (Current : $advVer -> Latest: $cfgVer)");

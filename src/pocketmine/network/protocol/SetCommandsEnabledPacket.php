@@ -39,4 +39,11 @@ class SetCommandsEnabledPacket extends DataPacket{
 		$this->putBool($this->enabled);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "SetCommandsEnabledPacket";
+	}
+
 }

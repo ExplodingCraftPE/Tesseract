@@ -236,6 +236,7 @@ LICENSE;
 
 	private function endWizard(){
 		echo "[*] " . $this->lang->you_have_finished . "\n";
+		echo "[*] " . $this->lang->pocketmine_plugins . "\n";
 		echo "[*] " . $this->lang->pocketmine_will_start . "\n\n\n";
 		sleep(4);
 	}

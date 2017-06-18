@@ -32,9 +32,6 @@ class PlayStatusPacket extends DataPacket{
 	const LOGIN_FAILED_CLIENT = 1;
 	const LOGIN_FAILED_SERVER = 2;
 	const PLAYER_SPAWN = 3;
-	const LOGIN_FAILED_INVALID_TENANT = 4;
-	const LOGIN_FAILED_VANILLA_EDU = 5;
-	const LOGIN_FAILED_EDU_VANILLA = 6;
 
 	public $status;
 
@@ -45,6 +42,13 @@ class PlayStatusPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putInt($this->status);
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "PlayStatusPacket";
 	}
 
 }

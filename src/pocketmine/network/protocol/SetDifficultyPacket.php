@@ -39,4 +39,12 @@ class SetDifficultyPacket extends DataPacket{
 		$this->putUnsignedVarInt($this->difficulty);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "SetDifficultyPacket";
+	}
+
+
 }

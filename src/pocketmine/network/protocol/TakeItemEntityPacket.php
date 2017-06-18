@@ -41,4 +41,11 @@ class TakeItemEntityPacket extends DataPacket{
 		$this->putEntityId($this->eid);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "TakeItemEntityPacket";
+	}
+
 }

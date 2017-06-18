@@ -24,18 +24,16 @@ namespace pocketmine\network\protocol;
 #include <rules/DataPacket.h>
 
 
-class ContainerSetContentPacket extends DataPacket {
+class ContainerSetContentPacket extends DataPacket{
 
 	const NETWORK_ID = Info::CONTAINER_SET_CONTENT_PACKET;
 
 	const SPECIAL_INVENTORY = 0;
-	const SPECIAL_OFFHAND = 0x77;
 	const SPECIAL_ARMOR = 0x78;
 	const SPECIAL_CREATIVE = 0x79;
 	const SPECIAL_HOTBAR = 0x7a;
 
 	public $windowid;
-	public $targetEid;
 	public $slots = [];
 	public $hotbar = [];
 
@@ -46,22 +44,22 @@ class ContainerSetContentPacket extends DataPacket {
 	}
 
 	public function decode(){
-		$this->windowid = $this->getUnsignedVarInt();
-		$this->targetEid = $this->getEntityId();
+		$this->windowid = $this->getByte();
 		$count = $this->getUnsignedVarInt();
 		for($s = 0; $s < $count and !$this->feof(); ++$s){
 			$this->slots[$s] = $this->getSlot();
 		}
-		$count = $this->getUnsignedVarInt();
-		for($s = 0; $s < $count and !$this->feof(); ++$s){
-			$this->hotbar[$s] = $this->getVarInt();
+		if($this->windowid === self::SPECIAL_INVENTORY){
+			$count = $this->getUnsignedVarInt();
+			for($s = 0; $s < $count and !$this->feof(); ++$s){
+				$this->hotbar[$s] = $this->getVarInt();
+			}
 		}
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->windowid);
-		$this->putEntityId($this->targetEid);
+		$this->putByte($this->windowid);
 		$this->putUnsignedVarInt(count($this->slots));
 		foreach($this->slots as $slot){
 			$this->putSlot($slot);
@@ -74,6 +72,13 @@ class ContainerSetContentPacket extends DataPacket {
 		}else{
 			$this->putUnsignedVarInt(0);
 		}
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "ContainerSetContentPacket";
 	}
 
 }

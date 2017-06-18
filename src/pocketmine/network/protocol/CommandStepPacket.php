@@ -27,6 +27,18 @@ class CommandStepPacket extends DataPacket{
 
 	const NETWORK_ID = Info::COMMAND_STEP_PACKET;
 
+	/**
+	 * unknown (string)
+	 * unknown (string)
+	 * unknown (uvarint)
+	 * unknown (uvarint)
+	 * unknown (bool)
+	 * unknown (uvarint64)
+	 * unknown (string)
+	 * unknown (string)
+	 * https://gist.github.com/dktapps/8285b93af4ca38e0104bfeb9a6c87afd
+	 */
+
 	public $command;
 	public $overload;
 	public $uvarint1;
@@ -52,6 +64,13 @@ class CommandStepPacket extends DataPacket{
 
 	public function encode(){
 
+	}
+
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "CommandStepPacket";
 	}
 
 }

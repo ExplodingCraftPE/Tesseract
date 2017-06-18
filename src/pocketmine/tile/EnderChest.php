@@ -15,7 +15,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author Tesseract Team
+ * @author Tessetact Team
  * @link http://www.github.com/TesseractTeam/Tesseract
  * 
  *

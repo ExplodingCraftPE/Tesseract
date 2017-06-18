@@ -35,4 +35,11 @@ class RequestChunkRadiusPacket extends DataPacket{
 
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "RequestChunkRadiusPacket";
+	}
+
 }

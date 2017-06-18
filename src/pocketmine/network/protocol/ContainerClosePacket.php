@@ -39,4 +39,11 @@ class ContainerClosePacket extends DataPacket{
 		$this->putByte($this->windowid);
 	}
 
+	/**
+	 * @return PacketName|string
+     */
+	public function getName(){
+		return "ContainerClosePacket";
+	}
+
 }
