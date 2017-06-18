@@ -25,7 +25,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
-
+use pocketmine\utils\TextFormat;
 
 class BanIpByNameCommand extends VanillaCommand{
 
@@ -33,7 +33,7 @@ class BanIpByNameCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.banipbyname.description",
-			"%pocketmine.command.banipbyname.usage"
+			"%commands.banipbyname.usage"
 		);
 		$this->setPermission("pocketmine.command.banipbyname");
 	}

@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class LoginPacket extends DataPacket{
-
 	const NETWORK_ID = Info::LOGIN_PACKET;
 
 	const MOJANG_PUBKEY = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
@@ -38,15 +37,6 @@ class LoginPacket extends DataPacket{
 	public $gameEdition;
 	public $clientUUID;
 	public $clientId;
-     public $adRole;
-	public $currentInputMode;
-	public $defaultInputMode;
-	public $deviceModel;
-	public $deviceOS;
-	public $gameVersion;
-	public $guiScale;
-	public $tenantId;
-	public $uiProfile;
 	public $identityPublicKey;
 	public $serverAddress;
 
@@ -55,14 +45,15 @@ class LoginPacket extends DataPacket{
 
 	public function decode(){
 		$this->protocol = $this->getInt();
-		if(!in_array($this->protocol, Info::ACCEPTED_PROTOCOLS)){
-			$this->buffer = null;
+		if($this->protocol !== Info::CURRENT_PROTOCOL){
 			return; //Do not attempt to decode for non-accepted protocols
 		}
 
 		$this->gameEdition = $this->getByte();
 
-		$this->setBuffer($this->getString(), 0);
+		$str = zlib_decode($this->getString(), 1024 * 1024 * 64);
+
+		$this->setBuffer($str, 0);
 
 		$time = time();
 
@@ -99,30 +90,9 @@ class LoginPacket extends DataPacket{
 			}
 		}
 		list($verified, $skinToken) = $this->decodeToken($this->get($this->getLInt()), $chainKey);
-        if(isset($skinToken["AdRole"])){
-            $this->AdRole = $skinToken["AdRole"];
-        }
-        if(isset($skinToken["ClientRandomId"])){
+		if(isset($skinToken["ClientRandomId"])){
 			$this->clientId = $skinToken["ClientRandomId"];
 		}
-        if(isset($skinToken["CurrentInputMode"])){
-            $this->currentInputMode = $skinToken["CurrentInputMode"];
-        }
-        if(isset($skinToken["DefaultInputMode"])){
-            $this->defaultInputMode = $skinToken["DefaultInputMode"];
-        }
- 		if(isset($skinToken["DeviceModel"])){
-            $this->deviceModel = $skinToken["DeviceModel"];
-        }
- 		if(isset($skinToken["DeviceOS"])){
-            $this->deviceOS = $skinToken["DeviceOS"];
-        }
- 		if(isset($skinToken["GameVersion"])){
-            $this->gameVersion = $skinToken["GameVersion"];
-        }
- 		if(isset($skinToken["GuiScale"])){
-            $this->guiScale = $skinToken["GuiScale"];
-        }
 		if(isset($skinToken["ServerAddress"])){
 			$this->serverAddress = $skinToken["ServerAddress"];
 		}
@@ -132,12 +102,6 @@ class LoginPacket extends DataPacket{
 		if(isset($skinToken["SkinId"])){
 			$this->skinId = $skinToken["SkinId"];
 		}
-        if(isset($skinToken["TenantId"])){
-            $this->TenantId = $skinToken["TenantId"];
-        }
-        if(isset($skinToken["UIProfile"])){
-            $this->UIProfile = $skinToken["UIProfile"];
-        }
 		if($verified){
 			$this->identityPublicKey = $chainKey;
 		}

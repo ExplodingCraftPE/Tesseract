@@ -61,22 +61,14 @@ class PlayerExperienceChangeEvent extends PlayerEvent implements Cancellable{
 	}
 	
 	public function setProgress(float $progress){
-		$this->progress = $progress;
+		$this->progress = $progress; //errors will be handled internally anyway
 	}
 
 	public function getExp(){
-		return Human::getLevelXpRequirement($this->expLevel) * $this->progress;
+		return Human::getLevelXpRequirement($this->level) * $this->progress;
 	}
 
 	public function setExp($exp){
-		$this->progress = $exp / Human::getLevelXpRequirement($this->expLevel);
+		$this->progress = $exp / Human::getLevelXpRequirement($this->level);
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "PlayerExperienceChangeEvent";
-	}
-
 }

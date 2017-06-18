@@ -29,7 +29,6 @@ use pocketmine\Player;
  * Allows the creation of players overriding the base Player class
  */
 class PlayerCreationEvent extends Event{
-
 	public static $handlerList = null;
 
 	/** @var SourceInterface */
@@ -135,13 +134,6 @@ class PlayerCreationEvent extends Event{
 		}
 
 		$this->playerClass = $class;
-	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "PlayerCreationEvent";
 	}
 
 }

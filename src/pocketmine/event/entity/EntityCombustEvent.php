@@ -56,12 +56,4 @@ class EntityCombustEvent extends EntityEvent implements Cancellable{
 	public function setProtectLevel($ProtectLevel){
 		$this->ProtectLevel = (int) $ProtectLevel;
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "EntityCombustEvent";
-	}
-
 }

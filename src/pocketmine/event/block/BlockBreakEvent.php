@@ -85,12 +85,4 @@ class BlockBreakEvent extends BlockEvent implements Cancellable{
 	public function setInstaBreak($instaBreak){
 		$this->instaBreak = (bool)$instaBreak;
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "BlockBreakEvent";
-	}
-
 }

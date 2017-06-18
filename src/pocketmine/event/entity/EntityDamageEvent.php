@@ -25,9 +25,10 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
 use pocketmine\inventory\PlayerInventory;
+use pocketmine\item\Armor;
 use pocketmine\Player;
 use pocketmine\item\Item;
-use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\enchantment;
 
 class EntityDamageEvent extends EntityEvent implements Cancellable{
 	public static $handlerList = null;
@@ -278,8 +279,8 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	}
 
 	/**
-	 * @return array|Item
-     * notice: $usedArmors $index->$cost
+	 * @return Item $usedArmors
+	 * notice: $usedArmors $index->$cost
 	 * $index: the $index of ArmorInventory
 	 * $cost:  the num of durability cost
 	 */
@@ -337,12 +338,4 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 			return true;
 		}
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "EntityDamageEvent";
-	}
-
 }

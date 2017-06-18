@@ -29,7 +29,6 @@ use pocketmine\Server;
  * Called when a player chats something
  */
 class PlayerChatEvent extends PlayerEvent implements Cancellable{
-
 	public static $handlerList = null;
 
 	/** @var string */
@@ -88,12 +87,4 @@ class PlayerChatEvent extends PlayerEvent implements Cancellable{
 	public function setRecipients(array $recipients){
 		$this->recipients = $recipients;
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "PlayerChatEvent";
-	}
-
 }

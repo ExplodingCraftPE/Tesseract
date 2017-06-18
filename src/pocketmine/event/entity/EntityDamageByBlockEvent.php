@@ -48,11 +48,5 @@ class EntityDamageByBlockEvent extends EntityDamageEvent{
 		return $this->damager;
 	}
 
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "EntityDamageByBlockEvent";
-	}
 
 }

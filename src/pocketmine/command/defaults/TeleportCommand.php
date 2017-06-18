@@ -34,7 +34,7 @@ class TeleportCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.tp.description",
-			"%pocketmine.command.tp.usage"
+			"%commands.tp.usage"
 		);
 		$this->setPermission("pocketmine.command.teleport");
 	}
@@ -100,7 +100,7 @@ class TeleportCommand extends VanillaCommand{
 			}
 
 			$x = $this->getRelativeDouble($target->x, $sender, $args[$pos++]);
-			$y = $this->getRelativeDouble($target->y, $sender, $args[$pos++], 0, 256);
+			$y = $this->getRelativeDouble($target->y, $sender, $args[$pos++], 0, 128);
 			$z = $this->getRelativeDouble($target->z, $sender, $args[$pos++]);
 			$yaw = $target->getYaw();
 			$pitch = $target->getPitch();

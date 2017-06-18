@@ -54,11 +54,4 @@ class EntityBlockChangeEvent extends EntityEvent implements Cancellable{
 		return $this->to;
 	}
 
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "EntityBlockChangeEvent";
-	}
-
 }

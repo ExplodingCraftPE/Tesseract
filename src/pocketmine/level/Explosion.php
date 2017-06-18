@@ -30,7 +30,6 @@ use pocketmine\event\entity\EntityExplodeEvent;
 use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\item\Item;
 use pocketmine\level\particle\HugeExplodeSeedParticle;
-use pocketmine\level\sound\ExplodeSound;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
@@ -39,6 +38,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\network\Network;
 use pocketmine\network\protocol\ExplodePacket;
 
 use pocketmine\utils\Random;
@@ -95,7 +95,7 @@ class Explosion{
 							$vBlock->x = $pointerX >= $x ? $x : $x - 1;
 							$vBlock->y = $pointerY >= $y ? $y : $y - 1;
 							$vBlock->z = $pointerZ >= $z ? $z : $z - 1;
-							if($vBlock->y < 0 or $vBlock->y >= Level::Y_MAX){
+							if($vBlock->y < 0 or $vBlock->y > 127){
 								break;
 							}
 							$block = $this->level->getBlock($vBlock);
@@ -179,7 +179,7 @@ class Explosion{
 		foreach($this->affectedBlocks as $block){
 			if($block->getId() === Block::TNT){
 				$mot = (new Random())->nextSignedFloat() * M_PI * 2;
-				$tnt = Entity::createEntity("PrimedTNT", $this->level, new CompoundTag("", [
+				$tnt = Entity::createEntity("PrimedTNT", $this->level->getChunk($block->x >> 4, $block->z >> 4), new CompoundTag("", [
 					"Pos" => new ListTag("Pos", [
 						new DoubleTag("", $block->x + 0.5),
 						new DoubleTag("", $block->y),
@@ -227,9 +227,8 @@ class Explosion{
 		$pk->radius = $this->size;
 		$pk->records = $send;
 		$this->level->addChunkPacket($source->x >> 4, $source->z >> 4, $pk);
-
+		
 		$this->level->addParticle(new HugeExplodeSeedParticle($source));
-		$this->level->addSound(new ExplodeSound(new Vector3($source->x, $source->y, $source->z)));
 
 		return true;
 	}

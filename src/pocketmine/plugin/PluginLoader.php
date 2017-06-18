@@ -21,6 +21,9 @@
 
 namespace pocketmine\plugin;
 
+/**
+ * Handles different types of plugins
+ */
 interface PluginLoader{
 
 	/**

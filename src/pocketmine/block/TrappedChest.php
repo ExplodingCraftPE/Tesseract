@@ -33,7 +33,7 @@ use pocketmine\Player;
 use pocketmine\tile\Chest as TileChest;
 use pocketmine\tile\Tile;
 
-class TrappedChest extends Solid{
+class TrappedChest extends RedstoneSource{
 	protected $id = self::TRAPPED_CHEST;
 
 	public function __construct($meta = 0){
@@ -133,7 +133,7 @@ class TrappedChest extends Solid{
 			}
 		}
 
-		$tile = Tile::createTile("Chest", $this->getLevel(), $nbt);
+		$tile = Tile::createTile("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 		if($chest instanceof TileChest and $tile instanceof TileChest){
 			$chest->pairWith($tile);
@@ -173,7 +173,7 @@ class TrappedChest extends Solid{
 						new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$chest = Tile::createTile("Chest", $this->getLevel(), $nbt);
+				$chest = Tile::createTile("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if(isset($chest->namedtag->Lock) and $chest->namedtag->Lock instanceof StringTag){

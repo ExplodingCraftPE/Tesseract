@@ -101,15 +101,11 @@ class MainLogger extends \AttachableThreadedLogger{
 	}
 
 	public function notice($message, $name = "NOTICE"){
-		$this->send(TextFormat::BOLD . $message, \LogLevel::NOTICE, $name, TextFormat::AQUA);
+		$this->send(TextFormat::BOLD . $message, \LogLevel::NOTICE, $name, TextFormat::GOLD);
 	}
 
 	public function info($message, $name = "INFO"){
 		$this->send($message, \LogLevel::INFO, $name, TextFormat::WHITE);
-	}
-	
-	public function developer($message, $name = "DEVELOPER"){
-		$this->send($message, \LogLevel::DEVELOPER, $name, TextFormat::GOLD);
 	}
 
 	public function debug($message, $name = "DEBUG"){
@@ -222,8 +218,8 @@ class MainLogger extends \AttachableThreadedLogger{
 			}
 		}
 
-    $message = TextFormat::toANSI(TextFormat::GREEN . "[Tesseract] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . $color . $prefix . "> " . $message . TextFormat::RESET);
-	//$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s") . "] ". TextFormat::RESET . $color ."<".$prefix . ">" . " " . $message . TextFormat::RESET);
+		$message = TextFormat::toANSI(TextFormat::BOLD . TextFormat::GREEN . "[Tesseract] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
+		//$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s") . "] ". TextFormat::RESET . $color ."<".$prefix . ">" . " " . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
 		if(!Terminal::hasFormattingCodes()){

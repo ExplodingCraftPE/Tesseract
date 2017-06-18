@@ -22,7 +22,7 @@
 namespace pocketmine\item;
 
 use pocketmine\entity\Entity;
-
+use pocketmine\entity\Human;
 use pocketmine\event\entity\EntityEatItemEvent;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\Player;
@@ -58,10 +58,7 @@ abstract class Food extends Item implements FoodSource{
 		if($human instanceof Player){
 			$human->dataPacket($pk);
 		}
-		
-		$server = $human->getLevel()->getServer();
-		
-		$server->broadcastPacket($human->getViewers(), $pk);
+		Server::broadcastPacket($human->getViewers(), $pk);
 
 		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEatItemEvent($human, $this));
 

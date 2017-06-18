@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class HurtArmorPacket extends DataPacket{
-
 	const NETWORK_ID = Info::HURT_ARMOR_PACKET;
 
 	public $health;

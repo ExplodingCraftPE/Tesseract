@@ -25,9 +25,10 @@ use pocketmine\inventory\ChestInventory;
 use pocketmine\inventory\DoubleChestInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\Level;
+use pocketmine\level\format\FullChunk;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
+
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
@@ -41,13 +42,15 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var DoubleChestInventory */
 	protected $doubleInventory = null;
 
-	public function __construct(Level $level, CompoundTag $nbt){
-		parent::__construct($level, $nbt);
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		parent::__construct($chunk, $nbt);
 		$this->inventory = new ChestInventory($this);
+
 		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
 			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
+
 		for($i = 0; $i < $this->getSize(); ++$i){
 			$this->inventory->setItem($i, $this->getItem($i));
 		}
@@ -166,11 +169,7 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 	}
 
 	protected function checkPairing(){
-		if($this->isPaired() and !$this->getLevel()->isChunkLoaded($this->namedtag->pairx->getValue() >> 4, $this->namedtag->pairz->getValue() >> 4)){
-			//paired to a tile in an unloaded chunk
-			$this->doubleInventory = null;
-
-		}elseif(($pair = $this->getPair()) instanceof Chest){
+		if(($pair = $this->getPair()) instanceof Chest){
 			if(!$pair->isPaired()){
 				$pair->createPair($this);
 				$pair->checkPairing();

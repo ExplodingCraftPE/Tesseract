@@ -24,6 +24,7 @@ namespace pocketmine\plugin;
 use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\event\plugin\PluginEnableEvent;
 use pocketmine\Server;
+use pocketmine\utils\PluginException;
 
 /**
  * Handles different types of plugins
@@ -95,8 +96,8 @@ class PharPluginLoader implements PluginLoader{
 	/**
 	 * Returns the filename patterns that this loader accepts
 	 *
-	 * @return array|string
-     */
+	 * @return array
+	 */
 	public function getPluginFilters(){
 		return "/\\.phar$/i";
 	}

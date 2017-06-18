@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class RemoveBlockPacket extends DataPacket{
-
 	const NETWORK_ID = Info::REMOVE_BLOCK_PACKET;
 
 	public $x;

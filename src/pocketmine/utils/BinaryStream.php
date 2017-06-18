@@ -1,5 +1,4 @@
 <?php
-
 /*
  *
  *  ____            _        _   __  __ _                  __  __ ____  
@@ -18,17 +17,13 @@
  * 
  *
 */
-
 namespace pocketmine\utils;
-
 #include <rules/DataPacket.h>
 #ifndef COMPILE
 #endif
-
 use pocketmine\item\Item;
 
 class BinaryStream extends \stdClass{
-
 	public $offset;
 	public $buffer;
 
@@ -127,8 +122,8 @@ class BinaryStream extends \stdClass{
 		$this->buffer .= Binary::writeShort($v);
 	}
 
-	public function getFloat(int $accuracy = -1){
-		return Binary::readFloat($this->get(4), $accuracy);
+	public function getFloat(){
+		return Binary::readFloat($this->get(4));
 	}
 
 	public function putFloat($v){
@@ -143,8 +138,8 @@ class BinaryStream extends \stdClass{
 		$this->buffer .= Binary::writeLShort($v);
 	}
 
-	public function getLFloat(int $accuracy = -1){
-		return Binary::readLFloat($this->get(4), $accuracy);
+	public function getLFloat(){
+		return Binary::readLFloat($this->get(4));
 	}
 
 	public function putLFloat($v){
@@ -175,6 +170,21 @@ class BinaryStream extends \stdClass{
 		$this->buffer .= chr($v);
 	}
 
+	public function getDataArray($len = 10){
+		$data = [];
+		for($i = 1; $i <= $len and !$this->feof(); ++$i){
+			$data[] = $this->get($this->getTriad());
+		}
+		return $data;
+	}
+
+	public function putDataArray(array $data = []){
+		foreach($data as $v){
+			$this->putTriad(strlen($v));
+			$this->put($v);
+		}
+	}
+
 	public function getUUID(){
 		return UUID::fromBinary($this->get(16));
 	}
@@ -183,17 +193,14 @@ class BinaryStream extends \stdClass{
 		$this->put($uuid->toBinary());
 	}
 
-	public function getSlot() : Item{
+	public function getSlot(){
 		$id = $this->getVarInt();
+
 		if($id <= 0){
 			return Item::get(0, 0, 0);
 		}
-
 		$auxValue = $this->getVarInt();
 		$data = $auxValue >> 8;
-		if($data === 0x7fff){
-			$data = -1;
-		}
 		$cnt = $auxValue & 0xff;
 
 		$nbtLen = $this->getLShort();
@@ -202,24 +209,12 @@ class BinaryStream extends \stdClass{
 		if($nbtLen > 0){
 			$nbt = $this->get($nbtLen);
 		}
-
-		//TODO
-		$canPlaceOn = $this->getVarInt();
-		if($canPlaceOn > 0){
-			for($i = 0; $i < $canPlaceOn; ++$i){
-				$this->getString();
-			}
-		}
-
-		//TODO
-		$canDestroy = $this->getVarInt();
-		if($canDestroy > 0){
-			for($i = 0; $i < $canDestroy; ++$i){
-				$this->getString();
-			}
-		}
-
-		return Item::get($id, $data, $cnt, $nbt);
+		return Item::get(
+			$id,
+			$data,
+			$cnt,
+			$nbt
+		);
 	}
 
 
@@ -230,15 +225,11 @@ class BinaryStream extends \stdClass{
 		}
 
 		$this->putVarInt($item->getId());
-		$auxValue = (($item->getDamage() & 0x7fff) << 8) | $item->getCount();
+		$auxValue = (($item->getDamage() ?? -1) << 8) | $item->getCount();
 		$this->putVarInt($auxValue);
-
 		$nbt = $item->getCompoundTag();
 		$this->putLShort(strlen($nbt));
 		$this->put($nbt);
-
-		$this->putVarInt(0); //CanPlaceOn entry count (TODO)
-		$this->putVarInt(0); //CanDestroy entry count (TODO)
 	}
 
 	public function getString(){
@@ -259,10 +250,9 @@ class BinaryStream extends \stdClass{
 		return Binary::readUnsignedVarInt($this);
 	}
 
-    /**
-     * Writes an unsigned varint32 to the stream.
-     * @param $v
-     */
+	/**
+	 * Writes an unsigned varint32 to the stream.
+	 */
 	public function putUnsignedVarInt($v){
 		$this->put(Binary::writeUnsignedVarInt($v));
 	}
@@ -274,10 +264,9 @@ class BinaryStream extends \stdClass{
 		return Binary::readVarInt($this);
 	}
 
-    /**
-     * Writes a signed varint32 to the stream.
-     * @param $v
-     */
+	/**
+	 * Writes a signed varint32 to the stream.
+	 */
 	public function putVarInt($v){
 		$this->put(Binary::writeVarInt($v));
 	}
@@ -303,9 +292,9 @@ class BinaryStream extends \stdClass{
 	}
 	
 	public function getVector3f(&$x, &$y, &$z){
-		$x = $this->getLFloat(4);
-		$y = $this->getLFloat(4);
-		$z = $this->getLFloat(4);
+		$x = $this->getLFloat();
+		$y = $this->getLFloat();
+		$z = $this->getLFloat();
 	}
 	
 	public function putVector3f($x, $y, $z){

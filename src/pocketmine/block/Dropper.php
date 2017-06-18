@@ -32,7 +32,7 @@ use pocketmine\Player;
 use pocketmine\tile\Dropper as TileDropper;
 use pocketmine\tile\Tile;
 
-class Dropper extends Solid{
+class Dropper extends Solid implements ElectricalAppliance{
 
 	protected $id = self::DROPPER;
 
@@ -95,7 +95,7 @@ class Dropper extends Solid{
 			}
 		}
 
-		Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
+		Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 		return true;
 	}
@@ -122,7 +122,7 @@ class Dropper extends Solid{
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
+				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if($player->isCreative() and $player->getServer()->limitedCreative){

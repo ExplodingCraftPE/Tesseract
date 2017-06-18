@@ -25,16 +25,12 @@ namespace pocketmine\network\protocol;
 
 
 class PlayStatusPacket extends DataPacket{
-
 	const NETWORK_ID = Info::PLAY_STATUS_PACKET;
 	
 	const LOGIN_SUCCESS = 0;
 	const LOGIN_FAILED_CLIENT = 1;
 	const LOGIN_FAILED_SERVER = 2;
 	const PLAYER_SPAWN = 3;
-	const LOGIN_FAILED_INVALID_TENANT = 4;
-	const LOGIN_FAILED_VANILLA_EDU = 5;
-	const LOGIN_FAILED_EDU_VANILLA = 6;
 
 	public $status;
 

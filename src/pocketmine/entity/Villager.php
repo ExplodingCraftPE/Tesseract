@@ -21,8 +21,9 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\level\Level;
 use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -47,12 +48,12 @@ class Villager extends Creature implements NPC, Ageable{
 		return "Villager";
 	}
 
-	public function __construct(Level $level, CompoundTag $nbt){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->Profession)){
 			$nbt->Profession = new ByteTag("Profession", mt_rand(0, 4));
 		}
 
-		parent::__construct($level, $nbt);
+		parent::__construct($chunk, $nbt);
 
 		$this->setDataProperty(self::DATA_PROFESSION_ID, self::DATA_TYPE_BYTE, $this->getProfession());
 	}

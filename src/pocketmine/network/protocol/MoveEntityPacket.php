@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class MoveEntityPacket extends DataPacket{
-
 	const NETWORK_ID = Info::MOVE_ENTITY_PACKET;
 
 	public $eid;
@@ -35,8 +34,6 @@ class MoveEntityPacket extends DataPacket{
 	public $yaw;
 	public $headYaw;
 	public $pitch;
-	public $onGround = false;
-	public $teleported = false;
 
 	public function decode(){
 		$this->eid = $this->getEntityId();
@@ -44,8 +41,6 @@ class MoveEntityPacket extends DataPacket{
 		$this->pitch = $this->getByte() * (360.0 / 256);
 		$this->yaw = $this->getByte() * (360.0 / 256);
 		$this->headYaw = $this->getByte() * (360.0 / 256);
-		$this->onGround = $this->getBool();
-		$this->teleported = $this->getBool();
 	}
 
 	public function encode(){
@@ -55,8 +50,5 @@ class MoveEntityPacket extends DataPacket{
 		$this->putByte($this->pitch / (360.0 / 256));
 		$this->putByte($this->yaw / (360.0 / 256));
 		$this->putByte($this->headYaw / (360.0 / 256));
-		$this->putBool($this->onGround);
-		$this->putBool($this->teleported);
 	}
-
 }

@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class SetHealthPacket extends DataPacket{
-
 	const NETWORK_ID = Info::SET_HEALTH_PACKET;
 
 	public $health;

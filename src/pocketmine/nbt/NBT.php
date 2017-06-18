@@ -38,6 +38,8 @@ use pocketmine\nbt\tag\NamedTAG;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\Tag;
+use pocketmine\utils\Utils;
+
 #ifndef COMPILE
 use pocketmine\utils\Binary;
 
@@ -446,8 +448,6 @@ class NBT{
 
 
 	/**
-	 * @param bool $network
-	 *
 	 * @return string|bool
 	 */
 	public function write(bool $network = false){
@@ -608,13 +608,13 @@ class NBT{
 	}
 
 	public function getString(bool $network = false){
-		$len = $network ? Binary::readUnsignedVarInt($this) : $this->getShort();
+		$len = $network ? $this->getByte() : $this->getShort();
 		return $this->get($len);
 	}
 
 	public function putString($v, bool $network = false){
 		if($network === true){
-			$this->put(Binary::writeUnsignedVarInt(strlen($v)));
+			$this->putByte(strlen($v));
 		}else{
 			$this->putShort(strlen($v));
 		}
@@ -624,6 +624,7 @@ class NBT{
 	public function getArray(){
 		$data = [];
 		self::toArray($data, $this->data);
+		return $data;
 	}
 
 	private static function toArray(array &$data, Tag $tag){

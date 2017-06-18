@@ -27,10 +27,14 @@ use pocketmine\item\EnchantedBook;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentEntry;
 use pocketmine\item\enchantment\EnchantmentLevelTable;
+use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
+use pocketmine\math\Vector3;
+use pocketmine\network\protocol\CraftingDataPacket;
 use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\tile\EnchantTable;
 
 class EnchantInventory extends TemporaryInventory{
@@ -45,8 +49,8 @@ class EnchantInventory extends TemporaryInventory{
 	}
 
 	/**
-	 * @return InventoryHolder|EnchantTable
-     */
+	 * @return EnchantTable
+	 */
 	public function getHolder(){
 		return $this->holder;
 	}
@@ -258,6 +262,19 @@ class EnchantInventory extends TemporaryInventory{
 		}else{
 			return mt_rand(0, 15);
 		}
+	}
+
+	public function sendEnchantmentList(){
+		$pk = new CraftingDataPacket();
+		if($this->entries !== null and $this->levels !== null){
+			$list = new EnchantmentList(count($this->entries));
+			for($i = 0; $i < count($this->entries); $i++){
+				$list->setSlot($i, $this->entries[$i]);
+			}
+			$pk->addEnchantList($list);
+		}
+
+		Server::getInstance()->broadcastPacket($this->getViewers(), $pk);
 	}
 
 	/**

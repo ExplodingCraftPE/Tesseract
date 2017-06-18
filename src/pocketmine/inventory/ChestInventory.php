@@ -34,8 +34,8 @@ class ChestInventory extends ContainerInventory{
 	}
 
 	/**
-	 * @return InventoryHolder|Chest
-     */
+	 * @return Chest
+	 */
 	public function getHolder(){
 		return $this->holder;
 	}

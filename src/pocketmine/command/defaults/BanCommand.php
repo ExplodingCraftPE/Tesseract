@@ -33,7 +33,7 @@ class BanCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.ban.player.description",
-			"%pocketmine.command.ban.player.ban.usage"
+			"%commands.ban.usage"
 		);
 		$this->setPermission("pocketmine.command.ban.player");
 	}
@@ -51,20 +51,22 @@ class BanCommand extends VanillaCommand{
 
 		$name = array_shift($args);
 		if(isset($args[0]) and isset($args[1])){
-			$reason = implode(" ", $args);
-			if(is_numeric(end($args))){
-				$reason = str_replace(end($args), " ", $reason);
-				$until = new \DateTime('@' . (end($args) * 86400 + time()));
-				$sender->getServer()->getNameBans()->addBan($name, $reason, $until, $sender->getName());
+			$reason = $args[0];
+			if($args[1] != null and is_numeric($args[1])){
+				$until = new \DateTime('@' . ($args[1] * 86400 + time()));
 			}else{
 				$until = null;
-				$sender->getServer()->getNameBans()->addBan($name, $reason = implode(" ", $args), $until, $sender->getName());
-			}	
-		} else {
-			$sender->getServer()->getNameBans()->addBan($name);
+			}
+
+			$sender->getServer()->getNameBans()->addBan($name, $reason, $until, $sender->getName());
+		}else{
+			$sender->getServer()->getNameBans()->addBan($name, $reason = implode(" ", $args), null, $sender->getName());
 		}
 
-        $player = $sender->getServer()->getPlayerExact($name);
+
+		if(($player = $sender->getServer()->getPlayerExact($name)) instanceof Player){
+			$player->kick($reason !== "" ? "Banned by admin. Reason: " . $reason : "Banned by admin." . "Banned Until:" . date('r'), $until = "Forever");
+		}
 
 		Command::broadcastCommandMessage($sender, new TranslationContainer("%commands.ban.success", [$player !== null ? $player->getName() : $name]));
 

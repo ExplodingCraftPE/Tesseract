@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class MobArmorEquipmentPacket extends DataPacket{
-
 	const NETWORK_ID = Info::MOB_ARMOR_EQUIPMENT_PACKET;
 
 	public $eid;

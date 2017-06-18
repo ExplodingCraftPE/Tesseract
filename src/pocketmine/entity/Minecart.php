@@ -2,29 +2,32 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __    __  _____
- * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
- * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author iTX Technologies
- * @link https://itxtech.org
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
- */
+ *
+*/
 
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
 use pocketmine\block\Rail;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 
@@ -182,8 +185,8 @@ class Minecart extends Vehicle{
 	 * on.
 	 * @param RailType $railType Type of rail the minecart is on.
 	 * @param Direction $candidateDirection Direction minecart already moving, or direction player looking.
-	 * @return int|Direction
-     */
+	 * @return Direction The direction the minecart should move.
+	 */
 	private function getDirectionToMove($railType, $candidateDirection) {
 		switch($railType){
 			case Rail::STRAIGHT_NORTH_SOUTH:
@@ -460,7 +463,7 @@ class Minecart extends Vehicle{
 		$pk->eid = $this->getId();
 		$pk->type = Minecart::NETWORK_ID;
 		$pk->x = $this->x;
-		$pk->y = $this->y - 2;
+		$pk->y = $this->y;
 		$pk->z = $this->z;
 		$pk->speedX = 0;
 		$pk->speedY = 0;

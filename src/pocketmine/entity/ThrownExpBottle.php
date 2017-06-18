@@ -21,7 +21,8 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\level\Level;
+
+use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -37,25 +38,9 @@ class ThrownExpBottle extends Projectile{
 	protected $gravity = 0.1;
 	protected $drag = 0.15;
 
-	private $hasSplashed = false;
-
-	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
-		parent::__construct($level, $nbt, $shootingEntity);
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+		parent::__construct($chunk, $nbt, $shootingEntity);
 	}
-
-	public function splash(){
-	    if(!$this->hasSplashed){
-	        $this->hasSplashed = true;
-            $this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
-            if($this->getLevel()->getServer()->expEnabled) {
-                $this->getLevel()->spawnXPOrb($this->add(0, -0.2, 0), mt_rand(1, 4));
-                $this->getLevel()->spawnXPOrb($this->add(-0.1, -0.2, 0), mt_rand(1, 4));
-                $this->getLevel()->spawnXPOrb($this->add(0, -0.2, -0.1), mt_rand(1, 4));
-        }
-
-        $this->kill();
-    }
-}
 
 	public function onUpdate($currentTick){
 		if($this->closed){
@@ -69,7 +54,14 @@ class ThrownExpBottle extends Projectile{
 		$this->age++;
 
 		if($this->age > 1200 or $this->isCollided){
-		    $this->splash();
+			$this->kill();
+			$this->close();
+			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
+			if($this->getLevel()->getServer()->expEnabled){
+				$this->getLevel()->spawnXPOrb($this->add(0, -0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->spawnXPOrb($this->add(-0.1, -0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->spawnXPOrb($this->add(0, -0.2, -0.1), mt_rand(1, 4));
+			}
 			$hasUpdate = true;
 		}
 

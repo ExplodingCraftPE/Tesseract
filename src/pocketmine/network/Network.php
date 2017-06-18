@@ -36,7 +36,7 @@ use pocketmine\network\protocol\AvailableCommandsPacket;
 use pocketmine\network\protocol\BatchPacket;
 use pocketmine\network\protocol\BlockEntityDataPacket;
 use pocketmine\network\protocol\BlockEventPacket;
-use pocketmine\network\protocol\BossEventPacket; 
+use pocketmine\network\protocol\BossEventPacket;
 use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\ChunkRadiusUpdatedPacket;
 use pocketmine\network\protocol\CommandStepPacket;
@@ -54,8 +54,8 @@ use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\HurtArmorPacket;
-use pocketmine\network\protocol\Info;
 use pocketmine\network\protocol\Info as ProtocolInfo;
+use pocketmine\network\protocol\Info;
 use pocketmine\network\protocol\InteractPacket;
 use pocketmine\network\protocol\InventoryActionPacket;
 use pocketmine\network\protocol\ItemFrameDropItemPacket;
@@ -68,13 +68,14 @@ use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
-use pocketmine\network\protocol\EntityFallPacket;
 use pocketmine\network\protocol\PlayerInputPacket;
 use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\network\protocol\RemoveBlockPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
-use pocketmine\network\protocol\ReplaceItemInSlotPacket;
+use pocketmine\network\protocol\RemovePlayerPacket;
+use pocketmine\network\protocol\ReplaceSelectedItemPacket;
 use pocketmine\network\protocol\RequestChunkRadiusPacket;
+use pocketmine\network\protocol\ResourcePackClientResponsePacket;
 use pocketmine\network\protocol\ResourcePacksInfoPacket;
 use pocketmine\network\protocol\RespawnPacket;
 use pocketmine\network\protocol\SetCommandsEnabledPacket;
@@ -86,19 +87,19 @@ use pocketmine\network\protocol\SetHealthPacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
 use pocketmine\network\protocol\SetSpawnPositionPacket;
 use pocketmine\network\protocol\SetTimePacket;
-use pocketmine\network\protocol\SetTitlePacket;
-use pocketmine\network\protocol\ShowCreditsPacket;
 use pocketmine\network\protocol\SpawnExperienceOrbPacket;
 use pocketmine\network\protocol\StartGamePacket;
 use pocketmine\network\protocol\TakeItemEntityPacket;
 use pocketmine\network\protocol\TextPacket;
-use pocketmine\network\protocol\TransferPacket;
 use pocketmine\network\protocol\UpdateBlockPacket;
 use pocketmine\network\protocol\UseItemPacket;
 use pocketmine\Player;
 use pocketmine\Server;
+use pocketmine\utils\Binary;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\MainLogger;
+
+use pocketmine\network\protocol\CameraPacket;
 
 class Network {
 
@@ -245,9 +246,9 @@ class Network {
 			while($stream->offset < $len){
 				$buf = $stream->getString();
 				if(($pk = $this->getPacket(ord($buf{0}))) !== null){
-					/*if($pk::NETWORK_ID === 0xfe){
+					if($pk::NETWORK_ID === Info::BATCH_PACKET){
 						throw new \InvalidStateException("Invalid BatchPacket inside BatchPacket");
-					}*/
+					}
 
 					$pk->setBuffer($buf, 1);
 
@@ -328,10 +329,10 @@ class Network {
 		$this->registerPacket(ProtocolInfo::ADVENTURE_SETTINGS_PACKET, AdventureSettingsPacket::class);
 		$this->registerPacket(ProtocolInfo::ANIMATE_PACKET, AnimatePacket::class);
 		$this->registerPacket(ProtocolInfo::AVAILABLE_COMMANDS_PACKET, AvailableCommandsPacket::class);
-		$this->registerPacket(0xfe, BatchPacket::class);
+		$this->registerPacket(ProtocolInfo::BATCH_PACKET, BatchPacket::class);
 		$this->registerPacket(ProtocolInfo::BLOCK_ENTITY_DATA_PACKET, BlockEntityDataPacket::class);
 		$this->registerPacket(ProtocolInfo::BLOCK_EVENT_PACKET, BlockEventPacket::class);
-		$this->registerPacket(ProtocolInfo::BOSS_EVENT_PACKET, BossEventPacket::class); 
+		$this->registerPacket(ProtocolInfo::BOSS_EVENT_PACKET, BossEventPacket::class);
 		$this->registerPacket(ProtocolInfo::CHANGE_DIMENSION_PACKET, ChangeDimensionPacket::class);
 		$this->registerPacket(ProtocolInfo::CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket::class);
 		$this->registerPacket(ProtocolInfo::COMMAND_STEP_PACKET, CommandStepPacket::class);
@@ -359,14 +360,14 @@ class Network {
 		$this->registerPacket(ProtocolInfo::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
 		$this->registerPacket(ProtocolInfo::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_ACTION_PACKET, PlayerActionPacket::class);
-		$this->registerPacket(ProtocolInfo::ENTITY_FALL_PACKET, EntityFallPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_INPUT_PACKET, PlayerInputPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_LIST_PACKET, PlayerListPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAY_STATUS_PACKET, PlayStatusPacket::class);
 		$this->registerPacket(ProtocolInfo::REMOVE_BLOCK_PACKET, RemoveBlockPacket::class);
 		$this->registerPacket(ProtocolInfo::REMOVE_ENTITY_PACKET, RemoveEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::REPLACE_ITEM_IN_SLOT_PACKET, ReplaceItemInSlotPacket::class);
+		$this->registerPacket(ProtocolInfo::REPLACE_SELECTED_ITEM_PACKET, ReplaceSelectedItemPacket::class);
 		$this->registerPacket(ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
+		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
 		$this->registerPacket(ProtocolInfo::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
 		$this->registerPacket(ProtocolInfo::RESPAWN_PACKET, RespawnPacket::class);
 		$this->registerPacket(ProtocolInfo::SET_COMMANDS_ENABLED_PACKET, SetCommandsEnabledPacket::class);
@@ -378,14 +379,13 @@ class Network {
 		$this->registerPacket(ProtocolInfo::SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket::class);
 		$this->registerPacket(ProtocolInfo::SET_SPAWN_POSITION_PACKET, SetSpawnPositionPacket::class);
 		$this->registerPacket(ProtocolInfo::SET_TIME_PACKET, SetTimePacket::class);
-		$this->registerPacket(ProtocolInfo::SET_TITLE_PACKET, SetTitlePacket::class);
-		$this->registerPacket(ProtocolInfo::SHOW_CREDITS_PACKET, ShowCreditsPacket::class);
 		$this->registerPacket(ProtocolInfo::SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket::class);
 		$this->registerPacket(ProtocolInfo::START_GAME_PACKET, StartGamePacket::class);
 		$this->registerPacket(ProtocolInfo::TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket::class);
 		$this->registerPacket(ProtocolInfo::TEXT_PACKET, TextPacket::class);
-		$this->registerPacket(ProtocolInfo::TRANSFER_PACKET, TransferPacket::class);
 		$this->registerPacket(ProtocolInfo::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
 		$this->registerPacket(ProtocolInfo::USE_ITEM_PACKET, UseItemPacket::class);
+		
+		$this->registerPacket(ProtocolInfo::CAMERA_PACKET, CameraPacket::class);
 	}
 }

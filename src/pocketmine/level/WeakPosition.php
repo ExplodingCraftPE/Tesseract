@@ -23,10 +23,9 @@ namespace pocketmine\level;
 
 use pocketmine\math\Vector3;
 use pocketmine\Server;
+use pocketmine\utils\LevelException;
 
 class WeakPosition extends Position{
-	
-	protected $levelId = -1;
 
 	/**
 	 * @param int   $x
@@ -52,18 +51,7 @@ class WeakPosition extends Position{
 		return Server::getInstance()->getLevel($this->levelId);
 	}
 
-	/**
-	 * @param Level|null $level
-	 *
-	 * @return $this
-	 *
-	 * @throws \InvalidArgumentException if the specified Level has been closed
-	 */
-	public function setLevel(Level $level = null){
-		if($level !== null and $level->isClosed()){
-			throw new \InvalidArgumentException("Specified level has been unloaded and cannot be used");
-		}
- 
+	public function setLevel(Level $level){
 		$this->levelId = ($level !== null ? $level->getId() : -1);
 		return $this;
 	}

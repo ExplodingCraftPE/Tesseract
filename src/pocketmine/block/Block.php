@@ -26,6 +26,8 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 
+
+use pocketmine\event\block\BlockBurnEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -37,6 +39,7 @@ use pocketmine\metadata\Metadatable;
 use pocketmine\metadata\MetadataValue;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
+
 
 class Block extends Position implements BlockIds, Metadatable{	
 
@@ -121,7 +124,6 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::FIRE] = Fire::class;
 			self::$list[self::MONSTER_SPAWNER] = MonsterSpawner::class;
 			self::$list[self::WOOD_STAIRS] = WoodStairs::class;
-			self::$list[self::ENDER_CHEST] = EnderChest::class;
 			self::$list[self::CHEST] = Chest::class;
 
 			self::$list[self::DIAMOND_ORE] = DiamondOre::class;
@@ -192,18 +194,7 @@ class Block extends Position implements BlockIds, Metadatable{
 
 			self::$list[self::BREWING_STAND_BLOCK] = BrewingStand::class;
 			self::$list[self::END_PORTAL_FRAME] = EndPortalFrame::class;
-			self::$list[self::END_PORTAL] = EndPortal::class;
 			self::$list[self::END_STONE] = EndStone::class;
-
-			self::$list[self::END_STONE_BRICKS] = EndStoneBricks::class;
-			self::$list[self::END_ROD] = EndRod::class;
-
-			self::$list[self::PURPUR] = Purpur::class;
-			self::$list[self::PURPUR_STAIRS] = PurpurStairs::class;
-
-			self::$list[self::CHORUS_FLOWER] = ChorusFlower::class;
-			self::$list[self::CHORUS_PLANT] = ChorusPlant::class;
-
 			self::$list[self::SANDSTONE_STAIRS] = SandstoneStairs::class;
 			self::$list[self::EMERALD_ORE] = EmeraldOre::class;
 
@@ -211,7 +202,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::SPRUCE_WOOD_STAIRS] = SpruceWoodStairs::class;
 			self::$list[self::BIRCH_WOOD_STAIRS] = BirchWoodStairs::class;
 			self::$list[self::JUNGLE_WOOD_STAIRS] = JungleWoodStairs::class;
-			self::$list[self::BEACON] = Beacon::class;
+			self::$list[self::BEACON_BLOCK] = BeaconBlock::class;
 			self::$list[self::STONE_WALL] = StoneWall::class;
 
 			self::$list[self::FLOWER_POT_BLOCK] = FlowerPot::class;
@@ -234,8 +225,8 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::DARK_OAK_WOOD_STAIRS] = DarkOakWoodStairs::class;
 
 			self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
-			self::$list[self::PRISMARINE] = Prismarine::class;
-			self::$list[self::SEA_LANTERN] = SeaLantern::class;
+			self::$list[self::PRISMARINE_BLOCK] = PrismarineBlock::class;
+			self::$list[self::SEA_LANTERN_BLOCK] = SeaLanternBlock::class;
 			self::$list[self::HAY_BALE] = HayBale::class;
 			self::$list[self::CARPET] = Carpet::class;
 			self::$list[self::HARDENED_CLAY] = HardenedClay::class;
@@ -266,9 +257,11 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::STONE_PRESSURE_PLATE] = StonePressurePlate::class;
 			self::$list[self::LIGHT_WEIGHTED_PRESSURE_PLATE] = LightWeightedPressurePlate::class;
 			self::$list[self::HEAVY_WEIGHTED_PRESSURE_PLATE] = HeavyWeightedPressurePlate::class;
-			self::$list[self::LIT_REDSTONE_LAMP] = LitRedstoneLamp::class;
-			self::$list[self::REDSTONE_LAMP] = RedstoneLamp::class;
+			self::$list[self::REDSTONE_WIRE] = RedstoneWire::class;
+			self::$list[self::ACTIVE_REDSTONE_LAMP] = ActiveRedstoneLamp::class;
+			self::$list[self::INACTIVE_REDSTONE_LAMP] = InactiveRedstoneLamp::class;
 			self::$list[self::REDSTONE_TORCH] = RedstoneTorch::class;
+			self::$list[self::UNLIT_REDSTONE_TORCH] = UnlitRedstoneTorch::class;
 			self::$list[self::WOODEN_BUTTON] = WoodenButton::class;
 			self::$list[self::STONE_BUTTON] = StoneButton::class;
 			self::$list[self::LEVER] = Lever::class;
@@ -290,7 +283,6 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
 			self::$list[self::INVISIBLE_BEDROCK] = InvisibleBedrock::class;
 			self::$list[self::HOPPER_BLOCK] = Hopper::class;
-			self::$list[self::DRAGON_EGG] = DragonEgg::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
@@ -313,6 +305,8 @@ class Block extends Position implements BlockIds, Metadatable{
 							}else{
 								self::$lightFilter[$id] = 1;
 							}
+						}elseif($block instanceof SolidLight){
+							self::$lightFilter[$id] = 1;
 						}else{
 							self::$lightFilter[$id] = 15;
 						}

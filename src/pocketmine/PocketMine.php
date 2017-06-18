@@ -67,14 +67,16 @@ namespace {
 namespace pocketmine {
 	use pocketmine\utils\Binary;
 	use pocketmine\utils\MainLogger;
-
-    use pocketmine\utils\Terminal;
+	use pocketmine\utils\ServerKiller;
+	use pocketmine\utils\Terminal;
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const VERSION = "1.2.0";
-	const API_VERSION = "3.0.1";
-	const CODENAME = "Ruby";
+	const VERSION = ""; //will be set by CI to a git hash
+	const API_VERSION = "2.1.0";
+	const CODENAME = "Crystal";
+	const MINECRAFT_VERSION = "v0.16.2 alpha";
+	const MINECRAFT_VERSION_NETWORK = "0.16.2";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -104,15 +106,16 @@ namespace pocketmine {
 	if(!class_exists("ClassLoader", false)){
 		require_once(\pocketmine\PATH . "src/spl/ClassLoader.php");
 		require_once(\pocketmine\PATH . "src/spl/BaseClassLoader.php");
+		require_once(\pocketmine\PATH . "src/pocketmine/CompatibleClassLoader.php");
 	}
 
-	$autoloader = new \BaseClassLoader();
+	$autoloader = new CompatibleClassLoader();
 	$autoloader->addPath(\pocketmine\PATH . "src");
 	$autoloader->addPath(\pocketmine\PATH . "src" . DIRECTORY_SEPARATOR . "spl");
 	$autoloader->register(true);
 
 
-	set_time_limit(0);
+	set_time_limit(0); //Who set it to 30 seconds?!?!
 
 	gc_enable();
 	error_reporting(-1);
@@ -465,7 +468,7 @@ namespace pocketmine {
 	}
 
 	ThreadManager::init();
-	new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH, $lang);
+	$server = new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH, $lang);
 
 	$logger->info("Stopping other threads");
 
@@ -477,11 +480,7 @@ namespace pocketmine {
 	$logger->shutdown();
 	$logger->join();
 
-	//echo "Server has stopped" . Terminal::$FORMAT_RESET . "\n";
-
-	$logger->info(Utils::getThreadCount() . " threads has stopped");//add threads count
-
-	$logger->info("Server has stopped");
+	echo "Server has stopped" . Terminal::$FORMAT_RESET . "\n";
 
 	exit(0);
 

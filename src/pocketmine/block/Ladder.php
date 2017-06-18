@@ -123,20 +123,18 @@ class Ladder extends Transparent{
 	}
 
 	public function onUpdate($type){
+		if($type === Level::BLOCK_UPDATE_NORMAL){
 		$faces = [
 			2 => 3,
 			3 => 2,
 			4 => 5,
 			5 => 4,
 		];
-		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if(isset($faces[$this->meta])) {
-				if ($this->getSide($faces[$this->meta])->getId() === self::AIR) {
+				if (!$this->getSide($faces[$this->meta])->isSolid()){//replace with common break method
 					$this->getLevel()->useBreakOn($this);
-				}
 				return Level::BLOCK_UPDATE_NORMAL;
+				}
 			}
-		}
 		return false;
 	}
 	

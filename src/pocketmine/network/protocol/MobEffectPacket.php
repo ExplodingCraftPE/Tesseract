@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class MobEffectPacket extends DataPacket{
-
 	const NETWORK_ID = Info::MOB_EFFECT_PACKET;
 
 	const EVENT_ADD = 1;
@@ -35,9 +34,9 @@ class MobEffectPacket extends DataPacket{
 	public $eid;
 	public $eventId;
 	public $effectId;
-	public $amplifier = 0;
+	public $amplifier;
 	public $particles = true;
-	public $duration = 0;
+	public $duration;
 
 	public function decode(){
 

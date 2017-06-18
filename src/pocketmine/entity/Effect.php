@@ -24,8 +24,10 @@ namespace pocketmine\entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
+use pocketmine\network\Network;
 use pocketmine\network\protocol\MobEffectPacket;
 use pocketmine\Player;
+
 
 class Effect{
 	const SPEED = 1;
@@ -171,8 +173,8 @@ class Effect{
 	 *
 	 * @return $this
 	 */
-	public function setAmplifier(int $amplifier){
-		$this->amplifier = $amplifier & 0xff;
+	public function setAmplifier($amplifier){
+		$this->amplifier = (int) $amplifier;
 		return $this;
 	}
 
@@ -293,7 +295,7 @@ class Effect{
 	public function add(Entity $entity, $modify = false, Effect $oldEffect = null){
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
-			$pk->eid = $entity->getId();
+			$pk->eid = 0;
 			$pk->effectId = $this->getId();
 			$pk->amplifier = $this->getAmplifier();
 			$pk->particles = $this->isVisible();
@@ -336,7 +338,7 @@ class Effect{
 	public function remove(Entity $entity){
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
-			$pk->eid = $entity->getId();
+			$pk->eid = 0;
 			$pk->eventId = MobEffectPacket::EVENT_REMOVE;
 			$pk->effectId = $this->getId();
 

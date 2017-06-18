@@ -24,7 +24,8 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
-use pocketmine\item\enchantment\Enchantment;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\item\enchantment\enchantment;
 
 abstract class Tool extends Item{
 	const TIER_WOODEN = 1;
@@ -48,15 +49,14 @@ abstract class Tool extends Item{
 		return 1;
 	}
 
-    /**
-     * TODO: Move this to each item
-     *
-     * @param Entity|Block $object
-     * @param int $type
-     * @return bool
-     * @internal param $ 1 for break|2 for Touch $type
-     *
-     */
+	/**
+	 * TODO: Move this to each item
+	 *
+	 * @param Entity|Block $object
+	 * @param 1 for break|2 for Touch $type
+	 *
+	 * @return bool
+	 */
 	public function useOn($object, $type = 1){
 		if($this->isUnbreakable()){
 			return true;

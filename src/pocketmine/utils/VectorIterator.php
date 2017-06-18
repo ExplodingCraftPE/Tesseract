@@ -23,6 +23,7 @@ namespace pocketmine\utils;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 
 /**
@@ -233,8 +234,8 @@ class VectorIterator implements \Iterator{
 	}
 
 	/**
-	 * @return Block|Vector3
-     *
+	 * @return Block
+	 *
 	 * @throws \OutOfBoundsException
 	 */
 	public function current(){

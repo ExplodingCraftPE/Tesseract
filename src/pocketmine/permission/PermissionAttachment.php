@@ -22,7 +22,7 @@
 namespace pocketmine\permission;
 
 use pocketmine\plugin\Plugin;
-use pocketmine\plugin\PluginException;
+use pocketmine\utils\PluginException;
 
 class PermissionAttachment{
 	/** @var PermissionRemovedExecutor */

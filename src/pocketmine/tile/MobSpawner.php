@@ -24,7 +24,6 @@ namespace pocketmine\tile;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityGenerateEvent;
 use pocketmine\item\Item;
-use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -32,31 +31,32 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\format\FullChunk;
 use pocketmine\Player;
 
 class MobSpawner extends Spawnable{
 
-	public function __construct(Level $level, CompoundTag $nbt){
-		if(!isset($nbt->EntityId) or !($nbt->EntityId instanceof IntTag)){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		parent::__construct($chunk, $nbt);
+		if(!isset($nbt->EntityId)){
 			$nbt->EntityId = new IntTag("EntityId", 0);
 		}
-		if(!isset($nbt->SpawnCount) or !($nbt->SpawnCount instanceof IntTag)){
+		if(!isset($nbt->SpawnCount)){
 			$nbt->SpawnCount = new IntTag("SpawnCount", 4);
 		}
-		if(!isset($nbt->SpawnRange) or !($nbt->SpawnRange instanceof IntTag)){
+		if(!isset($nbt->SpawnRange)){
 			$nbt->SpawnRange = new IntTag("SpawnRange", 4);
 		}
-		if(!isset($nbt->MinSpawnDelay) or !($nbt->MinSpawnDelay instanceof IntTag)){
+		if(!isset($nbt->MinSpawnDelay)){
 			$nbt->MinSpawnDelay = new IntTag("MinSpawnDelay", 200);
 		}
-		if(!isset($nbt->MaxSpawnDelay) or !($nbt->MaxSpawnDelay instanceof IntTag)){
+		if(!isset($nbt->MaxSpawnDelay)){
 			$nbt->MaxSpawnDelay = new IntTag("MaxSpawnDelay", 799);
 		}
-		if(!isset($nbt->Delay) or !($nbt->Delay instanceof IntTag)){
+		if(!isset($nbt->Delay)){
 			$nbt->Delay = new IntTag("Delay", mt_rand($nbt->MinSpawnDelay->getValue(), $nbt->MaxSpawnDelay->getValue()));
 		}
-		parent::__construct($level, $nbt);
+
 		if($this->getEntityId() > 0){
 			$this->scheduleUpdate();
 		}
@@ -68,7 +68,11 @@ class MobSpawner extends Spawnable{
 
 	public function setEntityId(int $id){
 		$this->namedtag->EntityId->setValue($id);
-		$this->onChanged();
+		$this->spawnToAll();
+		if($this->chunk instanceof FullChunk){
+			$this->chunk->setChanged();
+			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
+		}
 		$this->scheduleUpdate();
 	}
 
@@ -141,7 +145,7 @@ class MobSpawner extends Spawnable{
 
 		$this->timings->startTiming();
 
-		if(!($this->chunk instanceof Chunk)){
+		if(!($this->chunk instanceof FullChunk)){
 			return false;
 		}
 		if($this->canUpdate()){
@@ -171,7 +175,7 @@ class MobSpawner extends Spawnable{
 									new FloatTag("", 0)
 								]),
 							]);
-							$entity = Entity::createEntity($this->getEntityId(), $this->getLevel(), $nbt);
+							$entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt);
 							$entity->spawnToAll();
 						}
 					}

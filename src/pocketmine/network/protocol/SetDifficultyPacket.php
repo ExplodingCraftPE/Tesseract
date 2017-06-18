@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 class SetDifficultyPacket extends DataPacket{
-
 	const NETWORK_ID = Info::SET_DIFFICULTY_PACKET;
 
 	public $difficulty;

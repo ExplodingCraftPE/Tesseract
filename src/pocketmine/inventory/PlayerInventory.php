@@ -26,7 +26,7 @@ use pocketmine\event\entity\EntityArmorChangeEvent;
 use pocketmine\event\entity\EntityInventoryChangeEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\item\Item;
-
+use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\ContainerSetSlotPacket;
@@ -42,10 +42,7 @@ class PlayerInventory extends BaseInventory{
 	protected $hotbar;
 
 	public function __construct(Human $player, $contents = null){
-		for($i = 0; $i < $this->getHotbarSize(); $i++){
-			$this->hotbar[$i] = $i;
-		}
-		//$this->hotbar = array_fill(0, $this->getHotbarSize(), -1);
+		$this->hotbar = range(0, $this->getHotbarSize() - 1, 1);
 		parent::__construct($player, InventoryType::get(InventoryType::PLAYER));
 
 		if($contents !== null){
@@ -96,13 +93,11 @@ class PlayerInventory extends BaseInventory{
 		return ($index >= 0 and $index < $this->getHotbarSize()) ? $this->hotbar[$index] : -1;
 	}
 
-    /**
-     * @deprecated
-     *
-     * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
-     * @param $index
-     * @param $slot
-     */
+	/**
+	 * @deprecated
+	 *
+	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
+	 */
 	public function setHotbarSlotIndex($index, $slot){
 		if($this->getHolder()->getServer()->getProperty("settings.deprecated-verbose") !== false){
 			trigger_error("Do not attempt to change hotbar links in plugins!", E_USER_DEPRECATED);
@@ -228,7 +223,7 @@ class PlayerInventory extends BaseInventory{
 		$item = $this->getItemInHand();
 
 		$pk = new MobEquipmentPacket();
-		$pk->eid = $this->getHolder()->getId();
+		$pk->eid = ($target === $this->getHolder() ? 0 : $this->getHolder()->getId());
 		$pk->item = $item;
 		$pk->slot = $this->getHeldItemSlot();
 		$pk->selectedSlot = $this->getHeldItemIndex();
@@ -239,7 +234,7 @@ class PlayerInventory extends BaseInventory{
 				$this->sendSlot($this->getHeldItemSlot(), $target);
 			}
 		}else{
-			$this->getHolder()->getLevel()->getServer()->broadcastPacket($target, $pk);
+			Server::broadcastPacket($target, $pk);
 			foreach($target as $player){
 				if($player === $this->getHolder()){
 					$this->sendSlot($this->getHeldItemSlot(), $player);
@@ -281,7 +276,7 @@ class PlayerInventory extends BaseInventory{
 	public function setArmorItem($index, Item $item){
 		return $this->setItem($this->getSize() + $index, $item);
 	}
-
+	
 	public function damageArmor($index, $cost){
  		$this->slots[$this->getSize() + $index]->useOn($this->slots[$this->getSize() + $index], $cost);
  	    if($this->slots[$this->getSize() + $index]->getDamage() >= $this->slots[$this->getSize() + $index]->getMaxDurability()){
@@ -355,7 +350,7 @@ class PlayerInventory extends BaseInventory{
 
 	public function clear($index, $send = true){
 		if(isset($this->slots[$index])){
-			$item = Item::get(Item::AIR, 0, 0);
+			$item = Item::get(Item::AIR, null, 0);
 			$old = $this->slots[$index];
 			if($index >= $this->getSize() and $index < $this->size){ //Armor change
 				Server::getInstance()->getPluginManager()->callEvent($ev = new EntityArmorChangeEvent($this->getHolder(), $old, $item, $index));
@@ -435,7 +430,6 @@ class PlayerInventory extends BaseInventory{
 				$pk2 = new ContainerSetContentPacket();
 				$pk2->windowid = ContainerSetContentPacket::SPECIAL_ARMOR;
 				$pk2->slots = $armor;
-				$pk2->targetEid = $player->getId();
 				$player->dataPacket($pk2);
 			}else{
 				$player->dataPacket($pk);
@@ -449,7 +443,7 @@ class PlayerInventory extends BaseInventory{
 	public function setArmorContents(array $items){
 		for($i = 0; $i < 4; ++$i){
 			if(!isset($items[$i]) or !($items[$i] instanceof Item)){
-				$items[$i] = Item::get(Item::AIR, 0, 0);
+				$items[$i] = Item::get(Item::AIR, null, 0);
 			}
 
 			if($items[$i]->getId() === Item::AIR){
@@ -524,7 +518,6 @@ class PlayerInventory extends BaseInventory{
 				continue;
 			}
 			$pk->windowid = $id;
-			$pk->targetEid = $player->getId();
 			$player->dataPacket(clone $pk);
 		}
 	}
@@ -559,8 +552,8 @@ class PlayerInventory extends BaseInventory{
 	}
 
 	/**
-	 * @return Human|InventoryHolder|Player
-     */
+	 * @return Human|Player
+	 */
 	public function getHolder(){
 		return parent::getHolder();
 	}

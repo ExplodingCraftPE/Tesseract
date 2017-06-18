@@ -25,13 +25,13 @@ namespace pocketmine\network\protocol;
 
 
 use pocketmine\inventory\FurnaceRecipe;
+use pocketmine\inventory\MultiRecipe;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\item\Item;
 use pocketmine\utils\BinaryStream;
 
 class CraftingDataPacket extends DataPacket{
-
 	const NETWORK_ID = Info::CRAFTING_DATA_PACKET;
 
 	const ENTRY_SHAPELESS = 0;
@@ -39,7 +39,6 @@ class CraftingDataPacket extends DataPacket{
 	const ENTRY_FURNACE = 2;
 	const ENTRY_FURNACE_DATA = 3;
 	const ENTRY_MULTI = 4;
-	const ENTRY_SHULKER_BOX = 5; //TODO
 
 	/** @var object[] */
 	public $entries = [];
@@ -153,8 +152,8 @@ class CraftingDataPacket extends DataPacket{
 	}
 
 	private static function writeFurnaceRecipe(FurnaceRecipe $recipe, BinaryStream $stream){
-		if(!$recipe->getInput()->hasAnyDamageValue()){ //Data recipe
-			$stream->putVarInt($recipe->getInput()->getId());
+		if($recipe->getInput()->getDamage() !== null){ //Data recipe
+		$stream->putVarInt($recipe->getInput()->getId());
 			$stream->putVarInt($recipe->getInput()->getDamage());
 			$stream->putSlot($recipe->getResult());
 

@@ -38,7 +38,7 @@ class SummonCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.summon.description",
-			"%pocketmine.command.summon.usage"
+			"%commands.summon.usage"
 		);
 		$this->setPermission("pocketmine.command.summon");
 	}
@@ -122,6 +122,7 @@ class SummonCommand extends VanillaCommand{
 		$entity = null;
 		$type = $args[0];
 		$level = ($sender instanceof Player) ? $sender->getLevel() : $sender->getServer()->getDefaultLevel();
+		$chunk = $level->getChunk($x >> 4, $z >> 4, true);
 		$nbt = new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $x),
@@ -143,7 +144,7 @@ class SummonCommand extends VanillaCommand{
 			$nbt = NBT::combineCompoundTags($nbt, $nbtExtra, true);
 		}
 
-		$entity = Entity::createEntity($type, $level, $nbt);
+		$entity = Entity::createEntity($type, $chunk, $nbt);
 		if($entity instanceof Entity){
 			$entity->spawnToAll();
 			$sender->sendMessage("Successfully spawned entity $type at ($x, $y, $z)");

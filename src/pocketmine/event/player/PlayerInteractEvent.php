@@ -32,7 +32,6 @@ use pocketmine\Player;
  * Called when a player interacts or touches a block (including air?)
  */
 class PlayerInteractEvent extends PlayerEvent implements Cancellable{
-
 	public static $handlerList = null;
 
 	const LEFT_CLICK_BLOCK = 0;
@@ -104,12 +103,4 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable{
 	public function getFace(){
 		return $this->blockFace;
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "PlayerInteractEvent";
-	}
-
 }

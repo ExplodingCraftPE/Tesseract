@@ -22,6 +22,7 @@
 namespace pocketmine\plugin;
 
 use pocketmine\permission\Permission;
+use pocketmine\utils\PluginException;
 
 class PluginDescription{
 	private $name;

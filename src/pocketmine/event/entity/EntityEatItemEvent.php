@@ -43,12 +43,4 @@ class EntityEatItemEvent extends EntityEatEvent{
 		}
 		parent::setResidue($residue);
 	}
-
-	/**
-	 * @return EventName|string
-     */
-	public function getName(){
-		return "EntityEatItemEvent";
-	}
-
 }
