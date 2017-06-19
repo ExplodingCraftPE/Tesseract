@@ -2523,6 +2523,9 @@ class Level implements ChunkManager, Metadatable{
 		return Position::fromObject($this->provider->getSpawn(), $this);
 	}
 
+	public function updateGameRule($rule, $switch){
+        $this->provider->updateGameRule($rule, $switch);
+    }
 	/**
 	 * Sets the level spawn location
 	 *
