@@ -23,13 +23,14 @@ namespace pocketmine\level\sound;
 
 use pocketmine\block\Block;
 use pocketmine\network\protocol\LevelEventPacket;
- 
+use pocketmine\network\protocol\LevelSoundEventPacket;
+
 class BlockPlaceSound extends GenericSound{
 	
 	protected $data;
 	
 	public function __construct(Block $b){
-		parent::__construct($b, LevelEventPacket::EVENT_SOUND_BLOCK_PLACE);
+		parent::__construct($b, LevelSoundEventPacket::SOUND_PLACE);
 		$this->data = $b->getId();
 	}
 	

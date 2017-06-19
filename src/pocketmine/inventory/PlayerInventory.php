@@ -281,7 +281,7 @@ class PlayerInventory extends BaseInventory{
 	public function setArmorItem($index, Item $item){
 		return $this->setItem($this->getSize() + $index, $item);
 	}
-	
+
 	public function damageArmor($index, $cost){
  		$this->slots[$this->getSize() + $index]->useOn($this->slots[$this->getSize() + $index], $cost);
  	    if($this->slots[$this->getSize() + $index]->getDamage() >= $this->slots[$this->getSize() + $index]->getMaxDurability()){
@@ -435,6 +435,7 @@ class PlayerInventory extends BaseInventory{
 				$pk2 = new ContainerSetContentPacket();
 				$pk2->windowid = ContainerSetContentPacket::SPECIAL_ARMOR;
 				$pk2->slots = $armor;
+				$pk2->targetEid = $player->getId();
 				$player->dataPacket($pk2);
 			}else{
 				$player->dataPacket($pk);
@@ -523,6 +524,7 @@ class PlayerInventory extends BaseInventory{
 				continue;
 			}
 			$pk->windowid = $id;
+			$pk->targetEid = $player->getId();
 			$player->dataPacket(clone $pk);
 		}
 	}
