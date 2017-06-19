@@ -111,7 +111,12 @@ abstract class BaseLevelProvider implements LevelProvider{
 		$this->levelData->SpawnZ = new IntTag("SpawnZ", (int) $pos->z);
 	}
 
-	public function doGarbageCollection(){
+	public function updateGameRule($t, $s)
+    {
+        $this->levelData->GameRules = new StringTag("{$t}", $s);
+    }
+
+    public function doGarbageCollection(){
 
 	}
 
