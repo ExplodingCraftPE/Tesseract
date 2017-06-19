@@ -1,0 +1,16 @@
+{
+  //TODO: Add drop rarity for Pigs.
+  "Pig": {
+    "NETWORK_ID": 12,
+    "health": 10,
+    "width": 0.3,
+    "length": 0.9,
+    "height": 1.9,
+    "expDrop": [1, 3],
+    "drops": 319,
+    "enchantDrops": {
+      //TODO: Add looting
+      "TYPE_WEAPON_FIRE_ASPECT": 320
+    }
+  }
+}
