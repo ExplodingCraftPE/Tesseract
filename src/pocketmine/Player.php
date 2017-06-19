@@ -3735,7 +3735,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params));
-		$ev->setKeepInventory($this->server->getDefaultLevel()->getGameRule("keepInventory"));
+		$ev->setKeepInventory($this->getLevel()->getGameRule("keepInventory"));
 		$this->server->broadcastMessage($ev->getKeepInventory());
 		$ev->setKeepExperience($this->server->keepExperience);
 		$this->server->getPluginManager()->callEvent($ev);
