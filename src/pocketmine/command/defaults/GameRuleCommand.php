@@ -53,10 +53,10 @@ class GameRuleCommand extends VanillaCommand
                     if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         } else {
                             $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         }
                     } else {
                         $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
@@ -67,10 +67,10 @@ class GameRuleCommand extends VanillaCommand
                     if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         } else {
                             $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         }
                     } else {
                         $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
@@ -81,10 +81,10 @@ class GameRuleCommand extends VanillaCommand
                     if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         } else {
                             $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         }
                     } else {
                         $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
@@ -95,10 +95,10 @@ class GameRuleCommand extends VanillaCommand
                     if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         } else {
                             $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         }
                     } else {
                         $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));
@@ -109,10 +109,10 @@ class GameRuleCommand extends VanillaCommand
                     if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         } else {
                             $sender->getServer()->getDefaultLevel()->updateGameRule($args[0], $args[1]);
-                            $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
+                            $sender->sendMessage(new TranslationContainer("gamerule.change.success", [$args[0], $args[1]]));
                         }
                     } else {
                         $sender->sendMessage(new TranslationContainer("commands.generic.usage", ["%pocketmine.command.gamerule.argrument"]));

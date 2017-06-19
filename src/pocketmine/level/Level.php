@@ -2564,6 +2564,10 @@ class Level implements ChunkManager, Metadatable{
 	public function updateGameRule($rule, $switch){
         $this->provider->updateGameRule($rule, $switch);
     }
+
+    public function getGameRule($rule){
+	    return $this->provider->getGameRule($rule);
+    }
 	/**
 	 * Sets the level spawn location
 	 *

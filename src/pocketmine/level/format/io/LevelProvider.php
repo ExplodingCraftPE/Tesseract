@@ -213,6 +213,9 @@ interface LevelProvider{
 	public function doGarbageCollection();
 
 	public function updateGameRule($t, $s);
+
+	public function getGameRule($rule);
+
 	/**
 	 * @return Level
 	 */

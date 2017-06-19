@@ -93,6 +93,32 @@ abstract class BaseLevelProvider implements LevelProvider{
                 break;
         }
     }
+
+    public function getGameRule($rule) : bool {
+
+	    switch($rule){
+            case "keepInventory":
+                return (boolean) $this->levelData->GameRules["keepInventory"];
+                break;
+
+            case "showDeathMessage":
+                return (boolean) $this->levelData->GameRules["showDeathMessage"];
+                break;
+
+            case "doTileDrops":
+                return (boolean) $this->levelData->GameRules["doTileDrops"];
+                break;
+
+            case "doFireTick":
+                return (boolean) $this->levelData->GameRules["doFireTick"];
+                break;
+
+            case "doDaylightCycle":
+                return (boolean) $this->levelData->GameRules["doDaylightCycle"];
+                break;
+        }
+    }
+
 	public function getPath() : string{
 		return $this->path;
 	}

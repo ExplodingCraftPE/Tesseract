@@ -44,8 +44,6 @@ player:
  #This setting decides if experience will be enabled
  #If set to false, then exp bottles wont drop exp dots, and exp level wont go up
  experience: true
- #This setting decides if the inventory of a player will be kept after they die
- keep-inventory: false
  #This setting decides if the inventory of a player will be cleared upon them changing their gamemode
  auto-clear-inventory : true
  #This setting will decide if the experience of a player will be kept after they die

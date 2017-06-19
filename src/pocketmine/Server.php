@@ -270,7 +270,6 @@ class Server{
 	public $weatherEnabled = true;
 	public $foodEnabled = true;
 	public $expEnabled = true;
-	public $keepInventory = false;
 	public $netherEnabled = false;
 	public $netherName = "nether";
 	public $weatherRandomDurationMin = 6000;
@@ -1434,7 +1433,6 @@ class Server{
 		$this->weatherEnabled = $this->getAdvancedProperty("level.weather", true);
 		$this->foodEnabled = $this->getAdvancedProperty("player.hunger", true);
 		$this->expEnabled = $this->getAdvancedProperty("player.experience", true);
-		$this->keepInventory = $this->getAdvancedProperty("player.keep-inventory", false);
 		$this->keepExperience = $this->getAdvancedProperty("player.keep-experience", false);
 		$this->netherEnabled = $this->getAdvancedProperty("level.allow-nether", false);
 		$this->netherName = $this->getAdvancedProperty("level.level-name", "nether");
