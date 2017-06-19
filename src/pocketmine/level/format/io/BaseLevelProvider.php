@@ -113,7 +113,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 
 	public function updateGameRule($t, $s)
     {
-        $this->levelData->GameRules = new StringTag("{$t}", $s);
+        $this->levelData->GameRules = new StringTag("{$t}", (boolean) $s);
     }
 
     public function doGarbageCollection(){
