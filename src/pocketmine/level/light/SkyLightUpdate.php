@@ -19,32 +19,16 @@
  *
 */
 
-/**
- * NOTE: This is also the destroy block SOUND.
- */
-namespace pocketmine\level\particle;
+namespace pocketmine\level\light;
 
-use pocketmine\network\protocol\LevelEventPacket;
-use pocketmine\block\Block;
-use pocketmine\math\Vector3;
 
-class DestroyBlockParticle extends Particle{
-	
-	protected $data;
+class SkyLightUpdate extends LightUpdate{
 
-	public function __construct(Vector3 $pos, Block $b){
-		parent::__construct($pos->x, $pos->y, $pos->z);
-		$this->data = $b->getId() | ($b->getDamage() << 8);
+	public function getLight(int $x, int $y, int $z) : int{
+		return $this->level->getBlockSkyLightAt($x, $y, $z);
 	}
-	
-	public function encode(){
-		$pk = new LevelEventPacket;
-		$pk->evid = LevelEventPacket::EVENT_PARTICLE_DESTROY;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->data = $this->data;
-		
-		return $pk;
+
+	public function setLight(int $x, int $y, int $z, int $level){
+		$this->level->setBlockSkyLightAt($x, $y, $z, $level);
 	}
 }

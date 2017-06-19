@@ -120,7 +120,7 @@ class Chunk{
 			$this->heightMap = $heightMap;
 		}else{
 			assert(count($heightMap) === 0, "Wrong HeightMap value count, expected 256, got " . count($heightMap));
-			$val = ($this->height * 16) - 1;
+			$val = ($this->height * 16);
 			$this->heightMap = array_fill(0, 256, $val);
 		}
 
@@ -345,22 +345,13 @@ class Chunk{
 	 *
 	 * @param int  $x 0-15
 	 * @param int  $z 0-15
-	 * @param bool $useHeightMap whether to use pre-calculated heightmap values or not
 	 *
 	 * @return int
 	 */
-	public function getHighestBlockAt(int $x, int $z, bool $useHeightMap = true) : int{
-		if($useHeightMap){
-			$height = $this->getHeightMap($x, $z);
-
-			if($height !== 0 and $height !== 255){
-				return $height;
-			}
-		}
-
+	public function getHighestBlockAt(int $x, int $z) : int{
 		$index = $this->getHighestSubChunkIndex();
-		if($index < 0){
-			return 0;
+		if($index === -1){
+			return -1;
 		}
 
 		$height = $index << 4;
@@ -368,12 +359,11 @@ class Chunk{
 		for($y = $index; $y >= 0; --$y){
 			$height = $this->getSubChunk($y)->getHighestBlockAt($x, $z) | ($y << 4);
 			if($height !== -1){
-				break;
+				return $height;
 			}
 		}
 
-		$this->setHeightMap($x, $z, $height);
-		return $height;
+		return -1;
 	}
 
 	/**
@@ -404,9 +394,21 @@ class Chunk{
 	public function recalculateHeightMap(){
 		for($z = 0; $z < 16; ++$z){
 			for($x = 0; $x < 16; ++$x){
-				$this->setHeightMap($x, $z, $this->getHighestBlockAt($x, $z, false));
+				$this->recalculateHeightMapColumn($x, $z);
 			}
 		}
+	}
+
+	public function recalculateHeightMapColumn(int $x, int $z) : int{
+		$max = $this->getHighestBlockAt($x, $z);
+		for($y = $max; $y >= 0; --$y){
+			if(Block::$lightFilter[$id = $this->getBlockId($x, $y, $z)] > 1 or Block::$diffusesSkyLight[$id]){
+				break;
+			}
+		}
+
+		$this->setHeightMap($x, $z, $y + 1);
+		return $y + 1;
 	}
 
 	/**
@@ -421,18 +423,20 @@ class Chunk{
 
 				$y = ($this->getHighestSubChunkIndex() + 1) << 4;
 
-				for(; $y > $heightMap; --$y){
+				for(; $y >= $heightMap; --$y){
 					$this->setBlockSkyLight($x, $y, $z, 15);
 				}
 
-				for(; $y > 0 and $this->getBlockId($x, $y, $z) === Block::AIR; --$y){
-					$this->setBlockSkyLight($x, $y, $z, 15);
-				}
+				$light = 15;
+				for(; $y > 0; --$y){
+					if($light > 0){
+						$light -= Block::$lightFilter[$this->getBlockId($x, $y, $z)];
+						if($light < 0){
+							$light = 0;
+						}
+					}
 
-				$this->setHeightMap($x, $z, $y);
-				
-				for(; $y > 0; --$y){		
-					$this->setBlockSkyLight($x, $y, $z, 0);
+					$this->setBlockSkyLight($x, $y, $z, $light);
 				}
 			}
 		}
@@ -918,9 +922,9 @@ class Chunk{
 		}
 		$stream->putByte($count);
 		$stream->put($subChunks);
-		$stream->put(pack("C*", ...$this->heightMap) .
+		$stream->put(pack("v*", ...$this->heightMap) .
 			$this->biomeIds .
-			chr(($this->lightPopulated ? 1 << 2 : 0) | ($this->terrainPopulated ? 1 << 1 : 0) | ($this->terrainGenerated ? 1 : 0)));
+			chr(($this->lightPopulated ? 4 : 0) | ($this->terrainPopulated ? 2 : 0) | ($this->terrainGenerated ? 1 : 0)));
 		return $stream->getBuffer();
 	}
 
@@ -942,7 +946,7 @@ class Chunk{
 		for($y = 0; $y < $count; ++$y){
 			$subChunks[$stream->getByte()] = SubChunk::fastDeserialize($stream->get(10240));
 		}
-		$heightMap = array_values(unpack("C*", $stream->get(256)));
+		$heightMap = array_values(unpack("v*", $stream->get(512)));
 		$biomeIds = $stream->get(256);
 
 		$chunk = new Chunk($x, $z, $subChunks, [], [], $biomeIds, $heightMap);
