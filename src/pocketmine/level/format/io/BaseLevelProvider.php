@@ -69,6 +69,30 @@ abstract class BaseLevelProvider implements LevelProvider{
 		$this->asyncChunkRequest = (bool) $this->level->getServer()->getProperty("chunk-sending.async-chunk-request", false);
 	}
 
+    public function updateGameRule($t, $s)
+    {
+        switch($t){
+            case "keepInventory";
+                $this->levelData->GameRules->keepInventory = new StringTag("$t", "$s");
+                break;
+
+            case "showDeathMessages";
+                $this->levelData->GameRules->showDeathMessages = new StringTag("$t", "$s");
+                break;
+
+            case "doTileDrops";
+                $this->levelData->GameRules->doTileDrops = new StringTag("$t", "$s");
+                break;
+
+            case "doFireTick";
+                $this->levelData->GameRules->doFireTick = new StringTag("$t", "$s");;
+                break;
+
+            case "doDaylightCycle";
+                $this->levelData->GameRules->doDaylightCycle = new StringTag("$t", "$s");
+                break;
+        }
+    }
 	public function getPath() : string{
 		return $this->path;
 	}
@@ -111,10 +135,6 @@ abstract class BaseLevelProvider implements LevelProvider{
 		$this->levelData->SpawnZ = new IntTag("SpawnZ", (int) $pos->z);
 	}
 
-	public function updateGameRule($t, $s)
-    {
-        $this->levelData->GameRules = new StringTag("{$t}", (boolean) $s);
-    }
 
     public function doGarbageCollection(){
 
