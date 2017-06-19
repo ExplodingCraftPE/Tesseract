@@ -233,7 +233,6 @@ abstract class Entity extends Location implements Metadatable{
 		Entity::registerEntity(EnderDragon::class);
 		Entity::registerEntity(EnderPearl::class);
 		Entity::registerEntity(FallingSand::class);
-		Entity::registerEntity(FishingHook::class);
 		Entity::registerEntity(Ghast::class);
 		Entity::registerEntity(Horse::class);
 		Entity::registerEntity(Husk::class);
@@ -562,7 +561,7 @@ abstract class Entity extends Location implements Metadatable{
  	}
 
 	public function setGliding($value = true){
-		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_FALL_FLYING, (bool) $value);
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_GLIDING, (bool) $value);
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IDLING, (bool) $value);
 	}
  
@@ -572,6 +571,40 @@ abstract class Entity extends Location implements Metadatable{
 
 	public function setImmobile($value = true){
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IMMOBILE, $value);
+	}
+
+	/**
+	 * Returns whether the entity is able to climb blocks such as ladders or vines.
+	 * @return bool
+	 */
+	public function canClimb() : bool{
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CAN_CLIMB);
+	}
+
+	/**
+	 * Sets whether the entity is able to climb climbable blocks.
+	 * @param bool $value
+	 */
+	public function setCanClimb(bool $value){
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CAN_CLIMB, $value);
+	}
+
+	/**
+	 * Returns whether this entity is climbing a block. By default this is only true if the entity is climbing a ladder or vine or similar block.
+	 *
+	 * @return bool
+	 */
+	public function canClimbWalls() : bool{
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_WALLCLIMBING);
+	}
+
+	/**
+	 * Sets whether the entity is climbing a block. If true, the entity can climb anything.
+	 *
+	 * @param bool $value
+	 */
+	public function setCanClimbWalls(bool $value = true){
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_WALLCLIMBING, $value);
 	}
 
 	/**
@@ -588,23 +621,13 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function removeEffect($effectId){
-		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEffectRemoveEvent($this, $effectId));
-		if($ev->isCancelled()){
-			return false;
-		}
 		if(isset($this->effects[$effectId])){
 			$effect = $this->effects[$effectId];
 			unset($this->effects[$effectId]);
 			$effect->remove($this);
-			if($effectId === Effect::ABSORPTION and $this instanceof Human){
-				$this->setAbsorption(0);
-			}
 
 			$this->recalculateEffectColor();
-			return true;
 		}
-		
-		return false;
 	}
 
 	public function getEffect($effectId){
@@ -616,21 +639,14 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function addEffect(Effect $effect){
-		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEffectAddEvent($this, $effect));
-		if($ev->isCancelled()){
-			return false;
-		}
-		if($effect->getId() === Effect::HEALTH_BOOST){
-			$this->setHealth($this->getHealth() + 4 * ($effect->getAmplifier() + 1));
-		}
-		if($effect->getId() === Effect::ABSORPTION and $this instanceof Human){
-			$this->setAbsorption(4 * ($effect->getAmplifier() + 1));
-		}
-
 		if(isset($this->effects[$effect->getId()])){
 			$oldEffect = $this->effects[$effect->getId()];
-			if(($effect->getAmplifier() <= ($oldEffect->getAmplifier())) and $effect->getDuration() < $oldEffect->getDuration()){
-				return false;
+			if(
+				abs($effect->getAmplifier()) < ($oldEffect->getAmplifier())
+				or (abs($effect->getAmplifier()) === abs($oldEffect->getAmplifier())
+					and $effect->getDuration() < $oldEffect->getDuration())
+			){
+				return;
 			}
 			$effect->add($this, true, $oldEffect);
 		}else{
@@ -640,7 +656,6 @@ abstract class Entity extends Location implements Metadatable{
 		$this->effects[$effect->getId()] = $effect;
 
 		$this->recalculateEffectColor();
-		return true;
 	}
 
 	protected function recalculateEffectColor(){
@@ -649,7 +664,7 @@ abstract class Entity extends Location implements Metadatable{
 		$count = 0;
 		$ambient = true;
 		foreach($this->effects as $effect){
-			if($effect->isVisible()){
+			if($effect->isVisible() and $effect->hasBubbles()){
 				$c = $effect->getColor();
 				$color[0] += $c[0] * ($effect->getAmplifier() + 1);
 				$color[1] += $c[1] * ($effect->getAmplifier() + 1);
@@ -896,18 +911,21 @@ abstract class Entity extends Location implements Metadatable{
 		}
 		$this->setLastDamageCause($source);
 
-		if($this instanceof Human){
-			$damage = round($source->getFinalDamage());
-			if($this->getAbsorption() > 0){
-				$absorption = $this->getAbsorption() - $damage;
-				$this->setAbsorption($absorption <= 0 ? 0 : $absorption);
-				$this->setHealth($this->getHealth() + $absorption);
+		$damage = $source->getFinalDamage();
+
+		$absorption = $this->getAbsorption();
+		if($absorption > 0){
+			if($absorption > $damage){
+				$this->setAbsorption($absorption - $damage);
+				$damage = 0;
 			}else{
-				$this->setHealth($this->getHealth() - $damage);
+				$this->setAbsorption(0);
+				$damage -= $absorption;
 			}
-		}else{
-			$this->setHealth($this->getHealth() - round($source->getFinalDamage()));
 		}
+
+		$this->setHealth($this->getHealth() - $damage);
+
 		return true;
 	}
 
@@ -958,6 +976,14 @@ abstract class Entity extends Location implements Metadatable{
 		}
 	}
 
+	public function getAbsorption() : int{
+		return 0;
+	}
+
+	public function setAbsorption(int $absorption){
+
+	}
+
 	/**
 	 * @param EntityDamageEvent $type
 	 */
@@ -980,7 +1006,7 @@ abstract class Entity extends Location implements Metadatable{
 	 * @return int
 	 */
 	public function getMaxHealth(){
-		return $this->maxHealth + ($this->hasEffect(Effect::HEALTH_BOOST) ? 4 * ($this->getEffect(Effect::HEALTH_BOOST)->getAmplifier() + 1) : 0);
+		return $this->maxHealth;
 	}
 
 	/**
@@ -1476,6 +1502,8 @@ abstract class Entity extends Location implements Metadatable{
 			return true;
 		}
 
+		$this->blocksAround = null;
+
 		if($this->keepMovement){
 			$this->boundingBox->offset($dx, $dy, $dz);
 			$this->setPosition($this->temporalVector->setComponents(($this->boundingBox->minX + $this->boundingBox->maxX) / 2, $this->boundingBox->minY, ($this->boundingBox->minZ + $this->boundingBox->maxZ) / 2));
@@ -1605,6 +1633,7 @@ abstract class Entity extends Location implements Metadatable{
 
 			$this->checkChunks();
 
+			$this->checkBlockCollision();
 			$this->checkGroundState($movX, $movY, $movZ, $dx, $dy, $dz);
 			$this->updateFallState($dy, $this->onGround);
 
@@ -1868,11 +1897,7 @@ abstract class Entity extends Location implements Metadatable{
 		if(!$this->closed){
 			$this->server->getPluginManager()->callEvent(new EntityDespawnEvent($this));
 			$this->closed = true;
-			$this->removeEffect(Effect::HEALTH_BOOST);
 			$this->despawnFromAll();
-			if($this->linkedType != 0){
-				$this->linkedEntity->setLinked(0, $this);
-			}
 			if($this->chunk !== null){
 				$this->chunk->removeEntity($this);
 			}

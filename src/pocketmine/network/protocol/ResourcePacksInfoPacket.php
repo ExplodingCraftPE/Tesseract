@@ -23,7 +23,7 @@ namespace pocketmine\network\protocol;
 
 #include <rules/DataPacket.h>
 
-use pocketmine\resourcepacks\ResourcePackInfoEntry;
+use pocketmine\resourcepacks\ResourcePack;
 
 class ResourcePacksInfoPacket extends DataPacket{
 

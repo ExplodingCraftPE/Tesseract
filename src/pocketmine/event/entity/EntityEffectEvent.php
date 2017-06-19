@@ -19,32 +19,23 @@
  *
 */
 
-/**
- * NOTE: This is also the destroy block SOUND.
- */
-namespace pocketmine\level\particle;
+namespace pocketmine\event\entity;
 
-use pocketmine\network\protocol\LevelEventPacket;
-use pocketmine\block\Block;
-use pocketmine\math\Vector3;
+use pocketmine\entity\Effect;
+use pocketmine\entity\Entity;
+use pocketmine\event\Cancellable;
 
-class DestroyBlockParticle extends Particle{
-	
-	protected $data;
+class EntityEffectEvent extends EntityEvent implements Cancellable{
 
-	public function __construct(Vector3 $pos, Block $b){
-		parent::__construct($pos->x, $pos->y, $pos->z);
-		$this->data = $b->getId() | ($b->getDamage() << 8);
+	/** @var Effect */
+	private $effect;
+
+	public function __construct(Entity $entity, Effect $effect){
+		$this->entity = $entity;
+		$this->effect = $effect;
 	}
-	
-	public function encode(){
-		$pk = new LevelEventPacket;
-		$pk->evid = LevelEventPacket::EVENT_PARTICLE_DESTROY;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->data = $this->data;
-		
-		return $pk;
+
+	public function getEffect() : Effect{
+		return $this->effect;
 	}
 }

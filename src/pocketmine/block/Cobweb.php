@@ -46,6 +46,10 @@ class Cobweb extends Flowable{
 		return 4;
 	}
 
+	public function diffusesSkyLight() : bool{
+		return true;
+	}
+
 	public function getToolType(){
 		return Tool::TYPE_SHEARS;
 	}
