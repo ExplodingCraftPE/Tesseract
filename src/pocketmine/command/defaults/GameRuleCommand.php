@@ -64,7 +64,7 @@ class GameRuleCommand extends VanillaCommand
                     break;
 
                 case "showDeathMessages":
-                    if(in_array(strtolower($args[1]), array("true", false))){
+                    if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
                             $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
@@ -78,7 +78,7 @@ class GameRuleCommand extends VanillaCommand
                     break;
 
                 case "doTileDrops":
-                    if(in_array(strtolower($args[1]), array("true", false))){
+                    if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
                             $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
@@ -92,7 +92,7 @@ class GameRuleCommand extends VanillaCommand
                     break;
 
                 case "doFireTick":
-                    if(in_array(strtolower($args[1]), array("true", false))){
+                    if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
                             $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
@@ -106,7 +106,7 @@ class GameRuleCommand extends VanillaCommand
                     break;
 
                 case "doDaylightCycle":
-                    if(in_array(strtolower($args[1]), array("true", false))){
+                    if(in_array(strtolower($args[1]), array("true", "false"))){
                         if($sender instanceof Player){
                             $sender->getLevel()->updateGameRule($args[0], $args[1]);
                             $sender->sendMessage(new TranslationContainer("gamerule.change.success"));
