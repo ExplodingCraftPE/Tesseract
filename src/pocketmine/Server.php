@@ -272,7 +272,7 @@ class Server{
 	public $expEnabled = true;
 	public $keepInventory = false;
 	public $netherEnabled = false;
-	public $netherName = "nether";
+	public $netherName = null;
 	public $weatherRandomDurationMin = 6000;
 	public $weatherRandomDurationMax = 12000;
 	public $lightningTime = 200;
@@ -1437,7 +1437,6 @@ class Server{
 		$this->keepInventory = $this->getAdvancedProperty("player.keep-inventory", false);
 		$this->keepExperience = $this->getAdvancedProperty("player.keep-experience", false);
 		$this->netherEnabled = $this->getAdvancedProperty("level.allow-nether", false);
-		$this->netherName = $this->getAdvancedProperty("level.level-name", "nether");
 		$this->weatherRandomDurationMin = $this->getAdvancedProperty("level.weather-random-duration-min", 6000);
 		$this->weatherRandomDurationMax = $this->getAdvancedProperty("level.weather-random-duration-max", 12000);
 		$this->lightningTime = $this->getAdvancedProperty("level.lightning-time", 200);
@@ -1835,6 +1834,7 @@ class Server{
 			}
 			
 			if($this->netherEnabled){
+			    $this->netherName = $this->getDefaultLevel()->getName() . "_" . "nether";
 				if(!$this->loadLevel($this->netherName)){
 					$this->generateLevel($this->netherName, time(), Generator::getGenerator("nether"));
 				}
