@@ -222,8 +222,7 @@ class MainLogger extends \AttachableThreadedLogger{
 			}
 		}
 
-    $message = TextFormat::toANSI(TextFormat::GREEN . "[Tesseract] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . $color . $prefix . "> " . $message . TextFormat::RESET);
-	//$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s") . "] ". TextFormat::RESET . $color ."<".$prefix . ">" . " " . $message . TextFormat::RESET);
+        $message = TextFormat::toANSI(TextFormat::GREEN . "Tesseract > " . TextFormat::GRAY . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
 		if(!Terminal::hasFormattingCodes()){
@@ -248,39 +247,6 @@ class MainLogger extends \AttachableThreadedLogger{
 		}
 	}
 
-	/*public function run(){
-		$this->shutdown = false;
-		if($this->write){
-			$this->logResource = fopen($this->logFile, "a+b");
-			if(!is_resource($this->logResource)){
-				throw new \RuntimeException("Couldn't open log file");
-			}
-
-			while($this->shutdown === false){
-				if(!$this->write) {
-					fclose($this->logResource);
-					break;
-				}
-				$this->synchronized(function(){
-					while($this->logStream->count() > 0){
-						$chunk = $this->logStream->shift();
-						fwrite($this->logResource, $chunk);
-					}
-
-					$this->wait(25000);
-				});
-			}
-
-			if($this->logStream->count() > 0){
-				while($this->logStream->count() > 0){
-					$chunk = $this->logStream->shift();
-					fwrite($this->logResource, $chunk);
-				}
-			}
-
-			fclose($this->logResource);
-		}
-	}*/
 
 	public function run(){
 		$this->shutdown = false;

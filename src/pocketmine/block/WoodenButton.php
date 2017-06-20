@@ -27,6 +27,7 @@ use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\sound\ButtonClickSound;
 use pocketmine\math\Vector3;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
 
 class WoodenButton extends Transparent{
@@ -43,7 +44,7 @@ class WoodenButton extends Transparent{
 			if($this->isActivated()) {
 				$this->meta ^= 0x08;
 				$this->getLevel()->setBlock($this, $this, true, false);
-				$this->getLevel()->addSound(new ButtonClickSound($this));
+				$this->getLevel()->broadcastLevelEvent($this, LevelEventPacket::EVENT_REDSTONE_TRIGGER);
 				$this->deactivate();
 			}
 			return Level::BLOCK_UPDATE_SCHEDULED;
@@ -149,7 +150,7 @@ class WoodenButton extends Transparent{
 		if(!$this->isActivated()){
 			$this->meta ^= 0x08;
 			$this->getLevel()->setBlock($this, $this, true, false);
-			$this->getLevel()->addSound(new ButtonClickSound($this));
+			$this->getLevel()->broadcastLevelEvent($this, LevelEventPacket::EVENT_REDSTONE_TRIGGER);
 			$this->activate();
 			$this->getLevel()->scheduleUpdate($this, 30);
 		}

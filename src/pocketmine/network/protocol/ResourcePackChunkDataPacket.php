@@ -19,13 +19,33 @@
  *
 */
 
-namespace pocketmine\level\sound;
 
-use pocketmine\math\Vector3;
-use pocketmine\network\protocol\LevelEventPacket;
+namespace pocketmine\network\protocol;
 
-class GhastShootSound extends GenericSound{
-	public function __construct(Vector3 $pos, $pitch = 0){
-		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_GHAST_SHOOT, $pitch);
+#include <rules/DataPacket.h>
+
+class ResourcePackChunkDataPacket extends DataPacket{
+	const NETWORK_ID = Info::RESOURCE_PACK_CHUNK_DATA_PACKET;
+
+	public $packId;
+	public $chunkIndex;
+	public $progress;
+	public $data;
+
+	public function decode(){
+		$this->packId = $this->getString();
+		$this->chunkIndex = $this->getLInt();
+		$this->progress = $this->getLLong();
+		$this->data = $this->get($this->getLInt());
 	}
+
+	public function encode(){
+		$this->reset();
+		$this->putString($this->packId);
+		$this->putLInt($this->chunkIndex);
+		$this->putLLong($this->progress);
+		$this->putLInt(strlen($this->data));
+		$this->put($this->data);
+	}
+
 }
