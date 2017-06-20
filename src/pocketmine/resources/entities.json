@@ -7,7 +7,10 @@
     "width": 0.3,
     "length": 0.9,
     "height": 1.9,
-    "expDrop": [1, 3],
+    "expDrop": [
+      1,
+      3
+    ],
     "drops": 319,
     "enchantDrops": {
       "TYPE_WEAPON_FIRE_ASPECT": 320
@@ -20,10 +23,47 @@
     "width": 0.6,
     "length": 0.6,
     "height": 1.8,
-    "expDrop": [1, 3],
+    "expDrop": [
+      1,
+      3
+    ],
     "drops": 365,
     "enchantDrops": {
       "TYPE_WEAPON_FIRE_ASPECT": 366
+    }
+  },
+  "Cow": {
+    "unused_todo": "Add looting and mob drop rarity",
+    "NETWORK_ID": 13,
+    "name": "Cow",
+    "health": 10,
+    "width": 0.3,
+    "length": 0.9,
+    "height": 1.9,
+    "expDrop": [
+      1,
+      3
+    ],
+    "drops": 319,
+    "enchantDrops": {
+      "TYPE_WEAPON_FIRE_ASPECT": 320
+    },
+    "Blaze": {
+      "unused_todo": "Add looting and mob drop rarity",
+      "NETWORK_ID": 14,
+      "name": "Blaze",
+      "health": 10,
+      "width": 0.3,
+      "length": 0.9,
+      "height": 1.9,
+      "expDrop": [
+        1,
+        3
+      ],
+      "drops": 319,
+      "enchantDrops": {
+        "TYPE_WEAPON_FIRE_ASPECT": 320
+      }
     }
   }
 }

@@ -228,7 +228,7 @@ abstract class Entity extends Location implements Metadatable {
 		$content = json_decode($content, true);
 
 		foreach($content as $l){
-			Server::getInstance()->getLogger()->debug("Registering entity: " . $l['name']);
+			Server::getInstance()->getLogger()->alert("Registering entity: " . $l['name'] . TextFormat::LIGHT_PURPLE . " with NETWORK_ID: " . TextFormat::GRAY . $l['NETWORK_ID']);
 			self::$entity[$l['name']] = [
 				"name" => $l['name'],
 				"NETWORK_ID" => $l['NETWORK_ID'],
@@ -241,9 +241,9 @@ abstract class Entity extends Location implements Metadatable {
 				"drops" => $l['drops'],
 				"enchantDrops" => []
 			];
-		}
 
-	}
+            }
+		}
 
 	/**
 	 * @var Player[]
