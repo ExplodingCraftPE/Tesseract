@@ -2757,6 +2757,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				break;
 			case ProtocolInfo::SET_HEALTH_PACKET: //Not used
 				break;
+			case ProtocolInfo::LEVEL_SOUND_EVENT_PACKET:
+				$this->getLevel()->addChunkPacket($this->chunk->getX(), $this->chunk->getZ(), $packet);
+				break;
 			case ProtocolInfo::ENTITY_EVENT_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
