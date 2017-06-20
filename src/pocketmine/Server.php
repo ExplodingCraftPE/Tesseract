@@ -88,6 +88,7 @@ use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginLoadOrder;
 use pocketmine\plugin\PluginManager;
 use pocketmine\plugin\ScriptPluginLoader;
+use pocketmine\resourcepacks\ResourcePackManager;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\FileWriteTask;
 use pocketmine\scheduler\SendUsageTask;
@@ -182,6 +183,9 @@ class Server{
 
 	/** @var CraftingManager */
 	private $craftingManager;
+
+	/** @var ResourcePackManager */
+	private $resourceManager;
 
 	/** @var ConsoleCommandSender */
 	private $consoleSender;
@@ -656,6 +660,13 @@ class Server{
 	 */
 	public function getCraftingManager(){
 		return $this->craftingManager;
+	}
+
+	/**
+	 * @return ResourcePackManager
+	 */
+	public function getResourceManager() : ResourcePackManager{
+		return $this->resourceManager;
 	}
 
 	/**
@@ -1744,6 +1755,7 @@ class Server{
 			Color::init();
 			$this->craftingManager = new CraftingManager();
 
+			$this->resourceManager = new ResourcePackManager($this, $this->getDataPath() . "resource_packs" . DIRECTORY_SEPARATOR);
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
 			$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
 			$this->pluginManager->setUseTimings($this->getProperty("settings.enable-profiling", false));
@@ -2024,7 +2036,7 @@ class Server{
 	 * @param DataPacket[]|string $packets
 	 * @param bool                $forceSync
 	 */
-	public function batchPackets(array $players, array $packets, $forceSync = false){
+	public function batchPackets(array $players, array $packets, $forceSync = false, bool $immediate = false){
 		Timings::$playerNetworkTimer->startTiming();
 		$str = "";
 
@@ -2047,26 +2059,35 @@ class Server{
 		}
 
 		if(!$forceSync and $this->networkCompressionAsync){
-			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
+			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel, $immediate);
 			$this->getScheduler()->scheduleAsyncTask($task);
 		}else{
-			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);
+			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets, $immediate);
 		}
 
 		Timings::$playerNetworkTimer->stopTiming();
 	}
 
-	public function broadcastPacketsCallback($data, array $identifiers){
+	public function broadcastPacketsCallback($data, array $identifiers, bool $immediate){
 		$pk = new BatchPacket();
 		$pk->payload = $data;
 		$pk->encode();
 		$pk->isEncoded = true;
 
-		foreach($identifiers as $i){
-			if(isset($this->players[$i])){
-				$this->players[$i]->dataPacket($pk);
+		if($immediate){
+			foreach($identifiers as $i){
+				if(isset($this->players[$i])){
+					$this->players[$i]->directDataPacket($pk);
+				}
+			}
+		}else{
+			foreach($identifiers as $i){
+				if(isset($this->players[$i])){
+					$this->players[$i]->dataPacket($pk);
+				}
 			}
 		}
+
 	}
 
 

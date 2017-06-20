@@ -740,11 +740,11 @@ class Level implements ChunkManager, Metadatable{
 	 * WARNING: Do not use this, it's only for internal use.
 	 * Changes to this function won't be recorded on the version.
 	 */
-	public function sendTime(){
+	public function sendTime(Player ...$targets){
 		$pk = new SetTimePacket();
 		$pk->time = (int) $this->time;
 
-		$this->server->broadcastPacket($this->players, $pk);
+		$this->server->broadcastPacket(count($targets) > 0 ? $targets : $this->players, $pk);
 	}
 
 	/**
@@ -868,9 +868,7 @@ class Level implements ChunkManager, Metadatable{
 			Level::getXZ($index, $chunkX, $chunkZ);
 			$chunkPlayers = $this->getChunkPlayers($chunkX, $chunkZ);
 			if(count($chunkPlayers) > 0){
-				foreach($entries as $pk){
-					$this->server->broadcastPacket($chunkPlayers, $pk);
-				}
+				$this->server->batchPackets($chunkPlayers, $entries, false, false);
 			}
 		}
 
