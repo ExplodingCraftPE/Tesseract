@@ -19,13 +19,16 @@
  *
 */
 
-namespace pocketmine\level\sound;
+namespace pocketmine\level\light;
 
-use pocketmine\math\Vector3;
-use pocketmine\network\protocol\LevelEventPacket;
 
-class PopSound extends GenericSound{
-	public function __construct(Vector3 $pos, $pitch = 0){
-		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_POP, $pitch);
+class BlockLightUpdate extends LightUpdate{
+
+	public function getLight(int $x, int $y, int $z) : int{
+		return $this->level->getBlockLightAt($x, $y, $z);
+	}
+
+	public function setLight(int $x, int $y, int $z, int $level){
+		$this->level->setBlockLightAt($x, $y, $z, $level);
 	}
 }

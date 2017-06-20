@@ -19,13 +19,23 @@
  *
 */
 
-namespace pocketmine\level\sound;
+namespace pocketmine\event\entity;
 
-use pocketmine\math\Vector3;
-use pocketmine\network\protocol\LevelEventPacket;
+use pocketmine\entity\Effect;
+use pocketmine\entity\Entity;
+use pocketmine\event\Cancellable;
 
-class GhastShootSound extends GenericSound{
-	public function __construct(Vector3 $pos, $pitch = 0){
-		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_GHAST_SHOOT, $pitch);
+class EntityEffectEvent extends EntityEvent implements Cancellable{
+
+	/** @var Effect */
+	private $effect;
+
+	public function __construct(Entity $entity, Effect $effect){
+		$this->entity = $entity;
+		$this->effect = $effect;
+	}
+
+	public function getEffect() : Effect{
+		return $this->effect;
 	}
 }

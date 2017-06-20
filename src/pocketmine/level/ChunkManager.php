@@ -98,6 +98,10 @@ interface ChunkManager{
 	 */
 	public function setBlockLightAt(int $x, int $y, int $z, int $level);
 
+	public function getBlockSkyLightAt(int $x, int $y, int $z) : int;
+	
+	public function setBlockSkyLightAt(int $x, int $y, int $z, int $level);
+
 	/**
 	 * @param int $chunkX
 	 * @param int $chunkZ

@@ -30,6 +30,7 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Timings;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\Player;
@@ -44,21 +45,21 @@ abstract class Living extends Entity implements Damageable{
 	
 	protected $invisible = false;
 
+	protected $jumpVelocity = 0.42;
+
 	protected function initEntity(){
 		parent::initEntity();
 
 		if(isset($this->namedtag->HealF)){
-			$this->namedtag->Health = new ShortTag("Health", (int) $this->namedtag["HealF"]);
+			$this->namedtag->Health = new FloatTag("Health", (float) $this->namedtag["HealF"]);
 			unset($this->namedtag->HealF);
+		}elseif(isset($this->namedtag->Health) and !($this->namedtag->Health instanceof FloatTag)){
+			$this->namedtag->Health = new FloatTag("Health", (float) $this->namedtag->Health->getValue());
+		}else{
+			$this->namedtag->Health = new FloatTag("Health", (float) $this->getMaxHealth());
 		}
 
-		if(!isset($this->namedtag->Health) or !($this->namedtag->Health instanceof ShortTag)){
-			$this->namedtag->Health = new ShortTag("Health", $this->getMaxHealth());
-		}
-		
-		if($this->namedtag["Health"] <= 0)
-			$this->setHealth(20);
-		else $this->setHealth($this->namedtag["Health"]);
+		$this->setHealth($this->namedtag["Health"]);
 	}
 
 	public function setHealth($amount){
@@ -72,9 +73,17 @@ abstract class Living extends Entity implements Damageable{
 		}
 	}
 
+	public function getAbsorption() : int{
+		return (int) $this->attributeMap->getAttribute(Attribute::ABSORPTION)->getValue();
+	}
+
+	public function setAbsorption(int $absorption){
+		$this->attributeMap->getAttribute(Attribute::ABSORPTION)->setValue($absorption);
+	}
+
 	public function saveNBT(){
 		parent::saveNBT();
-		$this->namedtag->Health = new ShortTag("Health", $this->getHealth());
+		$this->namedtag->Health = new FloatTag("Health", $this->getHealth());
 	}
 
 	public abstract function getName();
@@ -92,6 +101,23 @@ abstract class Living extends Entity implements Damageable{
 		}
 
 		$this->attackTime = 0;
+	}
+
+	/**
+	 * Returns the initial upwards velocity of a jumping entity in blocks/tick, including additional velocity due to effects.
+	 * @return float
+	 */
+	public function getJumpVelocity() : float{
+		return $this->jumpVelocity + ($this->hasEffect(Effect::JUMP) ? ($this->getEffect(Effect::JUMP)->getAmplifier() / 10) : 0);
+	}
+
+	/**
+	 * Called when the entity jumps from the ground. This method adds upwards velocity to the entity.
+	 */
+	public function jump(){
+		if($this->onGround){
+			$this->motionY = $this->getJumpVelocity(); //Y motion should already be 0 if we're jumping from the ground.
+		}
 	}
 
 	public function attack($damage, EntityDamageEvent $source){
@@ -163,6 +189,10 @@ abstract class Living extends Entity implements Damageable{
 			return;
 		}
 		parent::kill();
+		$this->callDeathEvent();
+	}
+
+	protected function callDeathEvent(){
 		$this->server->getPluginManager()->callEvent($ev = new EntityDeathEvent($this, $this->getDrops()));
 		foreach($ev->getDrops() as $item){
 			$this->getLevel()->dropItem($this, $item);
