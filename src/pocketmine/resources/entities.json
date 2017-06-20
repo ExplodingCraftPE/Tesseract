@@ -1,6 +1,6 @@
 {
   "Pig": {
-    "unused_todo": "Add loooting and mob drop rarity",
+    "unused_todo": "Add looting and mob drop rarity",
     "NETWORK_ID": 12,
     "name": "Pig",
     "health": 10,
@@ -14,17 +14,16 @@
     }
   },
   "Chicken": {
-    "unused_todo": "Add loooting and mob drop rarity",
-    "NETWORK_ID": 12,
+    "NETWORK_ID": 10,
     "name": "Chicken",
-    "health": 10,
-    "width": 0.3,
-    "length": 0.9,
-    "height": 1.9,
+    "health": 4,
+    "width": 0.6,
+    "length": 0.6,
+    "height": 1.8,
     "expDrop": [1, 3],
-    "drops": 319,
+    "drops": 365,
     "enchantDrops": {
-      "TYPE_WEAPON_FIRE_ASPECT": 320
+      "TYPE_WEAPON_FIRE_ASPECT": 366
     }
   }
 }
