@@ -103,7 +103,6 @@ use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 
-//TODO use pocketmine\level\generator\ender\Ender;
 
 
 
