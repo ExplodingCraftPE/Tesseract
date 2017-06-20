@@ -19,13 +19,26 @@
  *
 */
 
-namespace pocketmine\level\sound;
 
-use pocketmine\math\Vector3;
-use pocketmine\network\protocol\LevelEventPacket;
+namespace pocketmine\network\protocol;
 
-class PopSound extends GenericSound{
-	public function __construct(Vector3 $pos, $pitch = 0){
-		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_POP, $pitch);
+#include <rules/DataPacket.h>
+
+class ResourcePackChunkRequestPacket extends DataPacket{
+	const NETWORK_ID = Info::RESOURCE_PACK_CHUNK_REQUEST_PACKET;
+
+	public $packId;
+	public $chunkIndex;
+
+	public function decode(){
+		$this->packId = $this->getString();
+		$this->chunkIndex = $this->getLInt();
 	}
+
+	public function encode(){
+		$this->reset();
+		$this->putString($this->packId);
+		$this->putLInt($this->chunkIndex);
+	}
+
 }

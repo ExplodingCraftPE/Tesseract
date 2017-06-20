@@ -22,12 +22,12 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
-use pocketmine\level\sound\TNTPrimeSound;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
 use pocketmine\utils\Random;
 
@@ -73,7 +73,7 @@ class TNT extends Solid {
                         "Fuse" => new ByteTag("Fuse", 80)
                     ]));
             $tnt->spawnToAll();
-            $this->level->addSound(new TNTPrimeSound($this));
+            $this->getLevel()->broadcastLevelEvent($player, LevelEventPacket::EVENT_SOUND_IGNITE);
             return true;
         }
         return false;
