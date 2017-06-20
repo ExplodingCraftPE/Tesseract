@@ -50,6 +50,7 @@ use pocketmine\level\format\io\region\McRegion;
 use pocketmine\level\format\io\region\PMAnvil;
 use pocketmine\level\format\io\LevelProviderManager;
 use pocketmine\level\generator\biome\Biome;
+use pocketmine\level\generator\ender\Ender;
 use pocketmine\level\generator\Flat;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\nether\Nether;
@@ -104,12 +105,10 @@ use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 
 
-
-
 /**
  * The class that manages everything
  */
-class Server{
+class Server {
 	const BROADCAST_CHANNEL_ADMINISTRATIVE = "pocketmine.broadcast.admin";
 	const BROADCAST_CHANNEL_USERS = "pocketmine.broadcast.user";
 
@@ -188,7 +187,7 @@ class Server{
 
 	/** @var int */
 	private $maxPlayers;
-	
+
 	/** @var bool */
 	private $autoSave;
 
@@ -266,20 +265,11 @@ class Server{
 	/** Advanced Config */
 	public $advancedConfig = null;
 
-	public $weatherEnabled = true;
 	public $foodEnabled = true;
 	public $expEnabled = true;
 	public $keepInventory = false;
-	public $netherEnabled = false;
 	public $netherName = "nether";
-	public $weatherRandomDurationMin = 6000;
-	public $weatherRandomDurationMax = 12000;
-	public $lightningTime = 200;
-	public $lightningFire = false;
 	public $version;
-	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
-	public $playerLoginMsg = "";
-	public $playerLogoutMsg = "";
 	public $autoClearInv = true;
 	public $dserverConfig = [];
 	public $dserverPlayers = 0;
@@ -298,7 +288,9 @@ class Server{
 	public $raklibDisable = false;
 	public $checkMovement = true;
 	public $folderpluginloader = false;
-	
+	public $endEnabled = true;
+	public $endName = "end";
+
 	/**
 	 * @return string
 	 */
@@ -353,7 +345,7 @@ class Server{
 	}
 
 	public function getFormattedVersion($prefix = ""){
-		return (\pocketmine\VERSION !== ""? $prefix . \pocketmine\VERSION : "");
+		return (\pocketmine\VERSION !== "" ? $prefix . \pocketmine\VERSION : "");
 	}
 
 	/**
@@ -618,7 +610,7 @@ class Server{
 
 	/**
 	 * @return \AttachableThreadedLogger|MainLogger|\ThreadedLogger
-     */
+	 */
 	public function getLogger(){
 		return $this->logger;
 	}
@@ -819,9 +811,9 @@ class Server{
 	}
 
 	/**
-	 * @param string   $name
+	 * @param string $name
 	 * @param CompoundTag $nbtTag
-	 * @param bool     $async
+	 * @param bool $async
 	 */
 	public function saveOfflinePlayerData($name, CompoundTag $nbtTag, $async = false){
 		if($this->shouldSavePlayerData()){
@@ -988,7 +980,7 @@ class Server{
 
 	/**
 	 * @param Level $level
-	 * @param bool  $forceUnload
+	 * @param bool $forceUnload
 	 *
 	 * @return bool
 	 */
@@ -1062,9 +1054,9 @@ class Server{
 	 * Generates a new level if it does not exists
 	 *
 	 * @param string $name
-	 * @param int    $seed
+	 * @param int $seed
 	 * @param string $generator Class name that extends pocketmine\level\generator\Noise
-	 * @param array  $options
+	 * @param array $options
 	 *
 	 * @return bool
 	 */
@@ -1182,7 +1174,7 @@ class Server{
 
 	/**
 	 * @param string $variable
-	 * @param mixed  $defaultValue
+	 * @param mixed $defaultValue
 	 *
 	 * @return mixed
 	 */
@@ -1209,7 +1201,7 @@ class Server{
 
 	/**
 	 * @param string $variable
-	 * @param int    $defaultValue
+	 * @param int $defaultValue
 	 *
 	 * @return int
 	 */
@@ -1224,14 +1216,14 @@ class Server{
 
 	/**
 	 * @param string $variable
-	 * @param int    $value
+	 * @param int $value
 	 */
 	public function setConfigInt($variable, $value){
 		$this->properties->set($variable, (int) $value);
 	}
 
 	/**
-	 * @param string  $variable
+	 * @param string $variable
 	 * @param boolean $defaultValue
 	 *
 	 * @return boolean
@@ -1260,7 +1252,7 @@ class Server{
 
 	/**
 	 * @param string $variable
-	 * @param bool   $value
+	 * @param bool $value
 	 */
 	public function setConfigBool($variable, $value){
 		$this->properties->set($variable, $value == true ? "1" : "0");
@@ -1409,16 +1401,16 @@ class Server{
 	public static function getInstance() : Server{
 		return self::$instance;
 	}
-	
+
 	function curl($url){
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $response = curl_exec($ch);
-        curl_close($ch);
-        return $response;
-    }
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		return $response;
+	}
 
 	public static function microSleep(int $microseconds){
 		Server::$sleeper->synchronized(function(int $ms){
@@ -1427,20 +1419,12 @@ class Server{
 	}
 
 	public function loadAdvancedConfig(){
-		$this->playerMsgType = $this->getAdvancedProperty("server.player-msg-type", self::PLAYER_MSG_TYPE_MESSAGE);
-		$this->playerLoginMsg = $this->getAdvancedProperty("server.login-msg", "§3@player joined the game");
-		$this->playerLogoutMsg = $this->getAdvancedProperty("server.logout-msg", "§3@player left the game");
-		$this->weatherEnabled = $this->getAdvancedProperty("level.weather", true);
 		$this->foodEnabled = $this->getAdvancedProperty("player.hunger", true);
 		$this->expEnabled = $this->getAdvancedProperty("player.experience", true);
 		$this->keepInventory = $this->getAdvancedProperty("player.keep-inventory", false);
 		$this->keepExperience = $this->getAdvancedProperty("player.keep-experience", false);
-		$this->netherEnabled = $this->getAdvancedProperty("level.allow-nether", false);
 		$this->netherName = $this->getAdvancedProperty("level.level-name", "nether");
-		$this->weatherRandomDurationMin = $this->getAdvancedProperty("level.weather-random-duration-min", 6000);
-		$this->weatherRandomDurationMax = $this->getAdvancedProperty("level.weather-random-duration-max", 12000);
-		$this->lightningTime = $this->getAdvancedProperty("level.lightning-time", 200);
-		$this->lightningFire = $this->getAdvancedProperty("level.lightning-fire", false);
+		$this->endName = $this->getAdvancedProperty("level.end-name", "end");
 		$this->autoClearInv = $this->getAdvancedProperty("player.auto-clear-inventory", true);
 		$this->dserverConfig = [
 			"enable" => $this->getAdvancedProperty("dserver.enable", false),
@@ -1471,7 +1455,7 @@ class Server{
 		$this->checkMovement = $this->getAdvancedProperty("anticheat.check-movement", true);
 		$this->folderpluginloader = $this->getAdvancedProperty("developer.folder-plugin-loader", false);
 	}
-	
+
 	/**
 	 * @return int
 	 *
@@ -1507,12 +1491,12 @@ class Server{
 	}
 
 	/**
-	 * @param \ClassLoader    $autoloader
+	 * @param \ClassLoader $autoloader
 	 * @param \ThreadedLogger $logger
-	 * @param string          $filePath
-	 * @param string          $dataPath
-	 * @param string          $pluginPath
-	 * @param string          $defaultLang
+	 * @param string $filePath
+	 * @param string $dataPath
+	 * @param string $pluginPath
+	 * @param string $defaultLang
 	 */
 	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, $filePath, $dataPath, $pluginPath, $defaultLang = "unknown"){
 		self::$instance = $this;
@@ -1536,14 +1520,14 @@ class Server{
 			if(!file_exists($dataPath . "crashdumps/")){
 				mkdir($dataPath . "crashdumps/", 0777);
 			}
-			
+
 			if(!file_exists($dataPath . "plugins/Tesseract/")){
 				mkdir($dataPath . "plugins/Tesseract/", 0777);
 			}
-			
+
 			if(\Phar::running(true) === ""){
-			   $packages = "src";
-			} else {
+				$packages = "src";
+			}else{
 				$packages = "phar";
 			}
 
@@ -1582,7 +1566,7 @@ class Server{
 				"auto-save" => true,
 				"online-mode" => false,
 			]);
-			
+
 			$version = $this->getFormattedVersion();
 			$this->version = $version;
 			$code = $this->getCodename();
@@ -1598,7 +1582,7 @@ class Server{
 			$date = date("D, F d, Y, H:i T");
 			$package = $packages;
 
-			            $this->logger->info("
+			$this->logger->info("
 §6┌─────────────────────────────────────────────────┐  §6-- Loaded: Properties and Configuration --
 §6│                                                 │    §cDate: §d$date
 §6│§b   _______                                _      §6│    §cVersion: §d$version §cCodename: §d$code
@@ -1716,7 +1700,7 @@ class Server{
 				@cli_set_process_title($this->getName() . " " . $this->getPocketMineVersion());
 			}
 
-			$this->logger->info(TextFormat::BLUE."Everything seems to be alright! Server started!");
+			$this->logger->info(TextFormat::BLUE . "Everything seems to be alright! Server started!");
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
 
 			$this->getLogger()->debug("Server unique id: " . $this->getServerUniqueId());
@@ -1749,23 +1733,23 @@ class Server{
 			$this->pluginManager->setUseTimings($this->getProperty("settings.enable-profiling", false));
 			$this->profilingTickRate = (float) $this->getProperty("settings.profile-report-trigger", 20);
 			$this->pluginManager->registerInterface(PharPluginLoader::class);
-			if($this->getAdvancedProperty("developer.folder-plugin-loader") === true) {
-                $this->pluginManager->registerInterface(FolderPluginLoader::class);
-            }
+			if($this->getAdvancedProperty("developer.folder-plugin-loader") === true){
+				$this->pluginManager->registerInterface(FolderPluginLoader::class);
+			}
 			$this->pluginManager->registerInterface(ScriptPluginLoader::class);
 
 			//set_exception_handler([$this, "exceptionHandler"]);
 			register_shutdown_function([$this, "crashDump"]);
 
 			$this->queryRegenerateTask = new QueryRegenerateEvent($this, 5);
-			
+
 			$this->pluginManager->loadPlugins($this->pluginPath);
 
 			$this->enablePlugins(PluginLoadOrder::STARTUP);
-			
+
 			if($this->getAdvancedProperty("network.raklib-disable") === false){
-			$this->network->registerInterface(new RakLibInterface($this));
-			} else {
+				$this->network->registerInterface(new RakLibInterface($this));
+			}else{
 				$this->logger->notice("Raklib disabled by tesseract.yml!");
 			}
 
@@ -1780,11 +1764,11 @@ class Server{
 			Generator::addGenerator(Normal::class, "default");
 			Generator::addGenerator(Nether::class, "hell");
 			Generator::addGenerator(Nether::class, "nether");
-			//TODO Generator::addGenerator(Ender::class, "ender");
+			Generator::addGenerator(Ender::class, "end");
 
 			if(!$this->getProperty("level-settings.default-format", "mcregion")){
-					$this->getLogger()->warning("McRegion is deprecated please refrain from using it!");
-				}
+				$this->getLogger()->warning("McRegion is deprecated please refrain from using it!");
+			}
 
 			foreach((array) $this->getProperty("worlds", []) as $name => $worldSetting){
 				if($this->loadLevel($name) === false){
@@ -1832,13 +1816,16 @@ class Server{
 
 				return;
 			}
-			
-			if($this->netherEnabled){
-				if(!$this->loadLevel($this->netherName)){
-					$this->generateLevel($this->netherName, time(), Generator::getGenerator("nether"));
-				}
-				$this->netherLevel = $this->getLevelByName($this->netherName);
+
+			if(!$this->loadLevel($this->netherName)){
+				$this->generateLevel($this->netherName, time(), Generator::getGenerator("nether"));
 			}
+			$this->netherLevel = $this->getLevelByName($this->netherName);
+
+			if(!$this->loadLevel($this->endName)){
+				$this->generateLevel($this->endName, time(), Generator::getGenerator("end"));
+			}
+			$this->endLevel = $this->getLevelByName($this->endName);
 
 
 			if($this->getProperty("ticks-per.autosave", 6000) > 0){
@@ -1846,12 +1833,12 @@ class Server{
 			}
 
 			$this->enablePlugins(PluginLoadOrder::POSTWORLD);
-			
+
 			if($this->dserverConfig["enable"] and ($this->getAdvancedProperty("dserver.server-list", "") != "")) $this->scheduler->scheduleRepeatingTask(new scheduler\CallbackTask(
-			[
-				$this, "updateDServerInfo"
-			]),
-			$this->dserverConfig["timer"]);
+				[
+					$this, "updateDServerInfo"
+				]),
+				$this->dserverConfig["timer"]);
 
 			if($cfgVer > $advVer){
 				$this->logger->notice("Your tesseract.yml needs update (Current : $advVer -> Latest: $cfgVer)");
@@ -1868,40 +1855,40 @@ class Server{
 		return $this->getConfigBoolean("online-mode", false);
 
 	}
-	
+
 	public function isExtensionInstalled($type){
 		switch($type){
-			
+
 			case 'OpenSSL':
-			if(!extension_loaded("openssl")){
-				return "false";
-				$this->setConfigBool("online-mode", false);
-				
-			} else {
-				return "true";
-			break;
+				if(!extension_loaded("openssl")){
+					return "false";
+					$this->setConfigBool("online-mode", false);
+
+				}else{
+					return "true";
+					break;
+				}
+			case '$type';
+				if(!extension_loaded($type)){
+					return "false";
+
+				}else{
+					return "true";
+				}
 		}
-		    case '$type';
-			if(!extension_loaded($type)){
-				return "false";
-				
-			} else {
-				return "true";
-			}
 	}
-	}
-	
+
 	public function checkAuthentication(){
-	   if($this->isExtensionInstalled("OpenSSL") == "false"){
-		   return "offline mode/insecure";
-		   
-	   } else {
-		   return "online mode/secure";
-	   }
+		if($this->isExtensionInstalled("OpenSSL") == "false"){
+			return "offline mode/insecure";
+
+		}else{
+			return "online mode/secure";
+		}
 	}
 
 	/**
-	 * @param string        $message
+	 * @param string $message
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1920,7 +1907,7 @@ class Server{
 	}
 
 	/**
-	 * @param string        $tip
+	 * @param string $tip
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1946,7 +1933,7 @@ class Server{
 	}
 
 	/**
-	 * @param string        $popup
+	 * @param string $popup
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1998,7 +1985,7 @@ class Server{
 	/**
 	 * Broadcasts a Minecraft packet to a list of players
 	 *
-	 * @param Player[]   $players
+	 * @param Player[] $players
 	 * @param DataPacket $packet
 	 */
 	public function broadcastPacket(array $players, DataPacket $packet){
@@ -2020,9 +2007,9 @@ class Server{
 	/**
 	 * Broadcasts a list of packets in a batch to a list of players
 	 *
-	 * @param Player[]            $players
+	 * @param Player[] $players
 	 * @param DataPacket[]|string $packets
-	 * @param bool                $forceSync
+	 * @param bool $forceSync
 	 */
 	public function batchPackets(array $players, array $packets, $forceSync = false){
 		Timings::$playerNetworkTimer->startTiming();
@@ -2112,7 +2099,7 @@ class Server{
 	 * Executes a command from a CommandSender
 	 *
 	 * @param CommandSender $sender
-	 * @param string        $commandLine
+	 * @param string $commandLine
 	 *
 	 * @return bool
 	 *
@@ -2172,7 +2159,7 @@ class Server{
 
 	/**
 	 * Shutdowns the server correctly
-	 * @param bool   $restart
+	 * @param bool $restart
 	 * @param string $msg
 	 */
 	public function shutdown(bool $restart = false, string $msg = ""){
@@ -2181,10 +2168,10 @@ class Server{
 			$killer->start();
 			$killer->kill();
 		}*/
-		
+
 		$this->getPluginManager()->callEvent($ev = new event\server\ServerShutdownEvent());
- 		if($ev->isCancelled(true)) return;
-		
+		if($ev->isCancelled(true)) return;
+
 		$this->isRunning = false;
 		if($msg != ""){
 			$this->propertyCache["settings.shutdown-message"] = $msg;
@@ -2244,7 +2231,7 @@ class Server{
 				$interface->shutdown();
 				$this->network->unregisterInterface($interface);
 			}
- 			
+
 			//$this->memoryManager->doObjectCleanup();
 
 			gc_collect_cycles();
@@ -2400,7 +2387,7 @@ class Server{
 		}
 
 		$this->sendFullPlayerListData($player);
-        $player->dataPacket($this->craftingManager->getCraftingDataPacket());
+		$player->dataPacket($this->craftingManager->getCraftingDataPacket());
 	}
 
 	public function addPlayer($identifier, Player $player){
@@ -2547,7 +2534,7 @@ class Server{
 	/**
 	 * @return MemoryManager
 	 */
-	
+
 	public function getMemoryManager(){
 		return $this->memoryManager;
 	}
@@ -2575,7 +2562,7 @@ class Server{
 
 	/**
 	 * @param string $address
-	 * @param int    $port
+	 * @param int $port
 	 * @param string $payload
 	 *
 	 * TODO: move this to Network
@@ -2599,7 +2586,7 @@ class Server{
 
 	/**
 	 * @param             $variable
-	 * @param null        $defaultValue
+	 * @param null $defaultValue
 	 * @param Config|null $cfg
 	 * @return bool|mixed|null
 	 */
@@ -2654,7 +2641,7 @@ class Server{
 
 		Timings::$connectionTimer->startTiming();
 		$this->network->processInterfaces();
-		
+
 		if($this->rcon !== null){
 			$this->rcon->check();
 		}

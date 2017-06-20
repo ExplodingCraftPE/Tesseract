@@ -23,7 +23,6 @@ namespace pocketmine\event\level;
 
 use pocketmine\event\Cancellable;
 use pocketmine\level\Level;
-use pocketmine\level\weather\Weather;
 
 class WeatherChangeEvent extends LevelEvent implements Cancellable{
 

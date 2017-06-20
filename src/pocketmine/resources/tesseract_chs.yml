@@ -15,15 +15,6 @@ config:
  version: 28
  
 level:
- #设置是否变换天气
- weather: true
- #随机天气持续时长最小值，最大值
- weather-random-duration-min: 6000
- weather-random-duration-max: 12000
- #随机闪电间隔，默认10秒，0 = 禁用
- lightning-time: 200
- #是否启用闪电击中着火
- lightning-fire: false
  #是否启用火焰蔓延
  fire-spread: false
  #是否开启地狱，打开此选项会自动生成地狱地图

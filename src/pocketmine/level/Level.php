@@ -116,7 +116,6 @@ use pocketmine\level\sound\Sound;
 use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\entity\Lightning;
 use pocketmine\entity\XPOrb;
-use pocketmine\level\weather\Weather;
 
 #include <rules/Level.h>
 
@@ -144,6 +143,7 @@ class Level implements ChunkManager, Metadatable{
 
 	const DIMENSION_NORMAL = 0;
 	const DIMENSION_NETHER = 1;
+	const DIMENSION_END = 2;
 
 	/** @var Tile[] */
 	private $tiles = [];
@@ -406,12 +406,9 @@ class Level implements ChunkManager, Metadatable{
 		$this->temporalVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
 
-		$this->weather = new Weather($this, 0);
-		if($this->server->netherEnabled and $this->server->netherName == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
+		if($this->server->netherName == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
+		elseif($this->server->endName === $this->folderName) $this->setDimension(self::DIMENSION_END);
 		else $this->setDimension(self::DIMENSION_NORMAL);
-		if($this->server->weatherEnabled and $this->getDimension() == self::DIMENSION_NORMAL){
-			$this->weather->setCanCalculate(true);
-		}else $this->weather->setCanCalculate(false);
 	}
 
 	public function setDimension(int $dimension){
@@ -420,13 +417,6 @@ class Level implements ChunkManager, Metadatable{
 
 	public function getDimension() : int{
 		return $this->dimension;
-	}
-
-	/**
-	 * @return Weather
-	 */
-	public function getWeather(){
-		return $this->weather;
 	}
 
 	public function getTickRate() : int{
@@ -783,8 +773,6 @@ class Level implements ChunkManager, Metadatable{
 			$this->sendTime();
 			$this->sendTimeTicker = 0;
 		}
-
-		$this->weather->calcWeather($currentTick);
 
 		$this->unloadChunks();
 

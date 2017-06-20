@@ -107,16 +107,6 @@ class Fire extends Flowable{
 					$this->getLevel()->setBlock($this, new Air(), true);
 				}
 
-				if(!$forever and $this->getLevel()->getWeather()->isRainy() and
-					($this->getLevel()->canBlockSeeSky($this) or
-						$this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_EAST)) or
-						$this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_WEST)) or
-						$this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_SOUTH)) or
-						$this->getLevel()->canBlockSeeSky($this->getSide(Vector3::SIDE_NORTH))
-					)
-				){
-					$this->getLevel()->setBlock($this, new Air(), true);
-				}else{
 					$meta = $this->meta;
 
 					if($meta < 15){
@@ -173,7 +163,6 @@ class Fire extends Flowable{
 					}
 				}
 			}
-		}
 		return 0;
 	}
 
