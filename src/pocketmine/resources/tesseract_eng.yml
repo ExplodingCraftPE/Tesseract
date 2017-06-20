@@ -47,6 +47,9 @@ player:
  keep-experience: false
  #Radius of chunks in worlds, possibly for rendering, if players crash by too much processing, set this below 10. disable=-1
  chunk-radius: -1
+
+anti-cheat:
+  check-movements: true
  
 server:
  #This setting decides if the server.log file will not be made/written.

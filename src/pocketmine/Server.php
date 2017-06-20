@@ -373,6 +373,7 @@ class Server{
 	public $enchantingTableEnabled = true;
 	public $countBookshelf = false;
 	public $allowInventoryCheats = false;
+	public $checkMovements = true;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1592,6 +1593,7 @@ class Server{
 		$this->countBookshelf = $this->getAdvancedProperty("enchantment.count-bookshelf", false);
 
 		$this->allowInventoryCheats = $this->getAdvancedProperty("inventory.allow-cheats", false);
+		$this->checkMovements = $this->getAdvancedProperty("anti-cheat.check-movements", true);
 		
 	}
 	
