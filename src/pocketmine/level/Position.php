@@ -24,7 +24,7 @@ namespace pocketmine\level;
 use pocketmine\math\Vector3;
 use pocketmine\utils\MainLogger;
 
-class Position extends Vector3{
+class Position extends Vector3 {
 
 	/** @var Level */
 	public $level = null;
@@ -45,7 +45,7 @@ class Position extends Vector3{
 	public static function fromObject(Vector3 $pos, Level $level = null){
 		return new Position($pos->x, $pos->y, $pos->z, $level);
 	}
-	
+
 	public function add($x, $y = 0, $z = 0){
 		if($x instanceof Vector3){
 			return new Position($this->x + $x->x, $this->y + $x->y, $this->z + $x->z, $this->level);
@@ -62,7 +62,7 @@ class Position extends Vector3{
 			MainLogger::getLogger()->debug("Position was holding a reference to an unloaded Level");
 			$this->level = null;
 		}
- 
+
 		return $this->level;
 	}
 
@@ -79,7 +79,7 @@ class Position extends Vector3{
 		if($level !== null and $level->isClosed()){
 			throw new \InvalidArgumentException("Specified level has been unloaded and cannot be used");
 		}
- 
+
 		$this->level = $level;
 		return $this;
 	}

@@ -43,7 +43,7 @@ use pocketmine\network\protocol\ExplodePacket;
 
 use pocketmine\utils\Random;
 
-class Explosion{
+class Explosion {
 
 	private $rays = 16; //Rays
 	public $level;

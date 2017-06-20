@@ -4,7 +4,7 @@ namespace pocketmine\level\generator\ender;
 
 use pocketmine\level\generator\biome\Biome;
 
-class EndBiome extends Biome{
+class EndBiome extends Biome {
 
 	public function __construct(){
 	}

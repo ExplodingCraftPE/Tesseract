@@ -29,7 +29,7 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class Bed extends Transparent{
+class Bed extends Transparent {
 
 	protected $id = self::BED_BLOCK;
 
@@ -37,11 +37,11 @@ class Bed extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return true;
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0.2;
 	}
 
@@ -49,7 +49,7 @@ class Bed extends Transparent{
 		return "Bed Block";
 	}
 
-	protected function recalculateBoundingBox() {
+	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
@@ -159,7 +159,7 @@ class Bed extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item) : array{
 		return [
 			[Item::BED, 0, 1],
 		];

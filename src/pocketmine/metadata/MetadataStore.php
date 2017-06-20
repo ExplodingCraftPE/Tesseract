@@ -22,12 +22,13 @@
 /**
  * Saves extra data on runtime for different items
  */
+
 namespace pocketmine\metadata;
 
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginException;
 
-abstract class MetadataStore{
+abstract class MetadataStore {
 	/** @var \WeakMap[] */
 	private $metadataMap;
 
@@ -64,7 +65,7 @@ abstract class MetadataStore{
 	 * @param string $metadataKey
 	 *
 	 * @return MetadataValue[]|\WeakMap
-     *
+	 *
 	 * @throws \Exception
 	 */
 	public function getMetadata($subject, $metadataKey){

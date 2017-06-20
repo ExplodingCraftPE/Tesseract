@@ -17,6 +17,7 @@
  *
  *
  */
+
 namespace pocketmine\event\inventory;
 
 use pocketmine\event\Cancellable;
@@ -25,7 +26,7 @@ use pocketmine\inventory\Recipe;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-class CraftItemEvent extends Event implements Cancellable{
+class CraftItemEvent extends Event implements Cancellable {
 
 	public static $handlerList = null;
 	/** @var Item[] */
@@ -73,7 +74,7 @@ class CraftItemEvent extends Event implements Cancellable{
 
 	/**
 	 * @return EventName|string
-     */
+	 */
 	public function getName(){
 		return "CraftItemEvent";
 	}

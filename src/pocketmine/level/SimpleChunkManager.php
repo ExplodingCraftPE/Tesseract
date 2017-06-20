@@ -27,7 +27,7 @@ use pocketmine\block\Block;
 use pocketmine\level\format\Chunk;
 use pocketmine\math\Vector3;
 
-class SimpleChunkManager implements ChunkManager{
+class SimpleChunkManager implements ChunkManager {
 
 	/** @var Chunk[] */
 	protected $chunks = [];
@@ -149,7 +149,7 @@ class SimpleChunkManager implements ChunkManager{
 
 	/**
 	 * Updates the light around the block
-	 * 
+	 *
 	 * @param $x
 	 * @param $y
 	 * @param $z

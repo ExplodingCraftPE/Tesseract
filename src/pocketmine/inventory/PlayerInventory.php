@@ -35,7 +35,7 @@ use pocketmine\network\protocol\MobEquipmentPacket;
 use pocketmine\Player;
 use pocketmine\Server;
 
-class PlayerInventory extends BaseInventory{
+class PlayerInventory extends BaseInventory {
 
 	protected $itemInHandIndex = 0;
 	/** @var int[] */
@@ -71,7 +71,7 @@ class PlayerInventory extends BaseInventory{
 					}
 				}
 			}else{
-				throw new \InvalidArgumentException("Expecting ListTag, received ".gettype($contents));
+				throw new \InvalidArgumentException("Expecting ListTag, received " . gettype($contents));
 			}
 		}
 	}
@@ -96,13 +96,14 @@ class PlayerInventory extends BaseInventory{
 		return ($index >= 0 and $index < $this->getHotbarSize()) ? $this->hotbar[$index] : -1;
 	}
 
-    /**
-     * @deprecated
-     *
-     * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
-     * @param $index
-     * @param $slot
-     */
+	/**
+	 * @deprecated
+	 *
+	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
+	 *
+	 * @param $index
+	 * @param $slot
+	 */
 	public function setHotbarSlotIndex($index, $slot){
 		if($this->getHolder()->getServer()->getProperty("settings.deprecated-verbose") !== false){
 			trigger_error("Do not attempt to change hotbar links in plugins!", E_USER_DEPRECATED);
@@ -216,6 +217,7 @@ class PlayerInventory extends BaseInventory{
 
 	/**
 	 * @deprecated
+	 *
 	 * @param int $slot
 	 */
 	public function setHeldItemSlot($slot){
@@ -283,12 +285,12 @@ class PlayerInventory extends BaseInventory{
 	}
 
 	public function damageArmor($index, $cost){
- 		$this->slots[$this->getSize() + $index]->useOn($this->slots[$this->getSize() + $index], $cost);
- 	    if($this->slots[$this->getSize() + $index]->getDamage() >= $this->slots[$this->getSize() + $index]->getMaxDurability()){
- 		$this->setItem($this->getSize() + $index, Item::get(Item::AIR, 0, 0));
+		$this->slots[$this->getSize() + $index]->useOn($this->slots[$this->getSize() + $index], $cost);
+		if($this->slots[$this->getSize() + $index]->getDamage() >= $this->slots[$this->getSize() + $index]->getMaxDurability()){
+			$this->setItem($this->getSize() + $index, Item::get(Item::AIR, 0, 0));
 		}
- 		$this->sendArmorContents($this->getViewers());
- 	}
+		$this->sendArmorContents($this->getViewers());
+	}
 
 	public function getHelmet(){
 		return $this->getItem($this->getSize());
@@ -560,7 +562,7 @@ class PlayerInventory extends BaseInventory{
 
 	/**
 	 * @return Human|InventoryHolder|Player
-     */
+	 */
 	public function getHolder(){
 		return parent::getHolder();
 	}

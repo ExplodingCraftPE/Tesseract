@@ -810,9 +810,9 @@ class Server {
 	}
 
 	/**
-	 * @param string $name
+	 * @param string      $name
 	 * @param CompoundTag $nbtTag
-	 * @param bool $async
+	 * @param bool        $async
 	 */
 	public function saveOfflinePlayerData($name, CompoundTag $nbtTag, $async = false){
 		if($this->shouldSavePlayerData()){
@@ -979,7 +979,7 @@ class Server {
 
 	/**
 	 * @param Level $level
-	 * @param bool $forceUnload
+	 * @param bool  $forceUnload
 	 *
 	 * @return bool
 	 */
@@ -1053,9 +1053,9 @@ class Server {
 	 * Generates a new level if it does not exists
 	 *
 	 * @param string $name
-	 * @param int $seed
+	 * @param int    $seed
 	 * @param string $generator Class name that extends pocketmine\level\generator\Noise
-	 * @param array $options
+	 * @param array  $options
 	 *
 	 * @return bool
 	 */
@@ -1173,7 +1173,7 @@ class Server {
 
 	/**
 	 * @param string $variable
-	 * @param mixed $defaultValue
+	 * @param mixed  $defaultValue
 	 *
 	 * @return mixed
 	 */
@@ -1200,7 +1200,7 @@ class Server {
 
 	/**
 	 * @param string $variable
-	 * @param int $defaultValue
+	 * @param int    $defaultValue
 	 *
 	 * @return int
 	 */
@@ -1215,14 +1215,14 @@ class Server {
 
 	/**
 	 * @param string $variable
-	 * @param int $value
+	 * @param int    $value
 	 */
 	public function setConfigInt($variable, $value){
 		$this->properties->set($variable, (int) $value);
 	}
 
 	/**
-	 * @param string $variable
+	 * @param string  $variable
 	 * @param boolean $defaultValue
 	 *
 	 * @return boolean
@@ -1251,7 +1251,7 @@ class Server {
 
 	/**
 	 * @param string $variable
-	 * @param bool $value
+	 * @param bool   $value
 	 */
 	public function setConfigBool($variable, $value){
 		$this->properties->set($variable, $value == true ? "1" : "0");
@@ -1488,12 +1488,12 @@ class Server {
 	}
 
 	/**
-	 * @param \ClassLoader $autoloader
+	 * @param \ClassLoader    $autoloader
 	 * @param \ThreadedLogger $logger
-	 * @param string $filePath
-	 * @param string $dataPath
-	 * @param string $pluginPath
-	 * @param string $defaultLang
+	 * @param string          $filePath
+	 * @param string          $dataPath
+	 * @param string          $pluginPath
+	 * @param string          $defaultLang
 	 */
 	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, $filePath, $dataPath, $pluginPath, $defaultLang = "unknown"){
 		self::$instance = $this;
@@ -1885,7 +1885,7 @@ class Server {
 	}
 
 	/**
-	 * @param string $message
+	 * @param string        $message
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1904,7 +1904,7 @@ class Server {
 	}
 
 	/**
-	 * @param string $tip
+	 * @param string        $tip
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1930,7 +1930,7 @@ class Server {
 	}
 
 	/**
-	 * @param string $popup
+	 * @param string        $popup
 	 * @param Player[]|null $recipients
 	 *
 	 * @return int
@@ -1982,7 +1982,7 @@ class Server {
 	/**
 	 * Broadcasts a Minecraft packet to a list of players
 	 *
-	 * @param Player[] $players
+	 * @param Player[]   $players
 	 * @param DataPacket $packet
 	 */
 	public function broadcastPacket(array $players, DataPacket $packet){
@@ -2004,9 +2004,9 @@ class Server {
 	/**
 	 * Broadcasts a list of packets in a batch to a list of players
 	 *
-	 * @param Player[] $players
+	 * @param Player[]            $players
 	 * @param DataPacket[]|string $packets
-	 * @param bool $forceSync
+	 * @param bool                $forceSync
 	 */
 	public function batchPackets(array $players, array $packets, $forceSync = false){
 		Timings::$playerNetworkTimer->startTiming();
@@ -2096,7 +2096,7 @@ class Server {
 	 * Executes a command from a CommandSender
 	 *
 	 * @param CommandSender $sender
-	 * @param string $commandLine
+	 * @param string        $commandLine
 	 *
 	 * @return bool
 	 *
@@ -2156,7 +2156,8 @@ class Server {
 
 	/**
 	 * Shutdowns the server correctly
-	 * @param bool $restart
+	 *
+	 * @param bool   $restart
 	 * @param string $msg
 	 */
 	public function shutdown(bool $restart = false, string $msg = ""){
@@ -2559,7 +2560,7 @@ class Server {
 
 	/**
 	 * @param string $address
-	 * @param int $port
+	 * @param int    $port
 	 * @param string $payload
 	 *
 	 * TODO: move this to Network
@@ -2583,8 +2584,9 @@ class Server {
 
 	/**
 	 * @param             $variable
-	 * @param null $defaultValue
+	 * @param null        $defaultValue
 	 * @param Config|null $cfg
+	 *
 	 * @return bool|mixed|null
 	 */
 	public function getAdvancedProperty($variable, $defaultValue = null, Config $cfg = null){

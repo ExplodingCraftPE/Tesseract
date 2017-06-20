@@ -26,7 +26,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class LeashKnot extends Entity{
+class LeashKnot extends Entity {
 	const NETWORK_ID = 88;
 
 	//TO-DO: Find the REAL width, length and height.

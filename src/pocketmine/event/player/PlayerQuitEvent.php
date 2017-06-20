@@ -26,7 +26,7 @@ use pocketmine\Player;
 /**
  * Called when a player leaves the server
  */
-class PlayerQuitEvent extends PlayerEvent{
+class PlayerQuitEvent extends PlayerEvent {
 
 	public static $handlerList = null;
 
@@ -58,7 +58,7 @@ class PlayerQuitEvent extends PlayerEvent{
 
 	/**
 	 * @return EventName|string
-     */
+	 */
 	public function getName(){
 		return "PlayerQuitEvent";
 	}

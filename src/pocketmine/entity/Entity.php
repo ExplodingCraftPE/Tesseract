@@ -22,6 +22,7 @@
 /**
  * All the entity classes
  */
+
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
@@ -69,7 +70,7 @@ use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\Server;
 
-abstract class Entity extends Location implements Metadatable{
+abstract class Entity extends Location implements Metadatable {
 
 	const NETWORK_ID = -1;
 
@@ -402,8 +403,8 @@ abstract class Entity extends Location implements Metadatable{
 		$this->justCreated = true;
 		$this->namedtag = $nbt;
 
-        $this->chunk = $level->getChunk($this->namedtag["Pos"][0] >> 4, $this->namedtag["Pos"][2] >> 4);
-        assert($this->chunk !== null);
+		$this->chunk = $level->getChunk($this->namedtag["Pos"][0] >> 4, $this->namedtag["Pos"][2] >> 4);
+		assert($this->chunk !== null);
 		$this->setLevel($level);
 		$this->server = $level->getServer();
 
@@ -473,11 +474,11 @@ abstract class Entity extends Location implements Metadatable{
 
 	//add original function (set scale etc)
 	public function setScale($scale){
- 		$this->setDataProperty(self::DATA_SCALE, self::DATA_TYPE_FLOAT, $scale);
+		$this->setDataProperty(self::DATA_SCALE, self::DATA_TYPE_FLOAT, $scale);
 	}
 
 	public function getScale(){
- 		$this->getDataProperty(self::DATA_SCALE, self::DATA_TYPE_FLOAT);
+		$this->getDataProperty(self::DATA_SCALE, self::DATA_TYPE_FLOAT);
 	}
 
 	/**
@@ -558,13 +559,13 @@ abstract class Entity extends Location implements Metadatable{
 
 	public function isGliding(){
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IDLING);
- 	}
+	}
 
 	public function setGliding($value = true){
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_GLIDING, (bool) $value);
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IDLING, (bool) $value);
 	}
- 
+
 	public function isImmobile() : bool{
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IMMOBILE);
 	}
@@ -575,6 +576,7 @@ abstract class Entity extends Location implements Metadatable{
 
 	/**
 	 * Returns whether the entity is able to climb blocks such as ladders or vines.
+	 *
 	 * @return bool
 	 */
 	public function canClimb() : bool{
@@ -583,6 +585,7 @@ abstract class Entity extends Location implements Metadatable{
 
 	/**
 	 * Sets whether the entity is able to climb climbable blocks.
+	 *
 	 * @param bool $value
 	 */
 	public function setCanClimb(bool $value){
@@ -681,7 +684,7 @@ abstract class Entity extends Location implements Metadatable{
 			$g = ($color[1] / $count) & 0xff;
 			$b = ($color[2] / $count) & 0xff;
 
-            $this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, 0xff000000 | ($r << 16) | ($g << 8) | $b);
+			$this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, 0xff000000 | ($r << 16) | ($g << 8) | $b);
 			$this->setDataProperty(Entity::DATA_POTION_AMBIENT, Entity::DATA_TYPE_BYTE, $ambient ? 1 : 0);
 		}else{
 			$this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, 0);
@@ -877,15 +880,15 @@ abstract class Entity extends Location implements Metadatable{
 
 	/**
 	 * @param Player $player
-	 * @param bool $send
+	 * @param bool   $send
 	 */
 	public function despawnFrom(Player $player, bool $send = true){
 		if(isset($this->hasSpawned[$player->getLoaderId()])){
-            if($send) {
-                $pk = new RemoveEntityPacket();
-                $pk->eid = $this->id;
-                $player->dataPacket($pk);
-            }
+			if($send){
+				$pk = new RemoveEntityPacket();
+				$pk->eid = $this->id;
+				$player->dataPacket($pk);
+			}
 			unset($this->hasSpawned[$player->getLoaderId()]);
 		}
 	}
@@ -1558,7 +1561,7 @@ abstract class Entity extends Location implements Metadatable{
 
 				//TODO: big messy loop
 			}*/
-			
+
 			assert(abs($dx) <= 20 and abs($dy) <= 20 and abs($dz) <= 20, "Movement distance is excessive: dx=$dx, dy=$dy, dz=$dz");
 
 			$list = $this->level->getCollisionCubes($this, $this->level->getTickRate() > 1 ? $this->boundingBox->getOffsetBoundingBox($dx, $dy, $dz) : $this->boundingBox->addCoord($dx, $dy, $dz), false);

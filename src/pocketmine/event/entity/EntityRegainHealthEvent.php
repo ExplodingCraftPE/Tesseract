@@ -24,7 +24,7 @@ namespace pocketmine\event\entity;
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
 
-class EntityRegainHealthEvent extends EntityEvent implements Cancellable{
+class EntityRegainHealthEvent extends EntityEvent implements Cancellable {
 
 	public static $handlerList = null;
 
@@ -69,7 +69,7 @@ class EntityRegainHealthEvent extends EntityEvent implements Cancellable{
 
 	/**
 	 * @return EventName|string
-     */
+	 */
 	public function getName(){
 		return "EntityRegainHealthEven";
 	}

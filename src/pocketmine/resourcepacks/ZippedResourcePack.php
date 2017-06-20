@@ -22,13 +22,14 @@
 namespace pocketmine\resourcepacks;
 
 
-class ZippedResourcePack implements ResourcePack{
+class ZippedResourcePack implements ResourcePack {
 
 	/**
 	 * Performs basic validation checks on a resource pack's manifest.json.
 	 * TODO: add more manifest validation
 	 *
 	 * @param \stdClass $manifest
+	 *
 	 * @return bool
 	 */
 	public static function verifyManifest(\stdClass $manifest){

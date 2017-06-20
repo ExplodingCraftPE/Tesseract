@@ -28,8 +28,8 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class Sign extends Spawnable{
-    
+class Sign extends Spawnable {
+
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->Text1)){
 			$nbt->Text1 = new StringTag("Text1", "");
@@ -45,12 +45,12 @@ class Sign extends Spawnable{
 		}
 		parent::__construct($level, $nbt);
 	}
-        
+
 	public function saveNBT(){
 		parent::saveNBT();
 		unset($this->namedtag->Creator);
 	}
-        
+
 	public function setText($line1 = "", $line2 = "", $line3 = "", $line4 = ""){
 		$this->namedtag->Text1 = new StringTag("Text1", $line1);
 		$this->namedtag->Text2 = new StringTag("Text2", $line2);
@@ -59,7 +59,7 @@ class Sign extends Spawnable{
 		$this->onChanged();
 		return true;
 	}
-        
+
 	public function getText(){
 		return [
 			$this->namedtag["Text1"],
@@ -68,7 +68,7 @@ class Sign extends Spawnable{
 			$this->namedtag["Text4"]
 		];
 	}
-        
+
 	public function getSpawnCompound(){
 		return new CompoundTag("", [
 			new StringTag("id", Tile::SIGN),
@@ -81,7 +81,7 @@ class Sign extends Spawnable{
 			new IntTag("z", (int) $this->z)
 		]);
 	}
-        
+
 	public function updateCompoundTag(CompoundTag $nbt, Player $player) : bool{
 		if($nbt["id"] !== Tile::SIGN){
 			return false;

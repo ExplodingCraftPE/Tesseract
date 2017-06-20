@@ -25,7 +25,7 @@ use pocketmine\Thread;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
 
-class CommandReader extends Thread{
+class CommandReader extends Thread {
 	private $readline;
 	/** @var \Threaded */
 	protected $buffer;

@@ -28,14 +28,14 @@ use pocketmine\Player;
 
 use pocketmine\tile\Chest;
 
-class ChestInventory extends ContainerInventory{
+class ChestInventory extends ContainerInventory {
 	public function __construct(Chest $tile){
 		parent::__construct($tile, InventoryType::get(InventoryType::CHEST));
 	}
 
 	/**
 	 * @return InventoryHolder|Chest
-     */
+	 */
 	public function getHolder(){
 		return $this->holder;
 	}

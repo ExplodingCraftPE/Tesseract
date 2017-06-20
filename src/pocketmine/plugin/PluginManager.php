@@ -38,7 +38,7 @@ use pocketmine\Server;
 /**
  * Manages all the plugins, Permissions and Permissibles
  */
-class PluginManager{
+class PluginManager {
 
 	/** @var Server */
 	private $server;
@@ -234,7 +234,6 @@ class PluginManager{
 								$compatible = true;
 								break;
 							}
-
 
 
 							if($compatible === false){

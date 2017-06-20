@@ -14,10 +14,10 @@ use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\tile\FlowerPot as TileFlowerPot;
 
-class FlowerPot extends Flowable{
+class FlowerPot extends Flowable {
 
-    const STATE_EMPTY = 0;
-    const STATE_FULL = 1;
+	const STATE_EMPTY = 0;
+	const STATE_FULL = 1;
 
 	protected $id = Block::FLOWER_POT_BLOCK;
 
@@ -25,7 +25,7 @@ class FlowerPot extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return true;
 	}
 
@@ -45,29 +45,29 @@ class FlowerPot extends Flowable{
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-        if($this->getSide(Vector3::SIDE_DOWN)->isTransparent()){
-            return false;
-        }
+		if($this->getSide(Vector3::SIDE_DOWN)->isTransparent()){
+			return false;
+		}
 
-        $this->getLevel()->setBlock($block, $this, true, true);
+		$this->getLevel()->setBlock($block, $this, true, true);
 
-        $nbt = new CompoundTag("", [
-            new StringTag("id", Tile::FLOWER_POT),
-            new IntTag("x", $block->x),
-            new IntTag("y", $block->y),
-            new IntTag("z", $block->z),
-            new ShortTag("item", 0),
-            new IntTag("mData", 0),
-            ]);
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::FLOWER_POT),
+			new IntTag("x", $block->x),
+			new IntTag("y", $block->y),
+			new IntTag("z", $block->z),
+			new ShortTag("item", 0),
+			new IntTag("mData", 0),
+		]);
 
-        if($item->hasCustomBlockData()){
-            foreach($item->getCustomBlockData() as $key => $v){
-                $nbt->{$key} = $v;
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
+				$nbt->{$key} = $v;
 			}
 		}
 
-        Tile::createTile(Tile::FLOWER_POT, $this->getLevel(), $nbt);
-        return true;
+		Tile::createTile(Tile::FLOWER_POT, $this->getLevel(), $nbt);
+		return true;
 	}
 
 	public function onUpdate($type){
@@ -80,27 +80,27 @@ class FlowerPot extends Flowable{
 		return false;
 	}
 
-    public function onActivate(Item $item, Player $player = null){
-        $pot = $this->getLevel()->getTile($this);
-        if(!($pot instanceof TileFlowerPot)){
-            return false;
- 		}
- 		if(!$pot->canAddItem($item)){
-            return true;
- 		}
+	public function onActivate(Item $item, Player $player = null){
+		$pot = $this->getLevel()->getTile($this);
+		if(!($pot instanceof TileFlowerPot)){
+			return false;
+		}
+		if(!$pot->canAddItem($item)){
+			return true;
+		}
 
- 		$this->setDamage(self::STATE_FULL); //specific damage value is unnecessary, it just needs to be non-zero to show an item.
- 		$this->getLevel()->setBlock($this, $this, true, false);
- 		$pot->setItem($item);
+		$this->setDamage(self::STATE_FULL); //specific damage value is unnecessary, it just needs to be non-zero to show an item.
+		$this->getLevel()->setBlock($this, $this, true, false);
+		$pot->setItem($item);
 
- 		if($player instanceof Player){
-            if($player->isSurvival()){
-                $item->setCount($item->getCount() - 1);
-                $player->getInventory()->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
-            }
- 		}
- 		return true;
- 	}
+		if($player instanceof Player){
+			if($player->isSurvival()){
+				$item->setCount($item->getCount() - 1);
+				$player->getInventory()->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+			}
+		}
+		return true;
+	}
 
 	public function getDrops(Item $item) : array{
 		$items = [[Item::FLOWER_POT, 0, 1]];

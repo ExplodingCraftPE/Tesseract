@@ -30,7 +30,7 @@ use pocketmine\level\generator\normal\object\SugarCaneStack;
 use pocketmine\level\generator\populator\VariableAmountPopulator;
 use pocketmine\utils\Random;
 
-class SugarCane extends VariableAmountPopulator{
+class SugarCane extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 	protected $randomAmount = 10;

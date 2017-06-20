@@ -33,7 +33,7 @@ use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Server;
 
-class Fire extends Flowable{
+class Fire extends Flowable {
 
 	protected $id = self::FIRE;
 
@@ -87,7 +87,7 @@ class Fire extends Flowable{
 		}
 	}
 
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item) : array{
 		return [];
 	}
 
@@ -107,55 +107,54 @@ class Fire extends Flowable{
 					$this->getLevel()->setBlock($this, new Air(), true);
 				}
 
-					$meta = $this->meta;
+				$meta = $this->meta;
 
-					if($meta < 15){
-						$this->meta = $meta + mt_rand(0, 3);
-						$this->getLevel()->setBlock($this, $this, true);
-					}
+				if($meta < 15){
+					$this->meta = $meta + mt_rand(0, 3);
+					$this->getLevel()->setBlock($this, $this, true);
+				}
 
-					$this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
+				$this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
 
-					if(!$forever and !$this->canNeighborBurn()){
-						if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $meta > 3){
-							$this->getLevel()->setBlock($this, new Air(), true);
-						}
-					}elseif(!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta >= 15 && mt_rand(0, 4) == 0){
+				if(!$forever and !$this->canNeighborBurn()){
+					if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $meta > 3){
 						$this->getLevel()->setBlock($this, new Air(), true);
-					}else{
-						$o = 0;
+					}
+				}elseif(!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta >= 15 && mt_rand(0, 4) == 0){
+					$this->getLevel()->setBlock($this, new Air(), true);
+				}else{
+					$o = 0;
 
-						//TODO: decrease the o if the rainfall values are high
+					//TODO: decrease the o if the rainfall values are high
 
-						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_EAST), 300 + $o, $meta);
-						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_WEST), 300 + $o, $meta);
-						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_DOWN), 250 + $o, $meta);
-						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_UP), 250 + $o, $meta);
-						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_SOUTH), 300 + $o, $meta);
-						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_NORTH), 300 + $o, $meta);
+					$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_EAST), 300 + $o, $meta);
+					$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_WEST), 300 + $o, $meta);
+					$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_DOWN), 250 + $o, $meta);
+					$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_UP), 250 + $o, $meta);
+					$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_SOUTH), 300 + $o, $meta);
+					$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_NORTH), 300 + $o, $meta);
 
-						for($x = ($this->x - 1); $x <= ($this->x + 1); ++$x){
-							for($z = ($this->z - 1); $z <= ($this->z + 1); ++$z){
-								for($y = ($this->y -1); $y <= ($this->y + 4); ++$y){
-									$k = 100;
+					for($x = ($this->x - 1); $x <= ($this->x + 1); ++$x){
+						for($z = ($this->z - 1); $z <= ($this->z + 1); ++$z){
+							for($y = ($this->y - 1); $y <= ($this->y + 4); ++$y){
+								$k = 100;
 
-									if($y > $this->y + 1){
-										$k += ($y - ($this->y + 1)) * 100;
-									}
+								if($y > $this->y + 1){
+									$k += ($y - ($this->y + 1)) * 100;
+								}
 
-									$chance = $this->getChanceOfNeighborsEncouragingFire($this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $z)));
+								$chance = $this->getChanceOfNeighborsEncouragingFire($this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $z)));
 
-									if($chance > 0){
-										$t = ($chance + 40 + $this->getLevel()->getServer()->getDifficulty() * 7);
+								if($chance > 0){
+									$t = ($chance + 40 + $this->getLevel()->getServer()->getDifficulty() * 7);
 
-										//TODO: decrease t if the rainfall values are high
+									//TODO: decrease t if the rainfall values are high
 
-										if($t > 0 and mt_rand(0, $k) <= $t){
-											$damage = min(15, $meta + mt_rand(0, 5) / 4);
+									if($t > 0 and mt_rand(0, $k) <= $t){
+										$damage = min(15, $meta + mt_rand(0, 5) / 4);
 
-											$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $z), new Fire($damage), true);
-											$this->getLevel()->scheduleUpdate($this->temporalVector, $this->getTickRate());
-										}
+										$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $z), new Fire($damage), true);
+										$this->getLevel()->scheduleUpdate($this->temporalVector, $this->getTickRate());
 									}
 								}
 							}
@@ -163,6 +162,7 @@ class Fire extends Flowable{
 					}
 				}
 			}
+		}
 		return 0;
 	}
 
@@ -205,7 +205,7 @@ class Fire extends Flowable{
 					$this->getLevel()->scheduleUpdate($block, $fire->getTickRate());
 				}
 			}else{
-					$this->getLevel()->setBlock($this, new Air(), true);
+				$this->getLevel()->setBlock($this, new Air(), true);
 			}
 
 			if($block instanceof TNT){

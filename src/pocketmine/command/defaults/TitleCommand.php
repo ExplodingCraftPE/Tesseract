@@ -20,9 +20,9 @@
  * 
  *
  */
- 
- namespace pocketmine\command\defaults;
- 
+
+namespace pocketmine\command\defaults;
+
 use pocketmine\network\protocol\SetTitlePacket;
 use pocketmine\command\CommandSender;
 
@@ -36,7 +36,7 @@ class TitleCommand extends VanillaCommand {
 		);
 		$this->setPermission("pocketmine.command.title");
 	}
-  
+
 	public function execute(CommandSender $sender, $currentAlias, array $args){
 		if($sender instanceof Player){
 			if(!$this->testPermission($sender)){
@@ -46,6 +46,6 @@ class TitleCommand extends VanillaCommand {
 				$sender->sendMessage("Usage: /title <title> <subtile> [text]");
 				return false;
 			}
-        }
-    }
+		}
+	}
 }

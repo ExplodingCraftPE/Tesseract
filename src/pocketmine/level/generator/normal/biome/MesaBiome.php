@@ -28,7 +28,7 @@ use pocketmine\block\StainedClay;
 use pocketmine\level\generator\normal\populator\Cactus;
 use pocketmine\level\generator\normal\populator\DeadBush;
 
-class MesaBiome extends SandyBiome{
+class MesaBiome extends SandyBiome {
 
 	public function __construct(){
 		parent::__construct();
@@ -46,53 +46,53 @@ class MesaBiome extends SandyBiome{
 		$this->setElevation(63, 81);
 
 		$this->temperature = 2.0;
-        $this->setGroundCover([
-            Block::get(Block::DIRT, 0),
-            Block::get(Block::HARDENED_CLAY, 0),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::HARDENED_CLAY, 0),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 7),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::HARDENED_CLAY, 0),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 12),
-            Block::get(Block::STAINED_HARDENED_CLAY, 12),
-            Block::get(Block::STAINED_HARDENED_CLAY, 12),
-            Block::get(Block::STAINED_HARDENED_CLAY, 14),
-            Block::get(Block::STAINED_HARDENED_CLAY, 14),
-            Block::get(Block::STAINED_HARDENED_CLAY, 14),
-            Block::get(Block::STAINED_HARDENED_CLAY, 4),
-            Block::get(Block::STAINED_HARDENED_CLAY, 7),
-            Block::get(Block::STAINED_HARDENED_CLAY, 0),
-            Block::get(Block::STAINED_HARDENED_CLAY, 7),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::HARDENED_CLAY, 0),
-            Block::get(Block::HARDENED_CLAY, 0),
-            Block::get(Block::HARDENED_CLAY, 0),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::STAINED_HARDENED_CLAY, 1),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0),
-            Block::get(Block::RED_SANDSTONE, 0)
-        ]);
-    }
+		$this->setGroundCover([
+			Block::get(Block::DIRT, 0),
+			Block::get(Block::HARDENED_CLAY, 0),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::HARDENED_CLAY, 0),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 7),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::HARDENED_CLAY, 0),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 12),
+			Block::get(Block::STAINED_HARDENED_CLAY, 12),
+			Block::get(Block::STAINED_HARDENED_CLAY, 12),
+			Block::get(Block::STAINED_HARDENED_CLAY, 14),
+			Block::get(Block::STAINED_HARDENED_CLAY, 14),
+			Block::get(Block::STAINED_HARDENED_CLAY, 14),
+			Block::get(Block::STAINED_HARDENED_CLAY, 4),
+			Block::get(Block::STAINED_HARDENED_CLAY, 7),
+			Block::get(Block::STAINED_HARDENED_CLAY, 0),
+			Block::get(Block::STAINED_HARDENED_CLAY, 7),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::HARDENED_CLAY, 0),
+			Block::get(Block::HARDENED_CLAY, 0),
+			Block::get(Block::HARDENED_CLAY, 0),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::STAINED_HARDENED_CLAY, 1),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0),
+			Block::get(Block::RED_SANDSTONE, 0)
+		]);
+	}
 
 	public function getName() : string{
 		return "Mesa";

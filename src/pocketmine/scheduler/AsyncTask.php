@@ -28,7 +28,7 @@ use pocketmine\Server;
  *
  * WARNING: Do not call PocketMine-MP API methods, or save objects from/on other Threads!!
  */
-abstract class AsyncTask extends \Threaded implements \Collectable{
+abstract class AsyncTask extends \Threaded implements \Collectable {
 
 	/** @var AsyncWorker $worker */
 	public $worker = null;
@@ -122,6 +122,7 @@ abstract class AsyncTask extends \Threaded implements \Collectable{
 	 * You have to initialize this in some way from the task on run
 	 *
 	 * @param string $identifier
+	 *
 	 * @return mixed
 	 */
 	public function getFromThreadStore($identifier){

@@ -45,7 +45,7 @@ use pocketmine\level\Level;
 use pocketmine\math\Vector3 as Vector3;
 use pocketmine\utils\Random;
 
-class Normal extends Generator{
+class Normal extends Generator {
 
 	/** @var Populator[] */
 	protected $populators = [];
@@ -94,11 +94,11 @@ class Normal extends Generator{
 		return "Normal";
 	}
 
-	public function getWaterHeight(): int{
-        return $this->waterHeight;
-    }
+	public function getWaterHeight() : int{
+		return $this->waterHeight;
+	}
 
-    public function getSettings(){
+	public function getSettings(){
 		return [];
 	}
 
@@ -156,79 +156,79 @@ class Normal extends Generator{
 			new OreType(new GoldOre(), 2, 9, 0, 32),
 			new OreType(new DiamondOre(), 1, 8, 0, 16),
 			new OreType(new Dirt(), 10, 33, 0, 128),
-            new OreType(new Stone(Stone::GRANITE), 10, 33, 0, 80),
-            new OreType(new Stone(Stone::DIORITE), 10, 33, 0, 80),
-            new OreType(new Stone(Stone::ANDESITE), 10, 33, 0, 80),
+			new OreType(new Stone(Stone::GRANITE), 10, 33, 0, 80),
+			new OreType(new Stone(Stone::DIORITE), 10, 33, 0, 80),
+			new OreType(new Stone(Stone::ANDESITE), 10, 33, 0, 80),
 			new OreType(new Gravel(), 8, 33, 0, 128)
 		]);
 		$this->populators[] = $ores;
 	}
 
 	public function generateChunk($chunkX, $chunkZ){
-        $this->random->setSeed(0xdeadbeef ^ ($chunkX << 8) ^ $chunkZ ^ $this->level->getSeed ());
+		$this->random->setSeed(0xdeadbeef ^ ($chunkX << 8) ^ $chunkZ ^ $this->level->getSeed());
 
-        $noise = Generator::getFastNoise3D($this->noiseBase, 16, 128, 16, 4, 8, 4, $chunkX * 16, 0, $chunkZ * 16);
+		$noise = Generator::getFastNoise3D($this->noiseBase, 16, 128, 16, 4, 8, 4, $chunkX * 16, 0, $chunkZ * 16);
 
-        $chunk = $this->level->getChunk($chunkX, $chunkZ);
+		$chunk = $this->level->getChunk($chunkX, $chunkZ);
 
-        $biomeCache = [ ];
+		$biomeCache = [];
 
-        for($x = 0; $x < 16; $x++) {
-            for($z = 0; $z < 16; $z++) {
-                $minSum = 0;
-                $maxSum = 0;
-                $weightSum = 0;
+		for($x = 0; $x < 16; $x++){
+			for($z = 0; $z < 16; $z++){
+				$minSum = 0;
+				$maxSum = 0;
+				$weightSum = 0;
 
-                $biome = $this->pickBiome($chunkX * 16 + $x, $chunkZ * 16 + $z);
-                $chunk->setBiomeId($x, $z, $biome->getId ());
+				$biome = $this->pickBiome($chunkX * 16 + $x, $chunkZ * 16 + $z);
+				$chunk->setBiomeId($x, $z, $biome->getId());
 
-                for($sx = - self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; $sx++) {
-                    for($sz = - self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; $sz++) {
+				for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; $sx++){
+					for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; $sz++){
 
-                        $weight = self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE] [$sz + self::$SMOOTH_SIZE];
+						$weight = self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE] [$sz + self::$SMOOTH_SIZE];
 
-                        if ($sx === 0 and $sz === 0) {
-                            $adjacent = $biome;
-                        } else {
-                            $index = Level::chunkHash($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
-                            if (isset($biomeCache[$index])) {
-                                $adjacent = $biomeCache[$index];
-                            } else {
-                                $biomeCache[$index] = $adjacent = $this->pickBiome($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
-                            }
-                        }
-                        $minSum += ($adjacent->getMinElevation () - 1) * $weight;
-                        $maxSum += $adjacent->getMaxElevation () * $weight;
+						if($sx === 0 and $sz === 0){
+							$adjacent = $biome;
+						}else{
+							$index = Level::chunkHash($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
+							if(isset($biomeCache[$index])){
+								$adjacent = $biomeCache[$index];
+							}else{
+								$biomeCache[$index] = $adjacent = $this->pickBiome($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
+							}
+						}
+						$minSum += ($adjacent->getMinElevation() - 1) * $weight;
+						$maxSum += $adjacent->getMaxElevation() * $weight;
 
-                        $weightSum += $weight;
-                    }
-                }
+						$weightSum += $weight;
+					}
+				}
 
-                $minSum /= $weightSum;
-                $maxSum /= $weightSum;
+				$minSum /= $weightSum;
+				$maxSum /= $weightSum;
 
-                $smoothHeight = ($maxSum - $minSum) / 2;
+				$smoothHeight = ($maxSum - $minSum) / 2;
 
-                for($y = 0; $y < 128; $y++) {
-                    if ($y < 3 || ($y < 5 && $this->random->nextBoolean ())) {
-                        $chunk->setBlockId($x, $y, $z, Block::BEDROCK);
-                        continue;
-                    }
-                    $noiseValue = $noise[$x] [$z] [$y] - 1 / $smoothHeight * ($y - $smoothHeight - $minSum);
+				for($y = 0; $y < 128; $y++){
+					if($y < 3 || ($y < 5 && $this->random->nextBoolean())){
+						$chunk->setBlockId($x, $y, $z, Block::BEDROCK);
+						continue;
+					}
+					$noiseValue = $noise[$x] [$z] [$y] - 1 / $smoothHeight * ($y - $smoothHeight - $minSum);
 
-                    if ($noiseValue > 0) {
-                        $chunk->setBlockId($x, $y, $z, Block::STONE);
-                    } elseif ($y <= $this->waterHeight) {
-                        $chunk->setBlockId($x, $y, $z, Block::STILL_WATER);
-                    }
-                }
-            }
-        }
+					if($noiseValue > 0){
+						$chunk->setBlockId($x, $y, $z, Block::STONE);
+					}elseif($y <= $this->waterHeight){
+						$chunk->setBlockId($x, $y, $z, Block::STILL_WATER);
+					}
+				}
+			}
+		}
 
-        foreach($this->generationPopulators as $populator) {
-            $populator->populate($this->level, $chunkX, $chunkZ, $this->random);
-        }
-    }
+		foreach($this->generationPopulators as $populator){
+			$populator->populate($this->level, $chunkX, $chunkZ, $this->random);
+		}
+	}
 
 
 	public function populateChunk($chunkX, $chunkZ){

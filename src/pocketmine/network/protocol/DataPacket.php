@@ -28,7 +28,7 @@ use pocketmine\item\Item;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\Utils;
 
-abstract class DataPacket extends BinaryStream{
+abstract class DataPacket extends BinaryStream {
 
 	const NETWORK_ID = 0;
 
@@ -68,7 +68,7 @@ abstract class DataPacket extends BinaryStream{
 
 		return $data;
 	}
-	
+
 	public function getEntityMetadata(bool $types = true) : array{
 		$count = $this->getUnsignedVarInt();
 		$data = [];
@@ -124,7 +124,7 @@ abstract class DataPacket extends BinaryStream{
 		}
 		return $data;
 	}
-	
+
 	public function putEntityMetadata(array $metadata){
 		$this->putUnsignedVarInt(count($metadata));
 		foreach($metadata as $key => $d){
@@ -168,7 +168,7 @@ abstract class DataPacket extends BinaryStream{
 
 	/**
 	 * @return PacketName|string
-     */
+	 */
 	public function getName(){
 		return "DataPacket";
 	}

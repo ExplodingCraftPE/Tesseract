@@ -27,17 +27,17 @@ use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 
-class Mooshroom extends Animal{
+class Mooshroom extends Animal {
 	const NETWORK_ID = 16;
 
 	public $width = 0.3;
 	public $length = 0.9;
 	public $height = 1.8;
-	
+
 	public function getName() : string{
 		return "Mooshroom";
 	}
-	
+
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -55,7 +55,7 @@ class Mooshroom extends Animal{
 
 		parent::spawnTo($player);
 	}
-	
+
 	public function getDrops(){
 		$lootingL = 0;
 		$cause = $this->lastDamageCause;

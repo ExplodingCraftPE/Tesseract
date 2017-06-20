@@ -26,7 +26,7 @@ namespace pocketmine\level\generator\populator;
 
 use pocketmine\utils\Random;
 
-abstract class VariableAmountPopulator extends Populator{
+abstract class VariableAmountPopulator extends Populator {
 	protected $baseAmount;
 	protected $randomAmount;
 	protected $odd;

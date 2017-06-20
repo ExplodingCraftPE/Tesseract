@@ -29,7 +29,7 @@ use pocketmine\event\plugin\PluginEnableEvent;
 use pocketmine\utils\MainLogger;
 
 
-class FolderPluginLoader implements PluginLoader{
+class FolderPluginLoader implements PluginLoader {
 
 	/** @var Server */
 	private $server;
@@ -101,7 +101,7 @@ class FolderPluginLoader implements PluginLoader{
 	 * Returns the filename patterns that this loader accepts
 	 *
 	 * @return array|string
-     */
+	 */
 	public function getPluginFilters(){
 		return "/[^\\.]/";
 	}

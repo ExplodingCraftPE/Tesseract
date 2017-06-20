@@ -24,7 +24,7 @@ namespace pocketmine\event\entity;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 
-class EntityEffectAddEvent extends EntityEffectEvent{
+class EntityEffectAddEvent extends EntityEffectEvent {
 	public static $handlerList = null;
 
 	/** @var bool */

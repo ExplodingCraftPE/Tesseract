@@ -27,7 +27,7 @@ use pocketmine\metadata\Metadatable;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\plugin\Plugin;
 
-class OfflinePlayer implements IPlayer, Metadatable{
+class OfflinePlayer implements IPlayer, Metadatable {
 
 	private $name;
 	private $server;

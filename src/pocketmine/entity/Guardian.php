@@ -32,7 +32,7 @@ use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\Player;
 
 
-class Guardian extends WaterAnimal implements Ageable{
+class Guardian extends WaterAnimal implements Ageable {
 	const NETWORK_ID = 49;
 
 	public $width = 0.95;

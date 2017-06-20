@@ -22,6 +22,7 @@
 /**
  * All the Item classes
  */
+
 namespace pocketmine\item;
 
 use pocketmine\Player;
@@ -47,9 +48,9 @@ use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\utils\Config;
 
-class Item implements ItemIds, \JsonSerializable{
+class Item implements ItemIds, \JsonSerializable {
 
-    /** @var NBT */
+	/** @var NBT */
 	private static $cachedParser = null;
 
 	private static function parseCompoundTag(string $tag) : CompoundTag{
@@ -82,7 +83,7 @@ class Item implements ItemIds, \JsonSerializable{
 	protected $durability = 0;
 	protected $name;
 
-	public function canBeActivated() :bool{
+	public function canBeActivated() : bool{
 		return false;
 	}
 
@@ -287,7 +288,7 @@ class Item implements ItemIds, \JsonSerializable{
 	public static function getCreativeItems() : array{
 		return Item::$creative;
 	}
-	
+
 	public static function addCreativeItem(Item $item){
 		Item::$creative[] = clone $item;
 	}
@@ -311,6 +312,7 @@ class Item implements ItemIds, \JsonSerializable{
 
 	/**
 	 * @param $index
+	 *
 	 * @return Item
 	 */
 	public static function getCreativeItem(int $index){
@@ -345,6 +347,7 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * @param string $str
 	 * @param bool   $multiple
+	 *
 	 * @return Item[]|Item
 	 */
 	public static function fromString(string $str, bool $multiple = false){
@@ -483,6 +486,7 @@ class Item implements ItemIds, \JsonSerializable{
 
 	/**
 	 * @param $id
+	 *
 	 * @return Enchantment|null
 	 */
 	public function getEnchantment(int $id){
@@ -505,6 +509,7 @@ class Item implements ItemIds, \JsonSerializable{
 	 * @param int  $id
 	 * @param int  $level
 	 * @param bool $compareLevel
+	 *
 	 * @return bool
 	 */
 	public function hasEnchantment(int $id, int $level = 1, bool $compareLevel = false) : bool{
@@ -523,9 +528,10 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @param $id
+	 *
 	 * @return Int level|0(for null)
 	 */
 	public function getEnchantmentLevel(int $id){
@@ -763,6 +769,7 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 		return [];
 	}
+
 	public function setLore(array $lines){
 		$tag = $this->getNamedTag();
 		if(!isset($tag->display)){
@@ -775,7 +782,7 @@ class Item implements ItemIds, \JsonSerializable{
 			$tag->display->Lore[$count++] = new StringTag("", $line);
 		}
 	}
-		
+
 
 	public function getNamedTagEntry($name){
 		$tag = $this->getNamedTag();
@@ -946,7 +953,7 @@ class Item implements ItemIds, \JsonSerializable{
 	public function isLeggings(){
 		return false;
 	}
-  
+
 	public function isChestplate(){
 		return false;
 	}
@@ -963,12 +970,14 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 
 		if($target instanceof Skeleton or $target instanceof Zombie or
-			$target instanceof Witch or $target instanceof PigZombie){
+			$target instanceof Witch or $target instanceof PigZombie
+		){
 			//SMITE    wither skeletons
 			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_SMITE);
 
 		}elseif($target instanceof Spider or $target instanceof CaveSpider or
-			$target instanceof Silverfish){
+			$target instanceof Silverfish
+		){
 			//Bane of Arthropods    wither skeletons
 			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_ARTHROPODS);
 
@@ -1016,7 +1025,7 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Serializes the item to an NBT CompoundTag
 	 *
-	 * @param int    $slot optional, the inventory slot of the item
+	 * @param int    $slot    optional, the inventory slot of the item
 	 * @param string $tagName the name to assign to the CompoundTag object
 	 *
 	 * @return CompoundTag
@@ -1032,7 +1041,7 @@ class Item implements ItemIds, \JsonSerializable{
 			$tag->tag = clone $this->getNamedTag();
 			$tag->tag->setName("tag");
 		}
-		
+
 		if($slot !== -1){
 			$tag->Slot = new ByteTag("Slot", $slot);
 		}

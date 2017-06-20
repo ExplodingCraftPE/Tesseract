@@ -498,7 +498,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * @param Plugin $plugin
 	 * @param string $name
-	 * @param bool $value
+	 * @param bool   $value
 	 *
 	 * @return bool|PermissionAttachment
 	 */
@@ -510,6 +510,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param PermissionAttachment $attachment
+	 *
 	 * @return bool
 	 */
 	public function removeAttachment(PermissionAttachment $attachment){
@@ -567,9 +568,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param SourceInterface $interface
-	 * @param null $clientID
-	 * @param string $ip
-	 * @param integer $port
+	 * @param null            $clientID
+	 * @param string          $ip
+	 * @param integer         $port
 	 */
 	public function __construct(SourceInterface $interface, $clientID, $ip, $port){
 		$this->interface = $interface;
@@ -995,7 +996,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Sends an ordered DataPacket to the send buffer
 	 *
 	 * @param DataPacket $packet
-	 * @param bool $needACK
+	 * @param bool       $needACK
 	 *
 	 * @return int|bool
 	 */
@@ -1033,7 +1034,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param DataPacket $packet
-	 * @param bool $needACK
+	 * @param bool       $needACK
 	 *
 	 * @return bool|int
 	 */
@@ -1180,6 +1181,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * TODO: remove this when Spectator Mode gets added properly to MCPE
 	 *
 	 * @param int $gamemode
+	 *
 	 * @return int
 	 */
 	public static function getClientFriendlyGamemode(int $gamemode) : int{
@@ -1194,7 +1196,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * Sets the gamemode, and if needed, kicks the Player.
 	 *
-	 * @param int $gm
+	 * @param int  $gm
 	 * @param bool $client if the client made this change in their GUI
 	 *
 	 * @return bool
@@ -3255,7 +3257,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Kicks a player from the server
 	 *
 	 * @param string $reason
-	 * @param bool $isAdmin
+	 * @param bool   $isAdmin
 	 *
 	 * @return bool
 	 */
@@ -3319,6 +3321,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Sends a direct chat message to a player
 	 *
 	 * @param string|TextContainer $message
+	 *
 	 * @return bool
 	 */
 	public function sendMessage($message){
@@ -3380,6 +3383,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param $message
+	 *
 	 * @return bool
 	 */
 	public function sendTip($message){
@@ -3398,11 +3402,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * Send a title text or/and with/without a sub title text to a player
 	 *
-	 * @param $title
+	 * @param        $title
 	 * @param string $subtitle
-	 * @param int $fadein
-	 * @param int $fadeout
-	 * @param int $duration
+	 * @param int    $fadein
+	 * @param int    $fadeout
+	 * @param int    $duration
+	 *
 	 * @return bool
 	 */
 	public function sendTitle($title, $subtitle = "", $fadein = 20, $fadeout = 20, $duration = 5){
@@ -3428,9 +3433,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * Send an action bar text to a player
 	 *
-	 * @param $title
+	 * @param     $title
 	 * @param int $fadein
 	 * @param int $fadeout
+	 *
 	 * @return bool
 	 */
 	public function sendActionBar($title, $fadein = 20, $fadeout = 20){
@@ -3447,8 +3453,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * flag set to kick without the "Kicked by admin" part instead of this method.
 	 *
 	 * @param string $message Message to be broadcasted
-	 * @param string $reason Reason showed in console
-	 * @param bool $notify
+	 * @param string $reason  Reason showed in console
+	 * @param bool   $notify
 	 */
 	public final function close($message = "", $reason = "generic reason", $notify = true){
 		if($this->connected and !$this->closed){
@@ -3538,6 +3544,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * Handles player data saving
+	 *
 	 * @param bool $async
 	 */
 	public function save($async = false){
@@ -3870,8 +3877,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param Vector3|Position|Location $pos
-	 * @param float $yaw
-	 * @param float $pitch
+	 * @param float                     $yaw
+	 * @param float                     $pitch
 	 *
 	 * @return bool
 	 */
@@ -3913,8 +3920,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Use teleport() for a delayed teleport after chunks have been sent.
 	 *
 	 * @param Vector3 $pos
-	 * @param float $yaw
-	 * @param float $pitch
+	 * @param float   $yaw
+	 * @param float   $pitch
 	 */
 	public function teleportImmediate(Vector3 $pos, $yaw = null, $pitch = null){
 		if(parent::teleport($pos, $yaw, $pitch)){
@@ -3955,7 +3962,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Returns the created/existing window id
 	 *
 	 * @param Inventory $inventory
-	 * @param int $forceId
+	 * @param int       $forceId
 	 *
 	 * @return int
 	 */
@@ -4034,6 +4041,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * @param Effect $effect
+	 *
 	 * @return bool|void
 	 * @internal param $Effect
 	 */

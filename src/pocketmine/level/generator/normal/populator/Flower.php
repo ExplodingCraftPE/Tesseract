@@ -27,7 +27,7 @@ use pocketmine\utils\Random;
 use pocketmine\level\generator\populator\VariableAmountPopulator;
 use pocketmine\block\Flower as FlowerBlock;
 
-class Flower extends VariableAmountPopulator{
+class Flower extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 	protected $baseAmount = 8;

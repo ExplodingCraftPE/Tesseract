@@ -17,6 +17,7 @@
  * @link https://itxtech.org
  *
  */
+
 namespace pocketmine\tile;
 
 use pocketmine\item\Item;
@@ -27,7 +28,7 @@ use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-class ItemFrame extends Spawnable{
+class ItemFrame extends Spawnable {
 
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->ItemRotation)){

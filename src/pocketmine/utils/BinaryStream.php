@@ -27,7 +27,7 @@ namespace pocketmine\utils;
 
 use pocketmine\item\Item;
 
-class BinaryStream extends \stdClass{
+class BinaryStream extends \stdClass {
 
 	public $offset;
 	public $buffer;
@@ -259,10 +259,11 @@ class BinaryStream extends \stdClass{
 		return Binary::readUnsignedVarInt($this);
 	}
 
-    /**
-     * Writes an unsigned varint32 to the stream.
-     * @param $v
-     */
+	/**
+	 * Writes an unsigned varint32 to the stream.
+	 *
+	 * @param $v
+	 */
 	public function putUnsignedVarInt($v){
 		$this->put(Binary::writeUnsignedVarInt($v));
 	}
@@ -274,10 +275,11 @@ class BinaryStream extends \stdClass{
 		return Binary::readVarInt($this);
 	}
 
-    /**
-     * Writes a signed varint32 to the stream.
-     * @param $v
-     */
+	/**
+	 * Writes a signed varint32 to the stream.
+	 *
+	 * @param $v
+	 */
 	public function putVarInt($v){
 		$this->put(Binary::writeVarInt($v));
 	}
@@ -285,7 +287,7 @@ class BinaryStream extends \stdClass{
 	public function getEntityId(){
 		return $this->getVarInt();
 	}
-	
+
 	public function putEntityId($v){
 		$this->putVarInt($v);
 	}
@@ -301,13 +303,13 @@ class BinaryStream extends \stdClass{
 		$this->putUnsignedVarInt($y);
 		$this->putVarInt($z);
 	}
-	
+
 	public function getVector3f(&$x, &$y, &$z){
 		$x = $this->getLFloat(4);
 		$y = $this->getLFloat(4);
 		$z = $this->getLFloat(4);
 	}
-	
+
 	public function putVector3f($x, $y, $z){
 		$this->putLFloat($x);
 		$this->putLFloat($y);

@@ -25,7 +25,7 @@ namespace pocketmine\level;
 
 use pocketmine\level\format\Chunk;
 
-interface ChunkManager{
+interface ChunkManager {
 	/**
 	 * Gets the raw block id.
 	 *
@@ -35,7 +35,7 @@ interface ChunkManager{
 	 *
 	 * @return int 0-255
 	 */
-	public function getBlockIdAt(int $x, int $y, int $z): int;
+	public function getBlockIdAt(int $x, int $y, int $z) : int;
 
 	/**
 	 * Sets the raw block id.
@@ -99,7 +99,7 @@ interface ChunkManager{
 	public function setBlockLightAt(int $x, int $y, int $z, int $level);
 
 	public function getBlockSkyLightAt(int $x, int $y, int $z) : int;
-	
+
 	public function setBlockSkyLightAt(int $x, int $y, int $z, int $level);
 
 	/**

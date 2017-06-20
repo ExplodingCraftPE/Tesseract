@@ -19,7 +19,7 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\level\format\io\region;
 
@@ -37,7 +37,7 @@ use pocketmine\nbt\tag\{
 use pocketmine\Player;
 use pocketmine\utils\MainLogger;
 
-class McRegion extends BaseLevelProvider{
+class McRegion extends BaseLevelProvider {
 
 	const REGION_FILE_EXTENSION = "mcr";
 
@@ -309,10 +309,10 @@ class McRegion extends BaseLevelProvider{
 
 	public function saveChunk(int $chunkX, int $chunkZ) : bool{
 		if($this->isChunkLoaded($chunkX, $chunkZ)){
-            $chunk = $this->getChunk($chunkX, $chunkZ);
-            if(!$chunk->isGenerated()){
-                throw new \InvalidStateException("Cannot save un-generated chunk");
-            }
+			$chunk = $this->getChunk($chunkX, $chunkZ);
+			if(!$chunk->isGenerated()){
+				throw new \InvalidStateException("Cannot save un-generated chunk");
+			}
 			$this->getRegion($chunkX >> 5, $chunkZ >> 5)->writeChunk($chunk);
 
 			return true;

@@ -33,7 +33,7 @@ use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\tile\EnchantTable;
 
-class EnchantInventory extends TemporaryInventory{
+class EnchantInventory extends TemporaryInventory {
 	private $bookshelfAmount = 0;
 
 	private $levels = [];
@@ -46,11 +46,11 @@ class EnchantInventory extends TemporaryInventory{
 
 	/**
 	 * @return InventoryHolder|EnchantTable
-     */
+	 */
 	public function getHolder(){
 		return $this->holder;
 	}
-	
+
 	public function getResultSlotIndex(){
 		return -1; //enchanting tables don't have result slots, they modify the item in the target slot instead
 	}
@@ -263,6 +263,7 @@ class EnchantInventory extends TemporaryInventory{
 	/**
 	 * @param Enchantment   $enchantment
 	 * @param Enchantment[] $enchantments
+	 *
 	 * @return Enchantment[]
 	 */
 	public function removeConflictEnchantment(Enchantment $enchantment, array $enchantments){

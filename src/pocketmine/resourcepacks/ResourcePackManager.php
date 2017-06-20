@@ -24,7 +24,7 @@ namespace pocketmine\resourcepacks;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 
-class ResourcePackManager{
+class ResourcePackManager {
 
 	/** @var Server */
 	private $server;
@@ -107,6 +107,7 @@ class ResourcePackManager{
 
 	/**
 	 * Returns whether players must accept resource packs in order to join.
+	 *
 	 * @return bool
 	 */
 	public function resourcePacksRequired() : bool{
@@ -115,6 +116,7 @@ class ResourcePackManager{
 
 	/**
 	 * Returns an array of resource packs in use, sorted in order of priority.
+	 *
 	 * @return ResourcePack[]
 	 */
 	public function getResourceStack() : array{
@@ -125,6 +127,7 @@ class ResourcePackManager{
 	 * Returns the resource pack matching the specified UUID string, or null if the ID was not recognized.
 	 *
 	 * @param string $id
+	 *
 	 * @return ResourcePack|null
 	 */
 	public function getPackById(string $id){
@@ -133,6 +136,7 @@ class ResourcePackManager{
 
 	/**
 	 * Returns an array of pack IDs for packs currently in use.
+	 *
 	 * @return string[]
 	 */
 	public function getPackIdList() : array{

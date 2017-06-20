@@ -29,7 +29,7 @@ use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\populator\VariableAmountPopulator;
 use pocketmine\utils\Random;
 
-class Mushroom extends VariableAmountPopulator{
+class Mushroom extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 

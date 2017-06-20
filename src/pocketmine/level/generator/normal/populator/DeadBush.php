@@ -26,7 +26,7 @@ use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\populator\VariableAmountPopulator;
 use pocketmine\utils\Random;
 
-class DeadBush extends VariableAmountPopulator{
+class DeadBush extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 

@@ -27,7 +27,7 @@ use pocketmine\Player;
 /**
  * Called when a player does an animation
  */
-class PlayerAnimationEvent extends PlayerEvent implements Cancellable{
+class PlayerAnimationEvent extends PlayerEvent implements Cancellable {
 
 	public static $handlerList = null;
 
@@ -54,7 +54,7 @@ class PlayerAnimationEvent extends PlayerEvent implements Cancellable{
 
 	/**
 	 * @return EventName|string
-     */
+	 */
 	public function getName(){
 		return "PlayerAnimationEvent";
 	}

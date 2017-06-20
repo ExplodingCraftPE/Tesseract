@@ -27,7 +27,7 @@ use pocketmine\level\generator\normal\object\OreType;
 use pocketmine\level\generator\object\Object;
 use pocketmine\utils\Random;
 
-class NetherOre extends Object{
+class NetherOre extends Object {
 	private $random;
 	public $type;
 

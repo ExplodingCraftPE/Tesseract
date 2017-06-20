@@ -32,7 +32,7 @@ use pocketmine\network\protocol\MobEffectPacket;
 use pocketmine\Player;
 use pocketmine\utils\Config;
 
-class Effect{
+class Effect {
 	const SPEED = 1;
 	const SLOWNESS = 2;
 	const HASTE = 3;
@@ -154,6 +154,7 @@ class Effect{
 
 	/**
 	 * Returns the translation key used to translate this effect's name.
+	 *
 	 * @return string
 	 */
 	public function getName(){
@@ -162,6 +163,7 @@ class Effect{
 
 	/**
 	 * Returns the effect ID as per Minecraft PE
+	 *
 	 * @return int
 	 */
 	public function getId(){
@@ -170,6 +172,7 @@ class Effect{
 
 	/**
 	 * Sets the duration in ticks of the effect.
+	 *
 	 * @param $ticks
 	 *
 	 * @return $this
@@ -181,6 +184,7 @@ class Effect{
 
 	/**
 	 * Returns the duration remaining of the effect in ticks.
+	 *
 	 * @return int
 	 */
 	public function getDuration(){
@@ -189,6 +193,7 @@ class Effect{
 
 	/**
 	 * Returns the default duration this effect will apply for if a duration is not specified.
+	 *
 	 * @return int
 	 */
 	public function getDefaultDuration() : int{
@@ -197,6 +202,7 @@ class Effect{
 
 	/**
 	 * Returns whether this effect will give the subject potion bubbles.
+	 *
 	 * @return bool
 	 */
 	public function hasBubbles() : bool{
@@ -215,6 +221,7 @@ class Effect{
 
 	/**
 	 * Changes the visibility of the effect.
+	 *
 	 * @param bool $bool
 	 *
 	 * @return $this
@@ -254,6 +261,7 @@ class Effect{
 
 	/**
 	 * Returns whether the effect is ambient.
+	 *
 	 * @return bool
 	 */
 	public function isAmbient(){
@@ -262,6 +270,7 @@ class Effect{
 
 	/**
 	 * Sets the ambiency of this effect.
+	 *
 	 * @param bool $ambient
 	 *
 	 * @return $this
@@ -367,6 +376,7 @@ class Effect{
 
 	/**
 	 * Returns an RGB color array of this effect's color.
+	 *
 	 * @return array
 	 */
 	public function getColor(){

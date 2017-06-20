@@ -28,7 +28,7 @@ namespace pocketmine\network\protocol;
 
 use pocketmine\resourcepacks\ResourcePack;
 
-class ResourcePackStackPacket extends DataPacket{
+class ResourcePackStackPacket extends DataPacket {
 	const NETWORK_ID = Info::RESOURCE_PACK_STACK_PACKET;
 
 	public $mustAccept = false;

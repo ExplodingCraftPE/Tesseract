@@ -22,7 +22,7 @@
 
 namespace pocketmine\event\entity;
 
-class EntityEffectRemoveEvent extends EntityEffectEvent{
+class EntityEffectRemoveEvent extends EntityEffectEvent {
 	public static $handlerList = null;
 
 }

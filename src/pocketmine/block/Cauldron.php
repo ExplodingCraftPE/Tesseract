@@ -46,7 +46,7 @@ use pocketmine\tile\Cauldron as TileCauldron;
 use pocketmine\tile\Tile;
 use pocketmine\utils\Color;
 
-class Cauldron extends Solid{
+class Cauldron extends Solid {
 
 	protected $id = self::CAULDRON_BLOCK;
 
@@ -80,7 +80,7 @@ class Cauldron extends Solid{
 			new ByteTag("SplashPotion", 0),
 			new ListTag("Items", [])
 		]);
-		
+
 		if($item->hasCustomBlockData()){
 			foreach($item->getCustomBlockData() as $key => $v){
 				$nbt->{$key} = $v;
@@ -257,7 +257,7 @@ class Cauldron extends Solid{
 				if($ev->isCancelled()){
 					return false;
 				}
-				if($this->meta < 2) {
+				if($this->meta < 2){
 					break;
 				}
 				if($tile->hasPotion()){
@@ -299,7 +299,7 @@ class Cauldron extends Solid{
 			}else{
 				$motion = $player->getDirectionVector()->multiply(0.4);
 				$position = clone $player->getPosition();
-				$player->getLevel()->dropItem($position->add(0 , 0.5, 0), $result , $motion, 40);
+				$player->getLevel()->dropItem($position->add(0, 0.5, 0), $result, $motion, 40);
 			}
 		}
 	}

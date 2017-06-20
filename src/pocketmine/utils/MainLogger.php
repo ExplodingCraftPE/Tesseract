@@ -25,7 +25,7 @@ use LogLevel;
 use pocketmine\Thread;
 use pocketmine\Worker;
 
-class MainLogger extends \AttachableThreadedLogger{
+class MainLogger extends \AttachableThreadedLogger {
 	protected $logFile;
 	protected $logStream;
 	protected $shutdown;
@@ -33,7 +33,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	private $logResource;
 	/** @var MainLogger */
 	public static $logger = null;
-	
+
 	private $consoleCallback;
 
 	/** Extra Settings */
@@ -107,7 +107,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	public function info($message, $name = "INFO"){
 		$this->send($message, \LogLevel::INFO, $name, TextFormat::WHITE);
 	}
-	
+
 	public function developer($message, $name = "DEVELOPER"){
 		$this->send($message, \LogLevel::DEVELOPER, $name, TextFormat::GOLD);
 	}
@@ -222,7 +222,7 @@ class MainLogger extends \AttachableThreadedLogger{
 			}
 		}
 
-        $message = TextFormat::toANSI(TextFormat::GREEN . "Tesseract > " . TextFormat::GRAY . $message . TextFormat::RESET);
+		$message = TextFormat::toANSI(TextFormat::GREEN . "Tesseract > " . TextFormat::GRAY . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
 		if(!Terminal::hasFormattingCodes()){
@@ -276,7 +276,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	public function setWrite($write){
 		$this->write = $write;
 	}
-	
+
 	public function setConsoleCallback($callback){
 		$this->consoleCallback = $callback;
 	}

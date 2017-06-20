@@ -26,7 +26,7 @@ use pocketmine\level\ChunkManager;
 use pocketmine\utils\Random;
 use pocketmine\level\generator\populator\VariableAmountPopulator;
 
-class LilyPad extends VariableAmountPopulator{
+class LilyPad extends VariableAmountPopulator {
 	/** @var ChunkManager */
 	private $level;
 

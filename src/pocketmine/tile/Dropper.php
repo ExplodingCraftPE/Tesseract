@@ -39,7 +39,7 @@ use pocketmine\nbt\tag\IntTag;
 
 use pocketmine\nbt\tag\StringTag;
 
-class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
+class Dropper extends Spawnable implements InventoryHolder, Container, Nameable {
 
 	/** @var DropperInventory */
 	protected $inventory;

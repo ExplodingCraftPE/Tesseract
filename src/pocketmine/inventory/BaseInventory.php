@@ -29,7 +29,7 @@ use pocketmine\network\protocol\ContainerSetSlotPacket;
 use pocketmine\Player;
 use pocketmine\Server;
 
-abstract class BaseInventory implements Inventory{
+abstract class BaseInventory implements Inventory {
 
 	/** @var InventoryType */
 	protected $type;
@@ -113,10 +113,10 @@ abstract class BaseInventory implements Inventory{
 		return $this->slots;
 	}
 
-    /**
-     * @param Item[] $items
-     * @param bool $send
-     */
+	/**
+	 * @param Item[] $items
+	 * @param bool   $send
+	 */
 	public function setContents(array $items, $send = true){
 		if(count($items) > $this->size){
 			$items = array_slice($items, 0, $this->size, true);
@@ -128,7 +128,7 @@ abstract class BaseInventory implements Inventory{
 					$this->clear($i, $send);
 				}
 			}else{
-				if (!$this->setItem($i, $items[$i], $send)){
+				if(!$this->setItem($i, $items[$i], $send)){
 					$this->clear($i, $send);
 				}
 			}
@@ -234,7 +234,7 @@ abstract class BaseInventory implements Inventory{
 
 		return -1;
 	}
-	
+
 	public function firstOccupied(){
 		for($i = 0; $i < $this->size; $i++){
 			if(($item = $this->getItem($i))->getId() !== Item::AIR and $item->getCount() > 0){
@@ -272,7 +272,7 @@ abstract class BaseInventory implements Inventory{
 		$itemSlots = [];
 		foreach($slots as $slot){
 			if(!($slot instanceof Item)){
-				throw new \InvalidArgumentException("Expected Item, got ".gettype($slot));
+				throw new \InvalidArgumentException("Expected Item, got " . gettype($slot));
 			}
 			if($slot->getId() !== 0 and $slot->getCount() > 0){
 				$itemSlots[] = clone $slot;
@@ -332,7 +332,7 @@ abstract class BaseInventory implements Inventory{
 		$itemSlots = [];
 		foreach($slots as $slot){
 			if(!($slot instanceof Item)){
-				throw new \InvalidArgumentException("Expected Item[], got ".gettype($slot));
+				throw new \InvalidArgumentException("Expected Item[], got " . gettype($slot));
 			}
 			if($slot->getId() !== 0 and $slot->getCount() > 0){
 				$itemSlots[] = clone $slot;
@@ -438,7 +438,7 @@ abstract class BaseInventory implements Inventory{
 		}
 	}
 
-	public function processSlotChange(Transaction $transaction): bool{
+	public function processSlotChange(Transaction $transaction) : bool{
 		return true;
 	}
 

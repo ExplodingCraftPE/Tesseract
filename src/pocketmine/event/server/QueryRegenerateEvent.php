@@ -25,7 +25,7 @@ namespace pocketmine\event\server;
 use pocketmine\Server;
 use pocketmine\utils\Binary;
 
-class QueryRegenerateEvent extends ServerEvent{
+class QueryRegenerateEvent extends ServerEvent {
 
 	public static $handlerList = null;
 
@@ -229,7 +229,7 @@ class QueryRegenerateEvent extends ServerEvent{
 
 	/**
 	 * @return EventName|string
-     */
+	 */
 	public function getName(){
 		return "QueryRegenerateEvent";
 	}

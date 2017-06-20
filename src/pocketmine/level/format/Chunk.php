@@ -22,7 +22,7 @@
 /**
  * Implementation of MCPE-style chunks with subchunks with XZY ordering.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\level\format;
 
@@ -37,7 +37,7 @@ use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\BinaryStream;
 
-class Chunk{
+class Chunk {
 
 	const MAX_SUBCHUNKS = 16;
 
@@ -81,16 +81,17 @@ class Chunk{
 	/** @var CompoundTag[] */
 	protected $NBTentities = [];
 
-    /**
-     * @param int $chunkX
-     * @param int $chunkZ
-     * @param SubChunk[] $subChunks
-     * @param CompoundTag[] $entities
-     * @param CompoundTag[] $tiles
-     * @param string $biomeIds
-     * @param int[] $heightMap
-     * @internal param LevelProvider $provider
-     */
+	/**
+	 * @param int           $chunkX
+	 * @param int           $chunkZ
+	 * @param SubChunk[]    $subChunks
+	 * @param CompoundTag[] $entities
+	 * @param CompoundTag[] $tiles
+	 * @param string        $biomeIds
+	 * @param int[]         $heightMap
+	 *
+	 * @internal param LevelProvider $provider
+	 */
 	public function __construct(int $chunkX, int $chunkZ, array $subChunks = [], array $entities = [], array $tiles = [], string $biomeIds = "", array $heightMap = []){
 		$this->x = $chunkX;
 		$this->z = $chunkZ;
@@ -185,11 +186,11 @@ class Chunk{
 	/**
 	 * Sets block ID and meta in one call at the specified chunk block coordinates
 	 *
-	 * @param int      $x 0-15
+	 * @param int      $x       0-15
 	 * @param int      $y
-	 * @param int      $z 0-15
+	 * @param int      $z       0-15
 	 * @param int|null $blockId 0-255 if null, does not change
-	 * @param int|null $meta 0-15 if null, does not change
+	 * @param int|null $meta    0-15 if null, does not change
 	 *
 	 * @return bool
 	 */
@@ -217,9 +218,9 @@ class Chunk{
 	/**
 	 * Sets the block ID at the specified chunk block coordinates
 	 *
-	 * @param int $x 0-15
+	 * @param int $x  0-15
 	 * @param int $y
-	 * @param int $z 0-15
+	 * @param int $z  0-15
 	 * @param int $id 0-255
 	 */
 	public function setBlockId(int $x, int $y, int $z, int $id){
@@ -244,9 +245,9 @@ class Chunk{
 	/**
 	 * Sets the block meta value at the specified chunk block coordinates
 	 *
-	 * @param int $x 0-15
+	 * @param int $x    0-15
 	 * @param int $y
-	 * @param int $z 0-15
+	 * @param int $z    0-15
 	 * @param int $data 0-15
 	 */
 	public function setBlockData(int $x, int $y, int $z, int $data){
@@ -271,9 +272,9 @@ class Chunk{
 	/**
 	 * Sets the raw block extra data value at the specified chunk block coordinates
 	 *
-	 * @param int $x 0-15
+	 * @param int $x    0-15
 	 * @param int $y
-	 * @param int $z 0-15
+	 * @param int $z    0-15
 	 * @param int $data bitmap, (meta << 8) | id
 	 */
 	public function setBlockExtraData(int $x, int $y, int $z, int $data){
@@ -302,9 +303,9 @@ class Chunk{
 	/**
 	 * Sets the sky light level at the specified chunk block coordinates
 	 *
-	 * @param int $x 0-15
+	 * @param int $x     0-15
 	 * @param int $y
-	 * @param int $z 0-15
+	 * @param int $z     0-15
 	 * @param int $level 0-15
 	 */
 	public function setBlockSkyLight(int $x, int $y, int $z, int $level){
@@ -329,9 +330,9 @@ class Chunk{
 	/**
 	 * Sets the block light level at the specified chunk block coordinates
 	 *
-	 * @param int $x 0-15
-	 * @param int $y 0-15
-	 * @param int $z 0-15
+	 * @param int $x     0-15
+	 * @param int $y     0-15
+	 * @param int $z     0-15
 	 * @param int $level 0-15
 	 */
 	public function setBlockLight(int $x, int $y, int $z, int $level){
@@ -343,8 +344,8 @@ class Chunk{
 	/**
 	 * Returns the Y coordinate of the highest non-air block at the specified X/Z chunk block coordinates
 	 *
-	 * @param int  $x 0-15
-	 * @param int  $z 0-15
+	 * @param int $x 0-15
+	 * @param int $z 0-15
 	 *
 	 * @return int
 	 */
@@ -380,6 +381,7 @@ class Chunk{
 
 	/**
 	 * Returns the heightmap value at the specified X/Z chunk block coordinates
+	 *
 	 * @param int $x 0-15
 	 * @param int $z 0-15
 	 * @param int $value
@@ -457,8 +459,8 @@ class Chunk{
 	/**
 	 * Sets the biome ID at the specified X/Z chunk block coordinates
 	 *
-	 * @param int $x 0-15
-	 * @param int $z 0-15
+	 * @param int $x       0-15
+	 * @param int $z       0-15
 	 * @param int $biomeId 0-255
 	 */
 	public function setBiomeId(int $x, int $z, int $biomeId){
@@ -468,6 +470,7 @@ class Chunk{
 
 	/**
 	 * Returns a column of block IDs from bottom to top at the specified X/Z chunk block coordinates.
+	 *
 	 * @param int $x 0-15
 	 * @param int $z 0-15
 	 *
@@ -483,6 +486,7 @@ class Chunk{
 
 	/**
 	 * Returns a column of block meta values from bottom to top at the specified X/Z chunk block coordinates.
+	 *
 	 * @param int $x 0-15
 	 * @param int $z 0-15
 	 *
@@ -498,6 +502,7 @@ class Chunk{
 
 	/**
 	 * Returns a column of sky light values from bottom to top at the specified X/Z chunk block coordinates.
+	 *
 	 * @param int $x 0-15
 	 * @param int $z 0-15
 	 *
@@ -513,6 +518,7 @@ class Chunk{
 
 	/**
 	 * Returns a column of block light values from bottom to top at the specified X/Z chunk block coordinates.
+	 *
 	 * @param int $x 0-15
 	 * @param int $z 0-15
 	 *
@@ -674,6 +680,7 @@ class Chunk{
 
 	/**
 	 * Deserializes tiles and entities from NBT
+	 *
 	 * @param Level $level
 	 */
 	public function initChunk(Level $level){
@@ -790,6 +797,7 @@ class Chunk{
 
 	/**
 	 * Sets a subchunk in the chunk index
+	 *
 	 * @param int           $y
 	 * @param SubChunk|null $subChunk
 	 * @param bool          $allowEmpty Whether to check if the chunk is empty, and if so replace it with an empty stub
@@ -874,8 +882,8 @@ class Chunk{
 			$result .= $this->subChunks[$y]->networkSerialize();
 		}
 		$result .= pack("v*", ...$this->heightMap)
-		        .  $this->biomeIds
-		        .  chr(0); //border block array count
+			. $this->biomeIds
+			. chr(0); //border block array count
 		//Border block entry format: 1 byte (4 bits X, 4 bits Z). These are however useless since they crash the regular client.
 
 		$extraData = new BinaryStream();
@@ -964,6 +972,7 @@ class Chunk{
 
 	/**
 	 * Creates a block hash from chunk block coordinates. Used for extra data keys in chunk packets.
+	 *
 	 * @internal
 	 *
 	 * @param int $x 0-15

@@ -21,7 +21,7 @@
 
 namespace pocketmine\utils;
 
-class UUID{
+class UUID {
 
 	private $parts = [0, 0, 0, 0];
 	private $version = null;
@@ -48,6 +48,7 @@ class UUID{
 	 *
 	 * @param string $uuid
 	 * @param int    $version
+	 *
 	 * @return UUID
 	 */
 	public static function fromString($uuid, $version = null){
@@ -59,6 +60,7 @@ class UUID{
 	 *
 	 * @param string $uuid
 	 * @param int    $version
+	 *
 	 * @return UUID
 	 */
 	public static function fromBinary($uuid, $version = null){
@@ -69,12 +71,13 @@ class UUID{
 		return new UUID(Binary::readInt(substr($uuid, 0, 4)), Binary::readInt(substr($uuid, 4, 4)), Binary::readInt(substr($uuid, 8, 4)), Binary::readInt(substr($uuid, 12, 4)), $version);
 	}
 
-    /**
-     * Creates an UUIDv3 from binary data or list of binary data
-     *
-     * @param array|string ...$data
-     * @return UUID
-     */
+	/**
+	 * Creates an UUIDv3 from binary data or list of binary data
+	 *
+	 * @param array|string ...$data
+	 *
+	 * @return UUID
+	 */
 	public static function fromData(...$data){
 		$hash = hash("md5", implode($data), true);
 

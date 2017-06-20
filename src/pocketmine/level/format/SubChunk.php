@@ -19,11 +19,11 @@
  *
 */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace pocketmine\level\format;
 
-class SubChunk{
+class SubChunk {
 
 	protected $ids;
 	protected $data;
@@ -48,10 +48,10 @@ class SubChunk{
 
 	public function isEmpty() : bool{
 		return (
-            substr_count($this->ids, "\x00") === 4096 and
-            substr_count($this->skyLight, "\xff") === 2048 and
-            substr_count($this->blockLight, "\x00") === 2048
-    );
+			substr_count($this->ids, "\x00") === 4096 and
+			substr_count($this->skyLight, "\xff") === 2048 and
+			substr_count($this->blockLight, "\x00") === 2048
+		);
 	}
 
 	public function getBlockId(int $x, int $y, int $z) : int{
@@ -221,7 +221,7 @@ class SubChunk{
 
 	public static function fastDeserialize(string $data) : SubChunk{
 		return new SubChunk(
-			substr($data,    0, 4096), //ids
+			substr($data, 0, 4096), //ids
 			substr($data, 4096, 2048), //data
 			substr($data, 6144, 2048), //sky light
 			substr($data, 8192, 2048)  //block light

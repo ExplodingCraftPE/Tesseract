@@ -27,7 +27,7 @@ use pocketmine\level\ChunkManager;
 use pocketmine\level\Level;
 
 //TODO: make light updates asynchronous
-abstract class LightUpdate{
+abstract class LightUpdate {
 
 	/** @var ChunkManager */
 	protected $level;

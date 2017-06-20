@@ -22,6 +22,7 @@
 /**
  * Named Binary Tag handling classes
  */
+
 namespace pocketmine\nbt;
 
 use pocketmine\nbt\tag\ByteArrayTag;
@@ -49,7 +50,7 @@ use pocketmine\utils\Binary;
 /**
  * Named Binary Tag encoder/decoder
  */
-class NBT{
+class NBT {
 
 	const LITTLE_ENDIAN = 0;
 	const BIG_ENDIAN = 1;
