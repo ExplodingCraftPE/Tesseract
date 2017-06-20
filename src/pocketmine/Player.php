@@ -124,6 +124,7 @@ use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\network\protocol\InteractPacket;
 use pocketmine\network\protocol\LevelEventPacket;
+use pocketmine\network\protocol\LevelSoundEventPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
@@ -2327,7 +2328,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                             $this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
                         }
                         $entity->spawnToAll();
-                        $this->level->addSound(new LaunchSound($this), $this->getViewers());
+                        $this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_SOUND_SHOOT);
                     }
 
 					$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
@@ -2447,7 +2448,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 											$ev->getProjectile()->kill();
 										}else{
 											$ev->getProjectile()->spawnToAll();
-											$this->level->addSound(new LaunchSound($this), $this->getViewers());
+											$this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_SOUND_SHOOT);
 										}
 									}else{
 										$ev->getProjectile()->spawnToAll();

@@ -526,28 +526,10 @@ class Level implements ChunkManager, Metadatable{
 		$this->closed = true;
 	}
 
-	public function addSound(Sound $sound, array $players = null){
-		$pk = $sound->encode();
-
-		if($players === null){
-			if($pk !== null){
-				if(!is_array($pk)){
-					$this->addChunkPacket($sound->x >> 4, $sound->z >> 4, $pk);
-				}else{
-					foreach($pk as $e){
-						$this->addChunkPacket($sound->x >> 4, $sound->z >> 4, $e);
-					}
-				}
-			}
-		}else{
-			if($pk !== null){
-				if(!is_array($pk)){
-					$this->server->broadcastPacket($players, $pk);
-				}else{
-					$this->server->batchPackets($players, $pk, false);
-				}
-			}
-		}
+	/**
+	 * @deprecated Use broadcastLevelEvent or broadcastLevelSoundEvent
+	 */
+	public function addSound(){
 	}
 
 	public function addParticle(Particle $particle, array $players = null){
