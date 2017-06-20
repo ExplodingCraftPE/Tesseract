@@ -268,7 +268,6 @@ class Server {
 	public $foodEnabled = true;
 	public $expEnabled = true;
 	public $keepInventory = false;
-	public $netherName = "nether";
 	public $version;
 	public $autoClearInv = true;
 	public $dserverConfig = [];
@@ -288,7 +287,7 @@ class Server {
 	public $raklibDisable = false;
 	public $checkMovement = true;
 	public $folderpluginloader = false;
-	public $endEnabled = true;
+	public $netherName = "nether";
 	public $endName = "end";
 
 	/**
@@ -1423,8 +1422,6 @@ class Server {
 		$this->expEnabled = $this->getAdvancedProperty("player.experience", true);
 		$this->keepInventory = $this->getAdvancedProperty("player.keep-inventory", false);
 		$this->keepExperience = $this->getAdvancedProperty("player.keep-experience", false);
-		$this->netherName = $this->getAdvancedProperty("level.level-name", "nether");
-		$this->endName = $this->getAdvancedProperty("level.end-name", "end");
 		$this->autoClearInv = $this->getAdvancedProperty("player.auto-clear-inventory", true);
 		$this->dserverConfig = [
 			"enable" => $this->getAdvancedProperty("dserver.enable", false),
