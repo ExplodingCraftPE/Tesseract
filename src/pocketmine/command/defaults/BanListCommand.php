@@ -43,7 +43,6 @@ class BanListCommand extends VanillaCommand{
 		}
 		
 		$args[0] = (isset($args[0]) ? strtolower($args[0]): "");
-		$title = "";
 		
 		switch($args[0]){
 			case "ips":
