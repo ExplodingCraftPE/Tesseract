@@ -230,23 +230,23 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 			}
 
 			$nbt = new CompoundTag("", [
-				"Pos" => new ListTag("Pos", [
+				new ListTag("Pos", [
 					new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 					new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 					new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 				]),
-				"Motion" => new ListTag("Motion", [
+				new ListTag("Motion", [
 					new DoubleTag("", $motion[0]),
 					new DoubleTag("", $motion[1]),
 					new DoubleTag("", $motion[2])
 				]),
-				"Rotation" => new ListTag("Rotation", [
+				new ListTag("Rotation", [
 					new FloatTag("", lcg_value() * 360),
 					new FloatTag("", 0)
 				]),
-				"Health" => new ShortTag("Health", 5),
-				"Item" => $needItem->nbtSerialize(-1, "Item"),
-				"PickupDelay" => new ShortTag("PickupDelay", 10)
+				new ShortTag("Health", 5),
+				$needItem->nbtSerialize(-1, "Item"),
+				new ShortTag("PickupDelay", 10)
 			]);
 
 			$f = 0.3;

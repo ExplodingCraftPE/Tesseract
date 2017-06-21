@@ -156,17 +156,17 @@ class MobSpawner extends Spawnable{
 						$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, $this->getEntityId(), EntityGenerateEvent::CAUSE_MOB_SPAWNER));
 						if(!$ev->isCancelled()){
 							$nbt = new CompoundTag("", [
-								"Pos" => new ListTag("Pos", [
+								new ListTag("Pos", [
 									new DoubleTag("", $pos->x),
 									new DoubleTag("", $pos->y),
 									new DoubleTag("", $pos->z)
 								]),
-								"Motion" => new ListTag("Motion", [
+								new ListTag("Motion", [
 									new DoubleTag("", 0),
 									new DoubleTag("", 0),
 									new DoubleTag("", 0)
 								]),
-								"Rotation" => new ListTag("Rotation", [
+								new ListTag("Rotation", [
 									new FloatTag("", mt_rand() / mt_getrandmax() * 360),
 									new FloatTag("", 0)
 								]),

@@ -208,17 +208,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 			$needItem = Item::get($item->getId(), $item->getDamage());
 			$f = 1.5;
 			$nbt = new CompoundTag("", [
-				"Pos" => new ListTag("Pos", [
+						new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new ListTag("Motion", [
+						new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new ListTag("Rotation", [
+						new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),

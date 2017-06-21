@@ -565,8 +565,8 @@ class Item implements ItemIds, \JsonSerializable{
 		foreach($tag->ench as $k => $entry){
 			if($entry["id"] === $ench->getId()){
 				$tag->ench->{$k} = new CompoundTag("", [
-					"id" => new ShortTag("id", $ench->getId()),
-					"lvl" => new ShortTag("lvl", $ench->getLevel())
+					new ShortTag("id", $ench->getId()),
+					new ShortTag("lvl", $ench->getLevel())
 				]);
 				$found = true;
 				break;
@@ -581,8 +581,8 @@ class Item implements ItemIds, \JsonSerializable{
 				}
 			}
 			$tag->ench->{$count + 1} = new CompoundTag("", [
-				"id" => new ShortTag("id", $ench->getId()),
-				"lvl" => new ShortTag("lvl", $ench->getLevel())
+				new ShortTag("id", $ench->getId()),
+				new ShortTag("lvl", $ench->getLevel())
 			]);
 		}
 
@@ -723,7 +723,7 @@ class Item implements ItemIds, \JsonSerializable{
 			$tag->display->Name = new StringTag("Name", $name);
 		}else{
 			$tag->display = new CompoundTag("display", [
-				"Name" => new StringTag("Name", $name)
+				new StringTag("Name", $name)
 			]);
 		}
 
@@ -1023,9 +1023,9 @@ class Item implements ItemIds, \JsonSerializable{
 	 */
 	public function nbtSerialize(int $slot = -1, string $tagName = "") : CompoundTag{
 		$tag = new CompoundTag($tagName, [
-			"id" => new ShortTag("id", $this->id),
-			"Count" => new ByteTag("Count", $this->count ?? -1),
-			"Damage" => new ShortTag("Damage", $this->meta),
+			new ShortTag("id", $this->id),
+			new ByteTag("Count", $this->count ?? -1),
+			new ShortTag("Damage", $this->meta),
 		]);
 
 		if($this->hasCompoundTag()){

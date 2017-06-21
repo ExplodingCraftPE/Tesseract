@@ -247,23 +247,23 @@ class McRegion extends BaseLevelProvider{
 		}
 		//TODO, add extra details
 		$levelData = new CompoundTag("Data", [
-			"hardcore" => new ByteTag("hardcore", 0),
-			"initialized" => new ByteTag("initialized", 1),
-			"GameType" => new IntTag("GameType", 0),
-			"generatorVersion" => new IntTag("generatorVersion", 1), //2 in MCPE
-			"SpawnX" => new IntTag("SpawnX", 256),
-			"SpawnY" => new IntTag("SpawnY", 70),
-			"SpawnZ" => new IntTag("SpawnZ", 256),
-			"version" => new IntTag("version", 19133),
-			"DayTime" => new IntTag("DayTime", 0),
-			"LastPlayed" => new LongTag("LastPlayed", microtime(true) * 1000),
-			"RandomSeed" => new LongTag("RandomSeed", $seed),
-			"SizeOnDisk" => new LongTag("SizeOnDisk", 0),
-			"Time" => new LongTag("Time", 0),
-			"generatorName" => new StringTag("generatorName", Generator::getGeneratorName($generator)),
-			"generatorOptions" => new StringTag("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
-			"LevelName" => new StringTag("LevelName", $name),
-			"GameRules" => new CompoundTag("GameRules", [])
+			new ByteTag("hardcore", 0),
+			new ByteTag("initialized", 1),
+			new IntTag("GameType", 0),
+			new IntTag("generatorVersion", 1), //2 in MCPE
+			new IntTag("SpawnX", 256),
+			new IntTag("SpawnY", 70),
+			new IntTag("SpawnZ", 256),
+			new IntTag("version", 19133),
+			new IntTag("DayTime", 0),
+			new LongTag("LastPlayed", microtime(true) * 1000),
+			new LongTag("RandomSeed", $seed),
+			new LongTag("SizeOnDisk", 0),
+			new LongTag("Time", 0),
+			new StringTag("generatorName", Generator::getGeneratorName($generator)),
+			new StringTag("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
+			new StringTag("LevelName", $name),
+			new CompoundTag("GameRules", [])
 		]);
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setData(new CompoundTag("", [

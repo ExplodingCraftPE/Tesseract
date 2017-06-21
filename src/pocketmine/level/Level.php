@@ -1554,24 +1554,24 @@ class Level implements ChunkManager, Metadatable{
 
 		if($item->getId() > 0 and $item->getCount() > 0){
 			$itemEntity = Entity::createEntity("Item", $this, new CompoundTag("", [
-				"Pos" => new ListTag("Pos", [
+				new ListTag("Pos", [
 					new DoubleTag("", $source->getX()),
 					new DoubleTag("", $source->getY()),
 					new DoubleTag("", $source->getZ())
 				]),
 
-				"Motion" => new ListTag("Motion", [
+				new ListTag("Motion", [
 					new DoubleTag("", $motion->x),
 					new DoubleTag("", $motion->y),
 					new DoubleTag("", $motion->z)
 				]),
-				"Rotation" => new ListTag("Rotation", [
+				new ListTag("Rotation", [
 					new FloatTag("", lcg_value() * 360),
 					new FloatTag("", 0)
 				]),
-				"Health" => new ShortTag("Health", 5),
-				"Item" => $item->nbtSerialize(-1, "Item"),
-				"PickupDelay" => new ShortTag("PickupDelay", $delay)
+				new ShortTag("Health", 5),
+				$item->nbtSerialize(-1, "Item"),
+				new ShortTag("PickupDelay", $delay)
 			]));
 
 			$itemEntity->spawnToAll();
@@ -2427,17 +2427,17 @@ class Level implements ChunkManager, Metadatable{
 	 */
 	public function spawnLightning(Vector3 $pos) : Lightning{
 		$nbt = new CompoundTag("", [
-			"Pos" => new ListTag("Pos", [
+			new ListTag("Pos", [
 				new DoubleTag("", $pos->getX()),
 				new DoubleTag("", $pos->getY()),
 				new DoubleTag("", $pos->getZ())
 			]),
-			"Motion" => new ListTag("Motion", [
+			new ListTag("Motion", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
 				new DoubleTag("", 0)
 			]),
-			"Rotation" => new ListTag("Rotation", [
+			new ListTag("Rotation", [
 				new FloatTag("", 0),
 				new FloatTag("", 0)
 			]),
@@ -2459,21 +2459,21 @@ class Level implements ChunkManager, Metadatable{
 	public function spawnXPOrb(Vector3 $pos, int $exp = 1){
 		if($exp > 0){
 			$nbt = new CompoundTag("", [
-				"Pos" => new ListTag("Pos", [
+				new ListTag("Pos", [
 					new DoubleTag("", $pos->getX()),
 					new DoubleTag("", $pos->getY() + 0.5),
 					new DoubleTag("", $pos->getZ())
 				]),
-				"Motion" => new ListTag("Motion", [
+				new ListTag("Motion", [
 					new DoubleTag("", 0),
 					new DoubleTag("", 0),
 					new DoubleTag("", 0)
 				]),
-				"Rotation" => new ListTag("Rotation", [
+				new ListTag("Rotation", [
 					new FloatTag("", 0),
 					new FloatTag("", 0)
 				]),
-				"Experience" => new LongTag("Experience", $exp),
+				new LongTag("Experience", $exp),
 			]);
 
 			$expOrb = new XPOrb($this, $nbt);

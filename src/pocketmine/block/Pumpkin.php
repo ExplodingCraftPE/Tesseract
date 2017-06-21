@@ -69,17 +69,17 @@ class Pumpkin extends Solid{
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
 					$golem = new SnowGolem($player->getLevel(), new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
+						new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y),
 							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new ListTag("Motion", [
+						new ListTag("Motion", [
 							new DoubleTag("", 0),
 							new DoubleTag("", 0),
 							new DoubleTag("", 0)
 						]),
-						"Rotation" => new ListTag("Rotation", [
+						new ListTag("Rotation", [
 							new FloatTag("", 0),
 							new FloatTag("", 0)
 						]),
@@ -104,17 +104,17 @@ class Pumpkin extends Solid{
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
 					$golem = new IronGolem($player->getLevel(), new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
+						new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y),
 							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new ListTag("Motion", [
+						new ListTag("Motion", [
 							new DoubleTag("", 0),
 							new DoubleTag("", 0),
 							new DoubleTag("", 0)
 						]),
-						"Rotation" => new ListTag("Rotation", [
+						new ListTag("Rotation", [
 							new FloatTag("", 0),
 							new FloatTag("", 0)
 						]),

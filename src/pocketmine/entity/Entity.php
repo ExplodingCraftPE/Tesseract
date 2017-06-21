@@ -772,11 +772,11 @@ abstract class Entity extends Location implements Metadatable{
 			$effects = [];
 			foreach($this->effects as $effect){
 				$effects[$effect->getId()] = new CompoundTag($effect->getId(), [
-					"Id" => new ByteTag("Id", $effect->getId()),
-					"Amplifier" => new ByteTag("Amplifier", $effect->getAmplifier()),
-					"Duration" => new IntTag("Duration", $effect->getDuration()),
-					"Ambient" => new ByteTag("Ambient", 0),
-					"ShowParticles" => new ByteTag("ShowParticles", $effect->isVisible() ? 1 : 0)
+					new ByteTag("Id", $effect->getId()),
+					new ByteTag("Amplifier", $effect->getAmplifier()),
+					new IntTag("Duration", $effect->getDuration()),
+					new ByteTag("Ambient", 0),
+					new ByteTag("ShowParticles", $effect->isVisible() ? 1 : 0)
 				]);
 			}
 

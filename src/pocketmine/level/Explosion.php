@@ -181,17 +181,17 @@ class Explosion{
 			if($block->getId() === Block::TNT){
 				$mot = (new Random())->nextSignedFloat() * M_PI * 2;
 				$tnt = Entity::createEntity("PrimedTNT", $this->level, new CompoundTag("", [
-					"Pos" => new ListTag("Pos", [
+					new ListTag("Pos", [
 						new DoubleTag("", $block->x + 0.5),
 						new DoubleTag("", $block->y),
 						new DoubleTag("", $block->z + 0.5)
 					]),
-					"Motion" => new ListTag("Motion", [
+					new ListTag("Motion", [
 						new DoubleTag("", -sin($mot) * 0.02),
 						new DoubleTag("", 0.2),
 						new DoubleTag("", -cos($mot) * 0.02)
 					]),
-					"Rotation" => new ListTag("Rotation", [
+					new ListTag("Rotation", [
 						new FloatTag("", 0),
 						new FloatTag("", 0)
 					]),
