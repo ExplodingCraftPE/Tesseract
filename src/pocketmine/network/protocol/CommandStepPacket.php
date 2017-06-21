@@ -30,28 +30,37 @@ class CommandStepPacket extends DataPacket{
 	public $command;
 	public $overload;
 	public $uvarint1;
-	public $uvarint2;
-	public $bool;
-	public $uvarint64;
-	public $args; //JSON formatted command arguments
-	public $string4;
+	public $currentStep;
+	public $done;
+	public $clientId;
+	public $inputJson;
+	public $outputJson;
 
 	public function decode(){
 		$this->command = $this->getString();
 		$this->overload = $this->getString();
 		$this->uvarint1 = $this->getUnsignedVarInt();
-		$this->uvarint2 = $this->getUnsignedVarInt();
-		$this->bool = (bool) $this->getByte();
-		$this->uvarint64 = $this->getUnsignedVarInt(); //TODO: varint64
-		$this->args = json_decode($this->getString());
-		$this->string4 = $this->getString();
-		while(!$this->feof()){
-			$this->getByte(); //prevent assertion errors. TODO: find out why there are always 3 extra bytes at the end of this packet.
-		}
+		$this->currentStep = $this->getUnsignedVarInt();
+		$this->done = (bool) $this->getByte();
+		$this->clientId = $this->getUnsignedVarInt();
+		$this->inputJson = json_decode($this->getString());
+		$this->outputJson = json_decode($this->getString());
+
+		$this->get(true); //TODO: read command origin data
 	}
 
 	public function encode(){
+		$this->reset();
+		$this->putString($this->command);
+		$this->putString($this->overload);
+		$this->putUnsignedVarInt($this->uvarint1);
+		$this->putUnsignedVarInt($this->currentStep);
+		$this->putByte($this->done);
+		$this->putUnsignedVarInt($this->clientId);
+		$this->putString(json_encode($this->inputJson));
+		$this->putString(json_encode($this->outputJson));
 
+		$this->put("\x00\x00\x00"); //TODO: command origin data
 	}
 
 }
