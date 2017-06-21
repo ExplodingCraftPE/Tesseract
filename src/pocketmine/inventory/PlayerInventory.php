@@ -241,7 +241,7 @@ class PlayerInventory extends BaseInventory {
 		$pk = new MobEquipmentPacket();
 		$pk->eid = $this->getHolder()->getId();
 		$pk->item = $item;
-		$pk->slot = $this->getHeldItemSlot();
+		$pk->hotbarSlot = $this->getHeldItemSlot();
 		$pk->selectedSlot = $this->getHeldItemIndex();
 
 		if(!is_array($target)){
