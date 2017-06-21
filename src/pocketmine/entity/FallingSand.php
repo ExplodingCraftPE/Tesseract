@@ -35,6 +35,7 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
 
 class FallingSand extends Entity {
@@ -142,8 +143,7 @@ class FallingSand extends Entity {
 					if(!$ev->isCancelled()){
 						$this->getLevel()->setBlock($pos, $ev->getTo(), true);
 						if($ev->getTo() instanceof Anvil){
-							$sound = new AnvilFallSound($this);
-							$this->getLevel()->addSound($sound);
+							$this->getLevel()->broadcastLevelEvent($this, LevelEventPacket::EVENT_SOUND_ANVIL_FALL);
 							foreach($this->level->getNearbyEntities($this->boundingBox->grow(0.1, 0.1, 0.1), $this) as $entity){
 								$entity->scheduleUpdate();
 								if(!$entity->isAlive()){

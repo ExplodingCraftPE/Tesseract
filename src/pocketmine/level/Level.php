@@ -518,28 +518,10 @@ class Level implements ChunkManager, Metadatable {
 		$this->closed = true;
 	}
 
-	public function addSound(Sound $sound, array $players = null){
-		$pk = $sound->encode();
-
-		if($players === null){
-			if($pk !== null){
-				if(!is_array($pk)){
-					$this->addChunkPacket($sound->x >> 4, $sound->z >> 4, $pk);
-				}else{
-					foreach($pk as $e){
-						$this->addChunkPacket($sound->x >> 4, $sound->z >> 4, $e);
-					}
-				}
-			}
-		}else{
-			if($pk !== null){
-				if(!is_array($pk)){
-					$this->server->broadcastPacket($players, $pk);
-				}else{
-					$this->server->batchPackets($players, $pk, false);
-				}
-			}
-		}
+	/**
+	 * @deprecated Use broadcastLevelEvent or broadcastLevelSoundEvent
+	 */
+	public function addSound(){
 	}
 
 	public function addParticle(Particle $particle, array $players = null){
@@ -750,11 +732,11 @@ class Level implements ChunkManager, Metadatable {
 	 * WARNING: Do not use this, it's only for internal use.
 	 * Changes to this function won't be recorded on the version.
 	 */
-	public function sendTime(){
+	public function sendTime(Player ...$targets){
 		$pk = new SetTimePacket();
 		$pk->time = (int) $this->time;
 
-		$this->server->broadcastPacket($this->players, $pk);
+		$this->server->broadcastPacket(count($targets) > 0 ? $targets : $this->players, $pk);
 	}
 
 	/**
@@ -876,9 +858,7 @@ class Level implements ChunkManager, Metadatable {
 			Level::getXZ($index, $chunkX, $chunkZ);
 			$chunkPlayers = $this->getChunkPlayers($chunkX, $chunkZ);
 			if(count($chunkPlayers) > 0){
-				foreach($entries as $pk){
-					$this->server->broadcastPacket($chunkPlayers, $pk);
-				}
+				$this->server->batchPackets($chunkPlayers, $entries, false, false);
 			}
 		}
 

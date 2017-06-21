@@ -24,8 +24,8 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
-use pocketmine\level\sound\DoorSound;
 
 class FenceGate extends Transparent {
 
@@ -101,7 +101,7 @@ class FenceGate extends Transparent {
 		}
 
 		$this->getLevel()->setBlock($this, $this, true);
-		$this->level->addSound(new DoorSound($this));
+		$this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_SOUND_DOOR);
 		return true;
 	}
 }

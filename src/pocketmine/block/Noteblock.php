@@ -23,8 +23,8 @@ namespace pocketmine\block;
 
 use pocketmine\item\Tool;
 use pocketmine\item\Item;
-use pocketmine\level\sound\NoteblockSound;
 use pocketmine\math\Vector3;
+use pocketmine\network\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 
 class Noteblock extends Solid {
@@ -86,13 +86,13 @@ class Noteblock extends Solid {
 			case Block::WALL_SIGN:
 			case Block::DOOR_BLOCK:
 			case Block::NOTEBLOCK:
-				return NoteblockSound::INSTRUMENT_BASS;
+				//return NoteblockSound::INSTRUMENT_BASS;
 			case Block::SAND:
 			case Block::SOUL_SAND:
-				return NoteblockSound::INSTRUMENT_TABOUR;
+				//return NoteblockSound::INSTRUMENT_TABOUR;
 			case Block::GLASS:
 			case Block::GLASS_PANE:
-				return NoteblockSound::INSTRUMENT_CLICK;
+				//return NoteblockSound::INSTRUMENT_CLICK;
 			case Block::STONE:
 			case Block::COBBLESTONE:
 			case Block::SANDSTONE:
@@ -128,15 +128,15 @@ class Noteblock extends Solid {
 			case Block::END_STONE:
 			case Block::STAINED_CLAY:
 			case Block::COAL_BLOCK:
-				return NoteblockSound::INSTRUMENT_BASS_DRUM;
+				//return NoteblockSound::INSTRUMENT_BASS_DRUM;
 		}
-		return NoteblockSound::INSTRUMENT_PIANO;
+		//return NoteblockSound::INSTRUMENT_PIANO;
 	}
 
 	public function onActivate(Item $item, Player $player = null){
 		$up = $this->getSide(Vector3::SIDE_UP);
 		if($up->getId() == 0){
-			$this->getLevel()->addSound(new NoteblockSound($this, $this->getInstrument(), $this->getStrength()));
+			$this->getLevel()->broadcastLevelSoundEvent($player, LevelSoundEventPacket::SOUND_NOTE);
 			return true;
 		}else{
 			return false;

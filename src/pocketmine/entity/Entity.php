@@ -283,7 +283,6 @@ abstract class Entity extends Location implements Metadatable {
 
 	protected $id;
 
-	protected $dataFlags = 0;
 	protected $dataProperties = [
 		self::DATA_FLAGS => [self::DATA_TYPE_LONG, 0],
 		self::DATA_AIR => [self::DATA_TYPE_SHORT, 400],
@@ -292,6 +291,8 @@ abstract class Entity extends Location implements Metadatable {
 		self::DATA_LEAD_HOLDER_EID => [self::DATA_TYPE_LONG, -1],
 		self::DATA_SCALE => [self::DATA_TYPE_FLOAT, 1],
 	];
+
+	protected $changedDataProperties = [];
 
 	public $passenger = null;
 	public $vehicle = null;
@@ -1133,6 +1134,11 @@ abstract class Entity extends Location implements Metadatable {
 			return false;
 		}
 
+		if(count($this->changedDataProperties) > 0){
+			$this->sendData($this->hasSpawned, $this->changedDataProperties);
+			$this->changedDataProperties = [];
+		}
+
 		if(count($this->effects) > 0){
 			foreach($this->effects as $effect){
 				if($effect->canTick()){
@@ -1921,11 +1927,13 @@ abstract class Entity extends Location implements Metadatable {
 	 *
 	 * @return bool
 	 */
-	public function setDataProperty($id, $type, $value){
+	public function setDataProperty($id, $type, $value, bool $send = true){
 		if($this->getDataProperty($id) !== $value){
 			$this->dataProperties[$id] = [$type, $value];
 
-			$this->sendData($this->hasSpawned, [$id => $this->dataProperties[$id]]);
+			if($send){
+				$this->changedDataProperties[$id] = $this->dataProperties[$id]; //This will be sent on the next tick
+			}
 
 			return true;
 		}

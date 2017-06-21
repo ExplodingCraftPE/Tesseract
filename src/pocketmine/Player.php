@@ -124,6 +124,7 @@ use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\network\protocol\InteractPacket;
 use pocketmine\network\protocol\LevelEventPacket;
+use pocketmine\network\protocol\LevelSoundEventPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
@@ -727,6 +728,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$pk->z = $this->z;
 				$this->dataPacket($pk);
 				$this->shouldSendStatus = true;
+
 			}
 
 			if($this->spawned){
@@ -739,8 +741,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$level = $level === null ? $this->level : $level;
 		$index = Level::chunkHash($x, $z);
 		if(isset($this->usedChunks[$index])){
-			foreach($level->getChunkEntities($x, $z) as $entity){
-				if($entity !== $this){
+			foreach($level->getChunkEntities($x, $z) as $entity) {
+				if ($entity !== $this) {
 					$entity->despawnFrom($this);
 				}
 			}
@@ -1351,15 +1353,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		return [];
-	}
-
-	public function setDataProperty($id, $type, $value){
-		if(parent::setDataProperty($id, $type, $value)){
-			$this->sendData($this, [$id => $this->dataProperties[$id]]);
-			return true;
-		}
-
-		return false;
 	}
 
 	protected function checkGroundState($movX, $movY, $movZ, $dx, $dy, $dz){
@@ -2303,9 +2296,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								$entity = Entity::createEntity("EnderPearl", $this->getLevel(), $nbt, $this);
 								$entity->setMotion($entity->getMotion()->multiply($f));
 								$this->server->getPluginManager()->callEvent($ev = new ProjectileLaunchEvent($entity));
-								if($ev->isCancelled()){
+								if ($ev->isCancelled()) {
 									$entity->kill();
-								}else{
+								} else {
 									$this->lastEnderPearlUse = $time;
 								}
 								break;
@@ -2318,7 +2311,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
 						}
 						$entity->spawnToAll();
-						$this->level->addSound(new LaunchSound($this), $this->getViewers());
+						$this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_SOUND_SHOOT);
 					}
 
 					$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
@@ -2365,6 +2358,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break;
 					case PlayerActionPacket::ACTION_STOP_BREAK:
 						$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_BLOCK_STOP_BREAK);
+						break;
+					case PlayerActionPacket::ACTION_CONTINUE_BREAK:
+						$block = $this->level->getBlock($pos);
+						$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_PARTICLE_PUNCH_BLOCK, $block->getId() | ($block->getDamage() << 8) | ($packet->face << 16));
 						break;
 					case PlayerActionPacket::ACTION_RELEASE_ITEM:
 						if($this->startAction > -1 and $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION)){
@@ -2438,7 +2435,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 											$ev->getProjectile()->kill();
 										}else{
 											$ev->getProjectile()->spawnToAll();
-											$this->level->addSound(new LaunchSound($this), $this->getViewers());
+											$this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_SOUND_SHOOT);
 										}
 									}else{
 										$ev->getProjectile()->spawnToAll();
@@ -2502,7 +2499,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->setGliding(false);
 
 						$this->extinguish();
-						$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400, false);
+						$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400);
 						$this->deadTicks = 0;
 						$this->noDamageTicks = 60;
 

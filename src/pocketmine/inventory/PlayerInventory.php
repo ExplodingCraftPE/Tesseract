@@ -96,17 +96,26 @@ class PlayerInventory extends BaseInventory {
 		return ($index >= 0 and $index < $this->getHotbarSize()) ? $this->hotbar[$index] : -1;
 	}
 
-	/**
-	 * @deprecated
-	 *
-	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
-	 *
-	 * @param $index
-	 * @param $slot
-	 */
-	public function setHotbarSlotIndex($index, $slot){
-		if($this->getHolder()->getServer()->getProperty("settings.deprecated-verbose") !== false){
-			trigger_error("Do not attempt to change hotbar links in plugins!", E_USER_DEPRECATED);
+	public function setHotbarSlotIndex($hotbarSlot, $inventorySlot){
+		if($hotbarSlot < 0 or $hotbarSlot >= $this->getHotbarSize()){
+			throw new \InvalidArgumentException("Hotbar slot index \"$inventorySlot\" is out of range");
+		}elseif($inventorySlot < -1 or $inventorySlot >= $this->getSize()){
+			throw new \InvalidArgumentException("Inventory slot index \"$inventorySlot\" is out of range");
+		}
+
+		if($inventorySlot !== -1 and ($alreadyEquippedIndex = array_search($inventorySlot, $this->hotbar)) !== false){
+			$this->hotbar[$alreadyEquippedIndex] = $this->hotbar[$hotbarSlot];
+		}
+
+		$this->hotbar[$hotbarSlot] = $inventorySlot;
+	}
+
+	public function getHotbarSlotItem(int $hotbarSlotIndex) : Item{
+		$inventorySlot = $this->getHotbarSlotIndex($hotbarSlotIndex);
+		if($inventorySlot !== -1){
+			return $this->getItem($inventorySlot);
+		}else{
+			return Item::get(Item::AIR, 0, 0);
 		}
 	}
 
@@ -146,7 +155,12 @@ class PlayerInventory extends BaseInventory {
 					$slotMapping = -1;
 				}
 
-				$item = $this->getItem($slotMapping);
+				if($slotMapping === -1){
+					$item = Item::get(Item::AIR, 0, 0);
+				}else{
+					$item = $this->getItem($slotMapping);
+				}
+
 				if($this->getHolder() instanceof Player){
 					Server::getInstance()->getPluginManager()->callEvent($ev = new PlayerItemHeldEvent($this->getHolder(), $item, $slotMapping, $hotbarSlotIndex));
 					if($ev->isCancelled()){
@@ -178,12 +192,7 @@ class PlayerInventory extends BaseInventory {
 	 * Returns the item the player is currently holding
 	 */
 	public function getItemInHand(){
-		$item = $this->getItem($this->getHeldItemSlot());
-		if($item instanceof Item){
-			return $item;
-		}else{
-			return Item::get(Item::AIR, 0, 0);
-		}
+		return $this->getHotbarSlotItem($this->itemInHandIndex);
 	}
 
 	/**

@@ -25,6 +25,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\level\sound\ExpPickupSound;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -64,7 +65,7 @@ class XpCommand extends VanillaCommand {
 				if($level > 0){
 					$player->addXpLevel((int) $level);
 					$sender->sendMessage(new TranslationContainer("%commands.xp.success.levels", [$level, $name]));
-					$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000))); //TODO: Find the level-up sound
+					$player->getLevel()->broadcastLevelEvent($player, LevelEventPacket::EVENT_SOUND_ORB, mt_rand(0, 1000));
 					return true;
 				}elseif($level < 0){
 					$player->takeXpLevel((int) -$level);
@@ -74,7 +75,7 @@ class XpCommand extends VanillaCommand {
 			}else{
 				if(($xp = (int) $args[0]) > 0){ //Set Experience
 					$player->addXp((int) $args[0]);
-					$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000)));
+					$player->getLevel()->broadcastLevelEvent($player, LevelEventPacket::EVENT_SOUND_ORB, mt_rand(0, 1000));
 					$sender->sendMessage(new TranslationContainer("%commands.xp.success", [$name, $args[0]]));
 					return true;
 				}elseif($xp < 0){ //Stupid, but this lines up with vanilla behaviour, so...

@@ -19,40 +19,35 @@
  *
 */
 
-namespace pocketmine\level\sound;
 
-use pocketmine\math\Vector3;
-use pocketmine\network\protocol\LevelEventPacket;
+namespace pocketmine\network\protocol;
 
-class GenericSound extends Sound {
+#include <rules/DataPacket.h>
 
-	public function __construct(Vector3 $pos, $id, $pitch = 0){
-		parent::__construct($pos->x, $pos->y, $pos->z);
-		$this->id = (int) $id;
-		$this->pitch = (float) $pitch * 1000;
+class ResourcePackDataInfoPacket extends DataPacket{
+	const NETWORK_ID = Info::RESOURCE_PACK_DATA_INFO_PACKET;
+
+	public $packId;
+	public $maxChunkSize;
+	public $chunkCount;
+	public $compressedPackSize;
+	public $sha256;
+
+	public function decode(){
+		$this->packId = $this->getString();
+		$this->maxChunkSize = $this->getLInt();
+		$this->chunkCount = $this->getLInt();
+		$this->compressedPackSize = $this->getLLong();
+		$this->sha256 = $this->getString();
 	}
-
-	protected $pitch = 0;
-	protected $id;
-
-	public function getPitch(){
-		return $this->pitch / 1000;
-	}
-
-	public function setPitch($pitch){
-		$this->pitch = (float) $pitch * 1000;
-	}
-
 
 	public function encode(){
-		$pk = new LevelEventPacket;
-		$pk->evid = $this->id;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->data = (int) $this->pitch;
-
-		return $pk;
+		$this->reset();
+		$this->putString($this->packId);
+		$this->putLInt($this->maxChunkSize);
+		$this->putLInt($this->chunkCount);
+		$this->putLLong($this->compressedPackSize);
+		$this->putString($this->sha256);
 	}
 
 }

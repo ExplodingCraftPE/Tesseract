@@ -28,10 +28,6 @@ use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\item\Potion;
-use pocketmine\level\sound\ExplodeSound;
-use pocketmine\level\sound\GraySplashSound;
-use pocketmine\level\sound\SpellSound;
-use pocketmine\level\sound\SplashSound;
 use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\network\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
@@ -159,7 +155,7 @@ class Cauldron extends Solid {
 							$tile->setSplashPotion(false);
 							$tile->clearCustomColor();
 							$this->getLevel()->setBlock($this, $this, true);
-							$this->getLevel()->addSound(new ExplodeSound($this->add(0.5, 0, 0.5)));
+							$this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_CAULDRON_EXPLODE);
 						}else{
 							$this->meta = 6;//fill
 							$tile->clearCustomColor();
@@ -227,7 +223,7 @@ class Cauldron extends Solid {
 					if($player->isSurvival()){
 						$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
 					}
-					$this->getLevel()->addSound(new ExplodeSound($this->add(0.5, 0, 0.5)));
+					$this->level->broadcastLevelEvent($this, LevelEventPacket::EVENT_CAULDRON_EXPLODE);
 				}elseif($item->getDamage() === Potion::WATER_BOTTLE){
 					$this->meta += 2;
 					if($this->meta > 0x06) $this->meta = 0x06;

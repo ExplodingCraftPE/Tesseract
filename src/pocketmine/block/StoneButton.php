@@ -22,8 +22,8 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
-use pocketmine\level\sound\ButtonClickSound;
 
 class StoneButton extends WoodenButton {
 	protected $id = self::STONE_BUTTON;
@@ -40,7 +40,7 @@ class StoneButton extends WoodenButton {
 		if(!$this->isActivated()){
 			$this->meta ^= 0x08;
 			$this->getLevel()->setBlock($this, $this, true, false);
-			$this->getLevel()->addSound(new ButtonClickSound($this));
+			$this->getLevel()->broadcastLevelEvent($player, LevelEventPacket::EVENT_REDSTONE_TRIGGER);
 			$this->activate();
 			$this->getLevel()->scheduleUpdate($this, 40);
 		}
