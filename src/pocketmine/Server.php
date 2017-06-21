@@ -112,10 +112,6 @@ class Server {
 	const BROADCAST_CHANNEL_ADMINISTRATIVE = "pocketmine.broadcast.admin";
 	const BROADCAST_CHANNEL_USERS = "pocketmine.broadcast.user";
 
-	const PLAYER_MSG_TYPE_MESSAGE = 0;
-	const PLAYER_MSG_TYPE_TIP = 1;
-	const PLAYER_MSG_TYPE_POPUP = 2;
-
 	/** @var Server */
 	private static $instance = null;
 
@@ -406,8 +402,12 @@ class Server {
 	/**
 	 * @return int
 	 */
-	public function getViewDistance(){
-		return max(56, $this->getProperty("chunk-sending.max-chunks", 256));
+	public function getViewDistance() : int{
+		return max(2, $this->getConfigInt("view-distance", 8));
+	}
+
+	public function getAllowedViewDistance(int $distance) : int{
+		return max(2, min($distance, $this->memoryManager->getViewDistance($this->getViewDistance())));
 	}
 
 	/**
@@ -1562,6 +1562,7 @@ class Server {
 				"rcon.password" => substr(base64_encode(random_bytes(20)), 3, 10),
 				"auto-save" => true,
 				"online-mode" => false,
+				"view-distance" => 8
 			]);
 
 			$version = $this->getFormattedVersion();
