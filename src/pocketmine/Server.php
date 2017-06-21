@@ -2066,7 +2066,7 @@ class Server{
 		Timings::$playerNetworkTimer->stopTiming();
 	}
 
-	public function broadcastPacketsCallback($data, array $identifiers, bool $immediate){
+	public function broadcastPacketsCallback($data, array $identifiers, bool $immediate = false){
 		$pk = new BatchPacket();
 		$pk->payload = $data;
 		$pk->encode();

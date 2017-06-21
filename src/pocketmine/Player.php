@@ -711,6 +711,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$pk->z = $this->z;
 				$this->dataPacket($pk);
 				$this->shouldSendStatus = true;
+
 			}
 			$targetLevel->getWeather()->sendWeather($this);
 
