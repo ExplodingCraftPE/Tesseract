@@ -63,7 +63,6 @@ class Obsidian extends Solid {
 	public function onBreak(Item $item){
 		parent::onBreak($item);
 
-		if($this->getLevel()->getServer()->netherEnabled){
 			for($i = 0; $i <= 6; $i++){
 				if($this->getSide($i)->getId() == self::PORTAL){
 					break;
@@ -107,7 +106,6 @@ class Obsidian extends Solid {
 					}
 					for($y = $block->y - 1; $this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL; $y--){
 						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
-					}
 				}
 			}
 		}
