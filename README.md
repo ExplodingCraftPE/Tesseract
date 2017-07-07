@@ -3,7 +3,7 @@ Tesseract
 
 __Feature-rich server software for Minecraft: Pocket Edition__
 #
-__Current version: 1.1.x__
+__Current version: 1.1.X__
 #
 __Stability: In-Dev - Beta__
 
@@ -16,4 +16,6 @@ We're focused on improving the way Minecraft: Pocket Edition server's work. We'r
 How can I help out?
 -------------
 You can contribute through PR's, just submit one and one of our members will definitely merge it; if found to be correct. 
+
+
 
